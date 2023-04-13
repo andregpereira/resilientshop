@@ -11,9 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -25,8 +27,13 @@ public class PedidoController {
     private final PedidoConsultaService consultaService;
 
     @PostMapping
-    public ResponseEntity<PedidoDto> criar(@RequestBody @Valid PedidoRegistrarDto dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(manutencaoService.criar(dto));
+    public ResponseEntity<PedidoDto> criar(@RequestBody @Valid PedidoRegistrarDto dto,
+            UriComponentsBuilder uriBuilder) {
+        log.info("Criando pedido...");
+        PedidoDto pedido = manutencaoService.criar(dto);
+        URI uri = uriBuilder.path("/pedidos/{id}").buildAndExpand(pedido.id()).toUri();
+        log.info("Pedido criado com sucesso");
+        return ResponseEntity.created(uri).body(pedido);
     }
 
     @DeleteMapping("/{id}")
@@ -38,11 +45,6 @@ public class PedidoController {
     public ResponseEntity<Page<PedidoDto>> listar(
             @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pageable) {
         return ResponseEntity.ok(consultaService.listar(pageable));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<PedidoDto> consultarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(consultaService.consultarPorId(id));
     }
 
 }
