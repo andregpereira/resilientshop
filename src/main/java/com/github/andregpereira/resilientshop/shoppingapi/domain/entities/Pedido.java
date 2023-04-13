@@ -1,0 +1,61 @@
+package com.github.andregpereira.resilientshop.shoppingapi.domain.entities;
+
+import com.github.andregpereira.resilientshop.shoppingapi.domain.Status;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "tb_pedidos")
+@SequenceGenerator(name = "pedido", sequenceName = "sq_pedidos", allocationSize = 1)
+public class Pedido {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pedido")
+    @Column(name = "id_pedido")
+    private Long id;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime dataCriacao;
+
+    @Column(nullable = false)
+    private LocalDateTime dataModificacao;
+
+    @Column(nullable = false)
+    private Status status;
+
+    @Column(nullable = false)
+    private BigDecimal total;
+
+    @OneToMany(mappedBy = "pedido")
+    private List<DetalhesPedido> detalhesPedidos;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Pedido pedido = (Pedido) o;
+        return Objects.equals(id, pedido.id) && Objects.equals(dataCriacao, pedido.dataCriacao) && Objects.equals(
+                dataModificacao, pedido.dataModificacao) && status == pedido.status && Objects.equals(total,
+                pedido.total) && Objects.equals(detalhesPedidos, pedido.detalhesPedidos);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, dataCriacao, dataModificacao, status, total, detalhesPedidos);
+    }
+
+}
