@@ -1,6 +1,5 @@
 package com.github.andregpereira.resilientshop.shoppingapi.domain.entities;
 
-import com.github.andregpereira.resilientshop.shoppingapi.domain.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,7 +32,7 @@ public class Pedido {
     private LocalDateTime dataModificacao;
 
     @Column(nullable = false)
-    private Status status;
+    private StatusPedido status;
 
     @Column(nullable = false)
     private BigDecimal total;

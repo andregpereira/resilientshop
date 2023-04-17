@@ -1,6 +1,6 @@
-package com.github.andregpereira.resilientshop.shoppingapi.service.consumers;
+package com.github.andregpereira.resilientshop.shoppingapi.infra.consumers;
 
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.UsuarioDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.usuario.UsuarioDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
