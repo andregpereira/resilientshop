@@ -1,0 +1,19 @@
+server:
+  port: 8767
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: true
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+
+zuul:
+  routes:
+    usuarios:
+      service-id: resilientshop-user-api
+      path: /usuarios/**
+    produtos:
+      service-id: resilientshop-products-api
+      path: /produtos/**
