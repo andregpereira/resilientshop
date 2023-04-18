@@ -14,7 +14,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "tb_detalhes_pedidos")
 @SequenceGenerator(name = "detalhe_pedido", sequenceName = "sq_detalhes_pedidos", allocationSize = 1)
-public class DetalhesPedido {
+public class DetalhePedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "detalhe_pedido")
@@ -27,8 +27,8 @@ public class DetalhesPedido {
     @Column(nullable = false)
     private int quantidade;
 
-    @Transient
-    private Produto idProduto;
+    @Column(nullable = false)
+    private Long idProduto;
 
     @ManyToOne
     @JoinColumn(name = "id_pedido")
@@ -40,7 +40,7 @@ public class DetalhesPedido {
             return true;
         if (o == null || getClass() != o.getClass())
             return false;
-        DetalhesPedido that = (DetalhesPedido) o;
+        DetalhePedido that = (DetalhePedido) o;
         return quantidade == that.quantidade && Objects.equals(id, that.id) && Objects.equals(subtotal,
                 that.subtotal) && Objects.equals(idProduto, that.idProduto) && Objects.equals(pedido, that.pedido);
     }
