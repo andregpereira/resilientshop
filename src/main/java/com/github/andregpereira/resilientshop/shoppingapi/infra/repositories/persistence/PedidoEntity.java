@@ -1,18 +1,17 @@
-package com.github.andregpereira.resilientshop.shoppingapi.domain.entities;
+package com.github.andregpereira.resilientshop.shoppingapi.infra.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -32,13 +31,13 @@ public class Pedido {
     private LocalDateTime dataModificacao;
 
     @Column(nullable = false)
-    private StatusPedido status;
+    private int status;
 
     @Column(nullable = false)
     private BigDecimal total;
 
     @OneToMany(mappedBy = "pedido")
-    private List<DetalhesPedido> detalhesPedidos;
+    private List<DetalhePedido> detalhePedido = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
@@ -49,12 +48,12 @@ public class Pedido {
         Pedido pedido = (Pedido) o;
         return Objects.equals(id, pedido.id) && Objects.equals(dataCriacao, pedido.dataCriacao) && Objects.equals(
                 dataModificacao, pedido.dataModificacao) && status == pedido.status && Objects.equals(total,
-                pedido.total) && Objects.equals(detalhesPedidos, pedido.detalhesPedidos);
+                pedido.total) && Objects.equals(detalhePedido, pedido.detalhePedido);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, dataCriacao, dataModificacao, status, total, detalhesPedidos);
+        return Objects.hash(id, dataCriacao, dataModificacao, status, total, detalhePedido);
     }
 
 }
