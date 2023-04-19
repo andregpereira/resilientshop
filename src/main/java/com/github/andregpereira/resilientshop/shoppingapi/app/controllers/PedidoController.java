@@ -1,9 +1,10 @@
 package com.github.andregpereira.resilientshop.shoppingapi.app.controllers;
 
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.PedidoDto;
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.PedidoRegistrarDto;
-import com.github.andregpereira.resilientshop.shoppingapi.service.PedidoConsultaService;
-import com.github.andregpereira.resilientshop.shoppingapi.service.PedidoManutencaoService;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoDetalharDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoRegistrarDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.services.PedidoConsultaService;
+import com.github.andregpereira.resilientshop.shoppingapi.app.services.PedidoManutencaoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +28,10 @@ public class PedidoController {
     private final PedidoConsultaService consultaService;
 
     @PostMapping
-    public ResponseEntity<PedidoDto> criar(@RequestBody @Valid PedidoRegistrarDto dto,
+    public ResponseEntity<PedidoDetalharDto> criar(@RequestBody @Valid PedidoRegistrarDto dto,
             UriComponentsBuilder uriBuilder) {
         log.info("Criando pedido...");
-        PedidoDto pedido = manutencaoService.criar(dto);
+        PedidoDetalharDto pedido = manutencaoService.criar(dto);
         URI uri = uriBuilder.path("/pedidos/{id}").buildAndExpand(pedido.id()).toUri();
         log.info("Pedido criado com sucesso");
         return ResponseEntity.created(uri).body(pedido);
@@ -45,6 +46,11 @@ public class PedidoController {
     public ResponseEntity<Page<PedidoDto>> listar(
             @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pageable) {
         return ResponseEntity.ok(consultaService.listar(pageable));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PedidoDetalharDto> listar(@PathVariable Long id) {
+        return ResponseEntity.ok(consultaService.consultarPorId(id));
     }
 
 }
