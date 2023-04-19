@@ -5,6 +5,7 @@ import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.Pedido
 import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoRegistrarDto;
 import com.github.andregpereira.resilientshop.shoppingapi.app.services.PedidoConsultaService;
 import com.github.andregpereira.resilientshop.shoppingapi.app.services.PedidoManutencaoService;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.StatusPedido;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,12 +46,21 @@ public class PedidoController {
     @GetMapping
     public ResponseEntity<Page<PedidoDto>> listar(
             @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pageable) {
+        log.info("Procurando pedidos...");
         return ResponseEntity.ok(consultaService.listar(pageable));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PedidoDetalharDto> listar(@PathVariable Long id) {
+    public ResponseEntity<PedidoDetalharDto> consultarPorId(@PathVariable Long id) {
+        log.info("Procurando pedido com id {}...", id);
         return ResponseEntity.ok(consultaService.consultarPorId(id));
+    }
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<Page<PedidoDto>> consultarPorStatus(@PathVariable int status,
+            @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pageable) {
+        log.info("Procurando pedidos com status {} ({})...", StatusPedido.getStatusPorId(status), status);
+        return ResponseEntity.ok(consultaService.consultarPorStatus(status, pageable));
     }
 
 }
