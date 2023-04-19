@@ -41,27 +41,27 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
     @Override
     public PedidoDetalharDto criar(PedidoRegistrarDto dto) {
         Pedido pedido = pedidoMapper.toPedido(dto);
-        List<DetalhePedido> detalhePedido = dto.detalhePedido().stream().parallel().map(dpDto -> {
+        List<DetalhePedido> detalhePedido = dto.detalhePedido().parallelStream().map(dpDto -> {
             Produto produto = produtoMapper.toProduto(produtoFeignClient.consultarPorId(dpDto.idProduto()));
             DetalhePedido dp = detalhePedidoMapper.toDetalhePedido(dpDto);
             dp.setProduto(produto);
-            dp.setPedido(pedido);
             dp.setSubtotal(produto.getValorUnitario().multiply(BigDecimal.valueOf(dpDto.quantidade())));
             return dp;
         }).toList();
         List<DetalhePedidoEntity> detalhePedidoEntity = detalhePedidoRepository.saveAll(
-                detalhePedidoMapper.toListaDetalhePedidoEntity(detalhePedido));
+                detalhePedido.parallelStream().map(dp -> {
+                    DetalhePedidoEntity dpE = detalhePedidoMapper.toDetalhePedidoEntity(dp);
+                    dpE.setIdProduto(dp.getProduto().getId());
+                    return dpE;
+                }).toList());
         LocalDateTime agora = LocalDateTime.now();
         pedido.setDataCriacao(agora);
         pedido.setDataModificacao(agora);
         pedido.setStatus(StatusPedido.AGUARDANDO_PAGAMENTO.getStatus());
-        pedido.setTotal(detalhePedido.stream().parallel().map(DetalhePedido::getSubtotal).reduce(BigDecimal.ZERO,
+        pedido.setTotal(detalhePedido.parallelStream().map(DetalhePedido::getSubtotal).reduce(BigDecimal.ZERO,
                 BigDecimal::add));
         PedidoEntity pedidoEntity = pedidoRepository.save(pedidoMapper.toPedidoEntity(pedido));
-        detalhePedidoEntity = detalhePedidoEntity.stream().parallel().map(dpE -> {
-            dpE.setPedido(pedidoEntity);
-            return dpE;
-        }).toList();
+        detalhePedidoEntity.parallelStream().forEach(dpe -> dpe.setPedido(pedidoEntity));
         detalhePedido = detalhePedidoMapper.toListaDetalhePedido(detalhePedidoRepository.saveAll(detalhePedidoEntity));
         pedido.setDetalhePedido(detalhePedido);
         pedido.setId(pedidoEntity.getId());
