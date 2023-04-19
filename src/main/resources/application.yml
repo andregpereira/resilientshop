@@ -1,19 +1,24 @@
-server:
-  port: 8761
-eureka:
-  instance:
-    hostname: localhost
-  client:
-    registerWithEureka: true
-    fetchRegistry: false
-    serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
-  server:
-    eviction-interval-timer-in-ms: 5000
-
-
-
-
+#server:
+#  port: 8761
+#
+#eureka:
+#  instance:
+#    hostname: localhost
+#  #    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+#  client:
+#    registerWithEureka: true
+#    fetchRegistry: true
+#    serviceUrl:
+#      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+#
 #zuul:
 #  routes:
 #    usuarios:
+#      service-id: resilientshop-user-api
+#      url: http://localhost:9000/
+#      stripPrefix: false
+#      path: /resilientshop-user-api/**
+#    produtos:
+#      service-id: resilientshop-products-api
+#      stripPrefix: false
+#      path: /resilientshop-products-api/**
