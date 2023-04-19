@@ -1,5 +1,14 @@
-package com.github.andregpereira.resilientshop.shoppingapi.app.dtos;
+package com.github.andregpereira.resilientshop.shoppingapi.app.dtos.endereco;
 
-public record EnderecoDto(String apelido) {
+
+public record EnderecoDto(Long id,
+        String cep,
+        String estado,
+        String cidade,
+        String bairro,
+        String rua,
+        String numero,
+        String complemento
+        ) {
 
 }

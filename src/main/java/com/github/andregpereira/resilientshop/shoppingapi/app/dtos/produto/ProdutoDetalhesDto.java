@@ -6,10 +6,11 @@ import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public record ProdutoDto(Long id,
+public record ProdutoDetalhesDto(Long id,
+        Long sku,
         String nome,
         String descricao,
-        @JsonFormat(shape = Shape.STRING, pattern = "dd/MM/yyyy HH:mm") LocalDateTime dataCriacao,
+        @JsonFormat(shape = Shape.STRING, pattern = "dd/MM/uuuu HH:mm") LocalDateTime dataCriacao,
         BigDecimal valorUnitario,
         int estoque) {
 
