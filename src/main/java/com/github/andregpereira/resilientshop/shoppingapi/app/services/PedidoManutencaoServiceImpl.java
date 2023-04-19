@@ -2,6 +2,7 @@ package com.github.andregpereira.resilientshop.shoppingapi.app.services;
 
 import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoDetalharDto;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoRegistrarDto;
+import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.PedidoNotFoundException;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.DetalhePedidoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.PedidoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.ProdutoMapper;
@@ -70,17 +71,12 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
 
     @Override
     public String cancelar(Long id) {
-        pedidoRepository.findById(id).ifPresentOrElse(p -> {
-            if (p.getStatus() != 1) {
-                log.info("Pedido com status {}({}). Não é possível cancelar o pedido",
-                        StatusPedido.getStatusPorId(p.getStatus()), p.getStatus());
-                throw new RuntimeException();
-            }
+        pedidoRepository.findByIdAndStatusAguardandoPagamento(id).ifPresentOrElse(p -> {
             p.setStatus(StatusPedido.CANCELADO.getStatus());
             pedidoRepository.save(p);
         }, () -> {
-            log.info("Pedido com o id {} cancelado", id);
-            throw new RuntimeException();
+            log.info("Pedido aguardando pagamento com id {} não encontrado", id);
+            throw new PedidoNotFoundException("Poxa! Não foi encontrado um pedido aguardando pagamento com o id " + id);
         });
         return "Pedido cancelado";
     }
