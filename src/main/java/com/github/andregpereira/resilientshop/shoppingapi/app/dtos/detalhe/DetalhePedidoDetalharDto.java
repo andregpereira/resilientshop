@@ -5,7 +5,7 @@ import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.usuario.Usuar
 
 import java.math.BigDecimal;
 
-public record DetalhesPedidoDetalharDto(Long id,
+public record DetalhePedidoDetalharDto(Long id,
         int quantidade,
         BigDecimal subtotal,
         ProdutoDto produto,
