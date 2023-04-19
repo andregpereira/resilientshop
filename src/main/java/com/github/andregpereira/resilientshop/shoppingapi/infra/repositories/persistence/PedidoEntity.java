@@ -1,11 +1,10 @@
-package com.github.andregpereira.resilientshop.shoppingapi.infra.entities;
+package com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence;
 
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,7 +16,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "tb_pedidos")
 @SequenceGenerator(name = "pedido", sequenceName = "sq_pedidos", allocationSize = 1)
-public class Pedido {
+public class PedidoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pedido")
@@ -37,7 +36,7 @@ public class Pedido {
     private BigDecimal total;
 
     @OneToMany(mappedBy = "pedido")
-    private List<DetalhePedido> detalhePedido = new ArrayList<>();
+    private List<DetalhePedidoEntity> detalhePedido;
 
     @Override
     public boolean equals(Object o) {
@@ -45,7 +44,7 @@ public class Pedido {
             return true;
         if (o == null || getClass() != o.getClass())
             return false;
-        Pedido pedido = (Pedido) o;
+        PedidoEntity pedido = (PedidoEntity) o;
         return Objects.equals(id, pedido.id) && Objects.equals(dataCriacao, pedido.dataCriacao) && Objects.equals(
                 dataModificacao, pedido.dataModificacao) && status == pedido.status && Objects.equals(total,
                 pedido.total) && Objects.equals(detalhePedido, pedido.detalhePedido);
