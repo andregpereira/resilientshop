@@ -12,14 +12,12 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface PedidoMapper {
 
-    Pedido toPedido(PedidoRegistrarDto dto);
-
     Pedido toPedido(PedidoEntity pedidoEntity);
-
-    PedidoEntity toPedidoEntity(Pedido pedido);
 
     PedidoDto toPedidoDto(Pedido pedido);
 
     PedidoDetalharDto toPedidoDetalharDto(Pedido pedido);
+
+    PedidoEntity toPedidoEntity(PedidoRegistrarDto dto);
 
 }
