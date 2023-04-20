@@ -32,16 +32,17 @@ import java.util.List;
 public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
 
     private final PedidoRepository pedidoRepository;
-    private final DetalhesPedidoRepository detalhePedidoRepository;
     private final PedidoMapper pedidoMapper;
+    private final DetalhesPedidoRepository detalhePedidoRepository;
     private final DetalhePedidoMapper detalhePedidoMapper;
-    private final ProdutoMapper produtoMapper;
     private final UsuarioFeignClient usuarioFeignClient;
     private final ProdutoFeignClient produtoFeignClient;
+    private final ProdutoMapper produtoMapper;
 
     @Override
     public PedidoDetalharDto criar(PedidoRegistrarDto dto) {
         Pedido pedido = pedidoMapper.toPedido(dto);
+        log.info("Calculando subtotal e setando produto(s)...");
         List<DetalhePedido> detalhePedido = dto.detalhePedido().parallelStream().map(dpDto -> {
             Produto produto = produtoMapper.toProduto(produtoFeignClient.consultarPorId(dpDto.idProduto()));
             DetalhePedido dp = detalhePedidoMapper.toDetalhePedido(dpDto);
@@ -49,6 +50,7 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
             dp.setSubtotal(produto.getValorUnitario().multiply(BigDecimal.valueOf(dpDto.quantidade())));
             return dp;
         }).toList();
+        log.info("Setando id(s) do(s) produto(s)... ");
         List<DetalhePedidoEntity> detalhePedidoEntity = detalhePedidoRepository.saveAll(
                 detalhePedido.parallelStream().map(dp -> {
                     DetalhePedidoEntity dpE = detalhePedidoMapper.toDetalhePedidoEntity(dp);
@@ -59,6 +61,7 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
         pedido.setDataCriacao(agora);
         pedido.setDataModificacao(agora);
         pedido.setStatus(StatusPedido.AGUARDANDO_PAGAMENTO.getStatus());
+        log.info("Calculando total...");
         pedido.setTotal(detalhePedido.parallelStream().map(DetalhePedido::getSubtotal).reduce(BigDecimal.ZERO,
                 BigDecimal::add));
         PedidoEntity pedidoEntity = pedidoRepository.save(pedidoMapper.toPedidoEntity(pedido));
@@ -78,6 +81,7 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
             log.info("Pedido aguardando pagamento com id {} não encontrado", id);
             throw new PedidoNotFoundException("Poxa! Não foi encontrado um pedido aguardando pagamento com o id " + id);
         });
+        log.info("Pedido com id {} cancelado com sucesso", id);
         return "Pedido cancelado";
     }
 
