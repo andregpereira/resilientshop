@@ -6,7 +6,6 @@ import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.Pedid
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.DetalhePedidoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.PedidoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.ProdutoMapper;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.DetalhePedido;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.Pedido;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.Produto;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.StatusPedido;
@@ -23,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -41,34 +39,26 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
 
     @Override
     public PedidoDetalharDto criar(PedidoRegistrarDto dto) {
-        Pedido pedido = pedidoMapper.toPedido(dto);
+        PedidoEntity pedidoEntity = pedidoMapper.toPedidoEntity(dto);
         log.info("Calculando subtotal e setando produto(s)...");
-        List<DetalhePedido> detalhePedido = dto.detalhePedido().parallelStream().map(dpDto -> {
-            Produto produto = produtoMapper.toProduto(produtoFeignClient.consultarPorId(dpDto.idProduto()));
-            DetalhePedido dp = detalhePedidoMapper.toDetalhePedido(dpDto);
+        pedidoEntity.getDetalhePedido().parallelStream().forEach(dp -> {
+            Produto produto = produtoMapper.toProduto(produtoFeignClient.consultarPorId(dp.getIdProduto()));
+            dp.setSubtotal(produto.getValorUnitario().multiply(BigDecimal.valueOf(dp.getQuantidade())));
             dp.setProduto(produto);
-            dp.setSubtotal(produto.getValorUnitario().multiply(BigDecimal.valueOf(dpDto.quantidade())));
-            return dp;
-        }).toList();
+            dp.setPedido(pedidoEntity);
+        });
         log.info("Setando id(s) do(s) produto(s)... ");
-        List<DetalhePedidoEntity> detalhePedidoEntity = detalhePedidoRepository.saveAll(
-                detalhePedido.parallelStream().map(dp -> {
-                    DetalhePedidoEntity dpE = detalhePedidoMapper.toDetalhePedidoEntity(dp);
-                    dpE.setIdProduto(dp.getProduto().getId());
-                    return dpE;
-                }).toList());
         LocalDateTime agora = LocalDateTime.now();
-        pedido.setDataCriacao(agora);
-        pedido.setDataModificacao(agora);
-        pedido.setStatus(StatusPedido.AGUARDANDO_PAGAMENTO.getStatus());
+        pedidoEntity.setDataCriacao(agora);
+        pedidoEntity.setDataModificacao(agora);
+        pedidoEntity.setStatus(StatusPedido.AGUARDANDO_PAGAMENTO.getStatus());
         log.info("Calculando total...");
-        pedido.setTotal(detalhePedido.parallelStream().map(DetalhePedido::getSubtotal).reduce(BigDecimal.ZERO,
-                BigDecimal::add));
-        PedidoEntity pedidoEntity = pedidoRepository.save(pedidoMapper.toPedidoEntity(pedido));
-        detalhePedidoEntity.parallelStream().forEach(dpe -> dpe.setPedido(pedidoEntity));
-        detalhePedido = detalhePedidoMapper.toListaDetalhePedido(detalhePedidoRepository.saveAll(detalhePedidoEntity));
-        pedido.setDetalhePedido(detalhePedido);
-        pedido.setId(pedidoEntity.getId());
+        pedidoEntity.setTotal(
+                pedidoEntity.getDetalhePedido().parallelStream().map(DetalhePedidoEntity::getSubtotal).reduce(
+                        BigDecimal.ZERO, BigDecimal::add));
+        Pedido pedido = pedidoMapper.toPedido(pedidoRepository.save(pedidoEntity));
+        pedido.setDetalhePedido(detalhePedidoMapper.toListaDetalhePedido(
+                detalhePedidoRepository.saveAll(pedidoEntity.getDetalhePedido())));
         return pedidoMapper.toPedidoDetalharDto(pedido);
     }
 
