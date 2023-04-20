@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.shoppingapi.app.dtos.detalhe;
+package com.github.andregpereira.resilientshop.shoppingapi.app.dtos.detalhepedido;
 
 import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.produto.ProdutoDto;
 

@@ -1,7 +1,7 @@
 package com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.detalhe.DetalhePedidoDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.detalhepedido.DetalhePedidoDto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

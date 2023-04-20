@@ -1,6 +1,6 @@
 package com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido;
 
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.detalhe.DetalhePedidoRegistrarDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.detalhepedido.DetalhePedidoRegistrarDto;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;

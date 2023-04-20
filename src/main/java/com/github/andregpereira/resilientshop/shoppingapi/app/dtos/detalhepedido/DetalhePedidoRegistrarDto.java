@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.shoppingapi.app.dtos.detalhe;
+package com.github.andregpereira.resilientshop.shoppingapi.app.dtos.detalhepedido;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
