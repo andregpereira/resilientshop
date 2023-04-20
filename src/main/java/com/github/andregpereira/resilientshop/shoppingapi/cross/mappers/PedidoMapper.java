@@ -7,7 +7,6 @@ import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.Pedido;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence.PedidoEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants.ComponentModel;
-import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
