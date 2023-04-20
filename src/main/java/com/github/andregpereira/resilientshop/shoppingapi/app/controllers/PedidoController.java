@@ -40,6 +40,7 @@ public class PedidoController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> cancelar(@PathVariable Long id) {
+        log.info("Cancelando pedido...");
         return ResponseEntity.ok(manutencaoService.cancelar(id));
     }
 
@@ -52,14 +53,14 @@ public class PedidoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PedidoDetalharDto> consultarPorId(@PathVariable Long id) {
-        log.info("Procurando pedido com id {}...", id);
+        log.info("Pesquisando pedido com id {}...", id);
         return ResponseEntity.ok(consultaService.consultarPorId(id));
     }
 
     @GetMapping("/status/{status}")
     public ResponseEntity<Page<PedidoDto>> consultarPorStatus(@PathVariable int status,
             @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pageable) {
-        log.info("Procurando pedidos com status {} ({})...", StatusPedido.getStatusPorId(status), status);
+        log.info("Pesquisando pedidos com status {} ({})...", StatusPedido.getStatusPorId(status), status);
         return ResponseEntity.ok(consultaService.consultarPorStatus(status, pageable));
     }
 
