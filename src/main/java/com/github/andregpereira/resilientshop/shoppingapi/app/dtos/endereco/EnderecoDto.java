@@ -1,6 +1,5 @@
 package com.github.andregpereira.resilientshop.shoppingapi.app.dtos.endereco;
 
-
 public record EnderecoDto(Long id,
         String cep,
         String estado,
@@ -8,7 +7,6 @@ public record EnderecoDto(Long id,
         String bairro,
         String rua,
         String numero,
-        String complemento
-        ) {
+        String complemento) {
 
 }
