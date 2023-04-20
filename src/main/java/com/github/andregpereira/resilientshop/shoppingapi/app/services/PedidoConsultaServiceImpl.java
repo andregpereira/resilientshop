@@ -25,8 +25,8 @@ public class PedidoConsultaServiceImpl implements PedidoConsultaService {
 
     private final PedidoRepository repository;
     private final PedidoMapper pedidoMapper;
-    private final ProdutoMapper produtoMapper;
     private final ProdutoFeignClient produtoFeignClient;
+    private final ProdutoMapper produtoMapper;
 
     @Override
     public Page<PedidoDto> listar(Pageable pageable) {
