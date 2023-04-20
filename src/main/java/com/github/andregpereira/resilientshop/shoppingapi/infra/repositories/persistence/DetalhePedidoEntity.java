@@ -25,17 +25,17 @@ public class DetalhePedidoEntity {
     private Long id;
 
     @Column(nullable = false)
+    private int quantidade;
+
+    @Column(nullable = false)
     private BigDecimal subtotal;
 
     @Column(nullable = false)
-    private int quantidade;
+    private Long idProduto;
 
     @ManyToOne
     @JoinColumn(name = "id_pedido")
     private PedidoEntity pedido;
-
-    @Column(nullable = false)
-    private Long idProduto;
 
     @Transient
     private Produto produto;
@@ -48,12 +48,13 @@ public class DetalhePedidoEntity {
             return false;
         DetalhePedidoEntity that = (DetalhePedidoEntity) o;
         return quantidade == that.quantidade && Objects.equals(id, that.id) && Objects.equals(subtotal,
-                that.subtotal) && Objects.equals(idProduto, that.idProduto) && Objects.equals(pedido, that.pedido);
+                that.subtotal) && Objects.equals(pedido, that.pedido) && Objects.equals(idProduto,
+                that.idProduto) && Objects.equals(produto, that.produto);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, subtotal, quantidade, idProduto, pedido);
+        return Objects.hash(id, quantidade, subtotal, pedido, idProduto, produto);
     }
 
 }
