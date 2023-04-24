@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Component
-@FeignClient(name = "resilientshop-products-api", url = "http://localhost:8765", path = "/produtos")
+@FeignClient(name = "resilientshop-products-api", url = "http://localhost:8763", path = "/produtos")
 public interface ProdutoFeignClient {
 
     @GetMapping("/{id}")
