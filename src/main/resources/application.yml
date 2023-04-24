@@ -1,24 +1,31 @@
-#server:
-#  port: 8761
-#
-#eureka:
-#  instance:
-#    hostname: localhost
-#  #    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-#  client:
-#    registerWithEureka: true
-#    fetchRegistry: true
-#    serviceUrl:
-#      defaultZone: http://${eureka.instance.hostname}:8761/eureka
-#
-#zuul:
-#  routes:
-#    usuarios:
-#      service-id: resilientshop-user-api
-#      url: http://localhost:9000/
-#      stripPrefix: false
-#      path: /resilientshop-user-api/**
-#    produtos:
-#      service-id: resilientshop-products-api
-#      stripPrefix: false
-#      path: /resilientshop-products-api/**
+spring:
+  application:
+    name: resilientshop-shopping-api
+  #PostgreSQL
+  datasource:
+    url: jdbc:postgresql://localhost:5432/resilientshop-shopping
+    username: postgres
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+server:
+  port: 8761
+  error:
+    include-stacktrace: never
+
+#Swagger
+spring-doc:
+  api-docs:
+    path: /api-docs
+
+eureka:
+  instance:
+    hostname: localhost
+  #    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka
