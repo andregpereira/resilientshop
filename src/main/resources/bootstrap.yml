@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: resilientshop-api-gateway
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
