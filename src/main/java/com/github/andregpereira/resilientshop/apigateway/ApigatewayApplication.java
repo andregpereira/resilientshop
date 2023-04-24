@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.apigatewayzuul;
+package com.github.andregpereira.resilientshop.apigateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @EnableDiscoveryClient
 @SpringBootApplication
-public class ApigatewayzuulApplication {
+public class ApigatewayApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ApigatewayzuulApplication.class, args);
+        SpringApplication.run(ApigatewayApplication.class, args);
     }
 
 }
