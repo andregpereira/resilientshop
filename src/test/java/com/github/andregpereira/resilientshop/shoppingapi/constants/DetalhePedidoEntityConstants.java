@@ -15,6 +15,8 @@ public class DetalhePedidoEntityConstants {
             BigDecimal.valueOf(48), 1L, PEDIDO_ENTITY, PRODUTO);
 
     public static final DetalhePedidoEntity DETALHE_PEDIDO_ENTITY_VAZIO = new DetalhePedidoEntity();
+    public static final DetalhePedidoEntity DETALHE_PEDIDO_ENTITY_INVALIDO = new DetalhePedidoEntity(null, 0, null,
+            null, null, null);
 
     public static final List<DetalhePedidoEntity> DETALHES_PEDIDO_ENTITY = new ArrayList<>() {
         {

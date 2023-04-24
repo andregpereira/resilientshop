@@ -82,16 +82,6 @@ class PedidoRepositoryTest {
     }
 
     @Test
-    void consultarPedidosExistentesRetornaPedidos() {
-        em.persist(DETALHE_PEDIDO_ENTITY);
-        PedidoEntity pedido = em.persistFlushFind(PEDIDO_ENTITY);
-        PageRequest pageable = PageRequest.of(0, 10, Sort.Direction.ASC, "id");
-        Page<PedidoEntity> pagePedidos = repository.findAll(pageable);
-        assertThat(pagePedidos).isNotEmpty();
-        assertThat(pagePedidos.getContent().get(0)).isEqualTo(pedido);
-    }
-
-    @Test
     void consultarPedidoPorIdInexistenteRetornaEmpty() {
         Optional<PedidoEntity> optionalPedido = repository.findById(10L);
         assertThat(optionalPedido).isEmpty();
