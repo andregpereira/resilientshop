@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.apigatewayzuul;
+package com.github.andregpereira.resilientshop.apigateway;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
