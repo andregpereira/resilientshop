@@ -1,19 +1,32 @@
-server:
-  port: 8767
 eureka:
   instance:
     hostname: localhost
   client:
-    registerWithEureka: true
-    fetchRegistry: false
+    register-with-eureka: true
+    fetch-registry: true
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka
 
-zuul:
-  routes:
-    usuarios:
-      service-id: resilientshop-user-api
-      path: /usuarios/**
-    produtos:
-      service-id: resilientshop-products-api
-      path: /produtos/**
+server:
+  port: 8763
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: resilientshop-api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: resilientshop-shopping-api
+          uri: lb://resilientshop-shopping-api
+          predicates:
+            - Path=/pedidos/**
+        - id: resilientshop-user-api
+          uri: lb://resilientshop-user-api
+          predicates:
+            - Path=/usuarios/**
+        - id: resilientshop-products-api
+          uri: lb://resilientshop-products-api
+          predicates:
+            - Path=/produtos/**
