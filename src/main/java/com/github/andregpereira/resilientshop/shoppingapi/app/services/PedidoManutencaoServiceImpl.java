@@ -11,7 +11,7 @@ import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.Produto
 import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.StatusPedido;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.ProdutoFeignClient;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.UsuarioFeignClient;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.DetalhesPedidoRepository;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.DetalhePedidoRepository;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.PedidoRepository;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence.DetalhePedidoEntity;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence.PedidoEntity;
@@ -31,7 +31,7 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
 
     private final PedidoRepository pedidoRepository;
     private final PedidoMapper pedidoMapper;
-    private final DetalhesPedidoRepository detalhePedidoRepository;
+    private final DetalhePedidoRepository detalhePedidoRepository;
     private final DetalhePedidoMapper detalhePedidoMapper;
     private final UsuarioFeignClient usuarioFeignClient;
     private final ProdutoFeignClient produtoFeignClient;

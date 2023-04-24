@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DetalhesPedidoRepository extends JpaRepository<DetalhePedidoEntity, Long> {
+public interface DetalhePedidoRepository extends JpaRepository<DetalhePedidoEntity, Long> {
 
 }
