@@ -1,2 +1,2 @@
-# resilientshop-api-gateway-zuul
+# resilientshop-api-gateway
 Resilient Shop Backend API Gateway GitHub Repository
