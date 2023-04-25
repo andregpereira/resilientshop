@@ -57,8 +57,8 @@ public class PedidoController {
         return ResponseEntity.ok(consultaService.consultarPorId(id));
     }
 
-    @GetMapping("/status/{status}")
-    public ResponseEntity<Page<PedidoDto>> consultarPorStatus(@PathVariable int status,
+    @GetMapping("/status")
+    public ResponseEntity<Page<PedidoDto>> consultarPorStatus(@RequestParam int status,
             @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pageable) {
         log.info("Pesquisando pedidos com status {} ({})...", StatusPedido.getStatusPorId(status), status);
         return ResponseEntity.ok(consultaService.consultarPorStatus(status, pageable));

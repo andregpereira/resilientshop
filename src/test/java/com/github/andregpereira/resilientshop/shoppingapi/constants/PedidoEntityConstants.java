@@ -8,8 +8,8 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-import static com.github.andregpereira.resilientshop.shoppingapi.constants.DetalhePedidoEntityConstants.DETALHES_PEDIDO_ENTITY;
-import static com.github.andregpereira.resilientshop.shoppingapi.constants.DetalhePedidoEntityConstants.DETALHES_PEDIDO_ENTITY_VAZIO;
+import static com.github.andregpereira.resilientshop.shoppingapi.constants.DetalhePedidoEntityConstants.LISTA_DETALHES_PEDIDOS_ENTITY;
+import static com.github.andregpereira.resilientshop.shoppingapi.constants.DetalhePedidoEntityConstants.LISTA_DETALHES_PEDIDOS_ENTITY_VAZIO;
 
 public class PedidoEntityConstants {
 
@@ -19,11 +19,11 @@ public class PedidoEntityConstants {
             Clock.fixed(Instant.parse("2014-12-22T10:15:30.00Z"), ZoneId.systemDefault()));
 
     public static final PedidoEntity PEDIDO_ENTITY = new PedidoEntity(null, LOCAL_DATE_TIME, LOCAL_DATE_TIME, 1,
-            BigDecimal.valueOf(48), DETALHES_PEDIDO_ENTITY);
+            BigDecimal.valueOf(48), LISTA_DETALHES_PEDIDOS_ENTITY);
 
     public static final PedidoEntity PEDIDO_ENTITY_VAZIO = new PedidoEntity();
 
     public static final PedidoEntity PEDIDO_ENTITY_INVALIDO = new PedidoEntity(null, null, null, 0, null,
-            DETALHES_PEDIDO_ENTITY_VAZIO);
+            LISTA_DETALHES_PEDIDOS_ENTITY_VAZIO);
 
 }
