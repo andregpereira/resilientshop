@@ -18,12 +18,12 @@ public class DetalhePedidoEntityConstants {
     public static final DetalhePedidoEntity DETALHE_PEDIDO_ENTITY_INVALIDO = new DetalhePedidoEntity(null, 0, null,
             null, null, null);
 
-    public static final List<DetalhePedidoEntity> DETALHES_PEDIDO_ENTITY = new ArrayList<>() {
+    public static final List<DetalhePedidoEntity> LISTA_DETALHES_PEDIDOS_ENTITY = new ArrayList<>() {
         {
             add(DETALHE_PEDIDO_ENTITY);
         }
     };
-    public static final List<DetalhePedidoEntity> DETALHES_PEDIDO_ENTITY_VAZIO = new ArrayList<>() {
+    public static final List<DetalhePedidoEntity> LISTA_DETALHES_PEDIDOS_ENTITY_VAZIO = new ArrayList<>() {
         {
             add(DETALHE_PEDIDO_ENTITY_VAZIO);
         }

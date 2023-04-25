@@ -1,6 +1,7 @@
 package com.github.andregpereira.resilientshop.shoppingapi.constants;
 
 import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoDetalharDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoDto;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoRegistrarDto;
 
 import java.math.BigDecimal;
@@ -11,11 +12,14 @@ import static com.github.andregpereira.resilientshop.shoppingapi.constants.Pedid
 
 public class PedidoDtoConstants {
 
-    public static final PedidoRegistrarDto PEDIDO_REGISTRAR_DTO = new PedidoRegistrarDto(
-            LISTA_DETALHE_PEDIDO_REGISTRAR_DTO);
-    public static final PedidoRegistrarDto PEDIDO_REGISTRAR_DTO_INVALIDO = new PedidoRegistrarDto(null);
+    public static final PedidoDto PEDIDO_DTO = new PedidoDto(null, LOCAL_DATE_TIME, LOCAL_DATE_TIME, 1,
+            BigDecimal.valueOf(48));
 
     public static final PedidoDetalharDto PEDIDO_DETALHAR_DTO = new PedidoDetalharDto(null, LOCAL_DATE_TIME,
             LOCAL_DATE_TIME, 1, BigDecimal.valueOf(48), LISTA_DETALHE_PEDIDO_DTO);
+
+    public static final PedidoRegistrarDto PEDIDO_REGISTRAR_DTO = new PedidoRegistrarDto(
+            LISTA_DETALHE_PEDIDO_REGISTRAR_DTO);
+    public static final PedidoRegistrarDto PEDIDO_REGISTRAR_DTO_INVALIDO = new PedidoRegistrarDto(null);
 
 }
