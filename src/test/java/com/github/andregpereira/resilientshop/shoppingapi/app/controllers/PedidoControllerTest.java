@@ -5,6 +5,7 @@ import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.Pedido
 import com.github.andregpereira.resilientshop.shoppingapi.app.services.PedidoConsultaService;
 import com.github.andregpereira.resilientshop.shoppingapi.app.services.PedidoManutencaoService;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.PedidoNotFoundException;
+import feign.FeignException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.security.InvalidParameterException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +69,13 @@ class PedidoControllerTest {
     }
 
     @Test
+    void criarPedidoComProdutoInexistenteThrowsException() throws Exception {
+        given(manutencaoService.criar(PEDIDO_REGISTRAR_DTO)).willThrow(FeignException.class);
+        mockMvc.perform(post("/pedidos").content(objectMapper.writeValueAsString(PEDIDO_REGISTRAR_DTO)).contentType(
+                MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
+    }
+
+    @Test
     void criarPedidoComRequestBodyNuloRetornaBadRequest() throws Exception {
         mockMvc.perform(post("/pedidos").content(objectMapper.writeValueAsString(null)).contentType(
                 MediaType.APPLICATION_JSON)).andExpectAll(status().isBadRequest(),
@@ -75,9 +84,9 @@ class PedidoControllerTest {
 
     @Test
     void cancelarPedidoPorIdExistenteRetornaOk() throws Exception {
-        given(manutencaoService.cancelar(10L)).willReturn("Pedido cancelado");
+        given(manutencaoService.cancelar(10L)).willReturn("Pedido com id 10 cancelado");
         mockMvc.perform(delete("/pedidos/10")).andExpect(status().isOk()).andExpectAll(
-                jsonPath("$").value("Pedido cancelado"));
+                jsonPath("$").value("Pedido com id 10 cancelado"));
     }
 
     @Test
@@ -142,6 +151,13 @@ class PedidoControllerTest {
         PageRequest pageable = PageRequest.of(0, 10, Sort.Direction.ASC, "id");
         given(consultaService.consultarPorStatus(1, pageable)).willThrow(PedidoNotFoundException.class);
         mockMvc.perform(get("/pedidos/status").param("status", "1")).andExpect(status().isNotFound());
+    }
+
+    @Test
+    void consultarPedidoPorStatusInvalidoThrowsException() throws Exception {
+        PageRequest pageable = PageRequest.of(0, 10, Sort.Direction.ASC, "id");
+        given(consultaService.consultarPorStatus(-1, pageable)).willThrow(InvalidParameterException.class);
+        mockMvc.perform(get("/pedidos/status").param("status", "-1")).andExpect(status().isBadRequest());
     }
 
     @Test
