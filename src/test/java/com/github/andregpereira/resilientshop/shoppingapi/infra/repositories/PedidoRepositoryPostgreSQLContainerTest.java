@@ -1,5 +1,6 @@
 package com.github.andregpereira.resilientshop.shoppingapi.infra.repositories;
 
+import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.config.PostgreSQLContainerConfig;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence.PedidoEntity;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
-class PedidoRepositoryTest {
+class PedidoRepositoryPostgreSQLContainerTest extends PostgreSQLContainerConfig {
 
     @Autowired
     private PedidoRepository repository;
