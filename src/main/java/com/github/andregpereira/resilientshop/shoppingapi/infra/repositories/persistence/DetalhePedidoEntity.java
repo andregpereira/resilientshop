@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 @Getter
 @Setter
@@ -48,13 +49,19 @@ public class DetalhePedidoEntity {
             return false;
         DetalhePedidoEntity that = (DetalhePedidoEntity) o;
         return quantidade == that.quantidade && Objects.equals(id, that.id) && Objects.equals(subtotal,
-                that.subtotal) && Objects.equals(pedido, that.pedido) && Objects.equals(idProduto,
-                that.idProduto) && Objects.equals(produto, that.produto);
+                that.subtotal) && Objects.equals(idProduto, that.idProduto) && Objects.equals(produto, that.produto);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, quantidade, subtotal, pedido, idProduto, produto);
+        return Objects.hash(id, quantidade, subtotal, idProduto, produto);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", DetalhePedidoEntity.class.getSimpleName() + "[", "]").add("id=" + id).add(
+                "quantidade=" + quantidade).add("subtotal=" + subtotal).add("idProduto=" + idProduto).add(
+                "produto=" + produto).toString();
     }
 
 }

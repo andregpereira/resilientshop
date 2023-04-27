@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 @Getter
 @Setter
@@ -55,6 +56,13 @@ public class PedidoEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id, dataCriacao, dataModificacao, status, total, detalhePedido);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", PedidoEntity.class.getSimpleName() + "[", "]").add("id=" + id).add(
+                "dataCriacao=" + dataCriacao).add("dataModificacao=" + dataModificacao).add("status=" + status).add(
+                "total=" + total).add("detalhePedido=" + detalhePedido).toString();
     }
 
 }
