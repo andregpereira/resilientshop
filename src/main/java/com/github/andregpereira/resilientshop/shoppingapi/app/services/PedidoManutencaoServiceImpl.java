@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
@@ -47,7 +48,6 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
             dp.setProduto(produto);
             dp.setPedido(pedidoEntity);
         });
-        log.info("Setando id(s) do(s) produto(s)... ");
         LocalDateTime agora = LocalDateTime.now();
         pedidoEntity.setDataCriacao(agora);
         pedidoEntity.setDataModificacao(agora);
@@ -69,10 +69,11 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
             pedidoRepository.save(p);
         }, () -> {
             log.info("Pedido aguardando pagamento com id {} não encontrado", id);
-            throw new PedidoNotFoundException("Poxa! Não foi encontrado um pedido aguardando pagamento com o id " + id);
+            throw new PedidoNotFoundException(
+                    MessageFormat.format("Poxa! Não foi encontrado um pedido aguardando pagamento com o id {0}", id));
         });
         log.info("Pedido com id {} cancelado com sucesso", id);
-        return "Pedido cancelado";
+        return MessageFormat.format("Pedido com id {0} cancelado", id);
     }
 
 }
