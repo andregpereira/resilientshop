@@ -64,16 +64,16 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
 
     @Override
     public String cancelar(Long id) {
-        pedidoRepository.findByIdAndStatusAguardandoPagamento(id).ifPresentOrElse(p -> {
+        return pedidoRepository.findByIdAndStatusAguardandoPagamento(id).map(p -> {
             p.setStatus(StatusPedido.CANCELADO.getStatus());
             pedidoRepository.save(p);
-        }, () -> {
+            log.info("Pedido com id {} cancelado com sucesso", id);
+            return MessageFormat.format("Pedido com id {0} cancelado", id);
+        }).orElseThrow(() -> {
             log.info("Pedido aguardando pagamento com id {} não encontrado", id);
-            throw new PedidoNotFoundException(
+            return new PedidoNotFoundException(
                     MessageFormat.format("Poxa! Não foi encontrado um pedido aguardando pagamento com o id {0}", id));
         });
-        log.info("Pedido com id {} cancelado com sucesso", id);
-        return MessageFormat.format("Pedido com id {0} cancelado", id);
     }
 
 }
