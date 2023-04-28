@@ -2,6 +2,7 @@ package com.github.andregpereira.resilientshop.shoppingapi.app.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoRegistrarDto;
 import com.github.andregpereira.resilientshop.shoppingapi.app.services.PedidoConsultaService;
 import com.github.andregpereira.resilientshop.shoppingapi.app.services.PedidoManutencaoService;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.PedidoNotFoundException;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoDtoConstants.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
@@ -70,7 +72,7 @@ class PedidoControllerTest {
 
     @Test
     void criarPedidoComProdutoInexistenteThrowsException() throws Exception {
-        given(manutencaoService.criar(PEDIDO_REGISTRAR_DTO)).willThrow(FeignException.class);
+        given(manutencaoService.criar(any(PedidoRegistrarDto.class))).willThrow(FeignException.class);
         mockMvc.perform(post("/pedidos").content(objectMapper.writeValueAsString(PEDIDO_REGISTRAR_DTO)).contentType(
                 MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
     }
@@ -164,6 +166,20 @@ class PedidoControllerTest {
     void inserirParametroStatusNuloThrowsException() throws Exception {
         mockMvc.perform(get("/pedidos/status")).andExpect(status().isBadRequest()).andExpectAll(
                 jsonPath("$.campo").value("status"), jsonPath("$.mensagem").value("O campo status é obrigatório"));
+    }
+
+    @Test
+    void cadastrarPedidoPorComAPIProdutosIndisponívelRetornaServiceUnavailable() throws Exception {
+        given(manutencaoService.criar(any(PedidoRegistrarDto.class))).willThrow(
+                FeignException.ServiceUnavailable.class);
+        mockMvc.perform(post("/pedidos").content(objectMapper.writeValueAsString(PEDIDO_REGISTRAR_DTO)).contentType(
+                MediaType.APPLICATION_JSON)).andExpect(status().isServiceUnavailable());
+    }
+
+    @Test
+    void consultarPedidoPorIdComAPIProdutosIndisponívelRetornaServiceUnavailable() throws Exception {
+        given(consultaService.consultarPorId(25L)).willThrow(FeignException.ServiceUnavailable.class);
+        mockMvc.perform(get("/pedidos/25")).andExpect(status().isServiceUnavailable());
     }
 
 }

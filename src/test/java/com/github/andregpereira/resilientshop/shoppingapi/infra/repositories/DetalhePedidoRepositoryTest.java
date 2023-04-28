@@ -26,7 +26,7 @@ class DetalhePedidoRepositoryTest {
     @AfterEach
     public void afterEach() {
         PEDIDO_ENTITY.setId(null);
-        LISTA_DETALHES_PEDIDOS_ENTITY.stream().forEach(dp -> dp.setId(null));
+        LISTA_DETALHES_PEDIDO_ENTITY.stream().forEach(dp -> dp.setId(null));
     }
 
     @Test
