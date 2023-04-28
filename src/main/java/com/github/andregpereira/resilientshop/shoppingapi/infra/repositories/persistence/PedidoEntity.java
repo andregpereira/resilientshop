@@ -38,7 +38,7 @@ public class PedidoEntity {
     @Column(nullable = false)
     private BigDecimal total;
 
-    @OneToMany(mappedBy = "pedido")
+    @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY)
     private List<DetalhePedidoEntity> detalhePedido;
 
     @Override
