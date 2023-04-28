@@ -22,6 +22,11 @@ public class TratadorDeErros {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
+    @ExceptionHandler(FeignException.ServiceUnavailable.class)
+    public ResponseEntity<String> erro503(FeignException.ServiceUnavailable e) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Serviço indisponível");
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<String> erro400(HttpMessageNotReadableException e) {
         return ResponseEntity.badRequest().body("Informação inválida. Verifique os dados e tente novamente");
@@ -44,7 +49,7 @@ public class TratadorDeErros {
     }
 
     @ExceptionHandler(PedidoNotFoundException.class)
-    public ResponseEntity<String> erro400(PedidoNotFoundException e) {
+    public ResponseEntity<String> erro404(PedidoNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
