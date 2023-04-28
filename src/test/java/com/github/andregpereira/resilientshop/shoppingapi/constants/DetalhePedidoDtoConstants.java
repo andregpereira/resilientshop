@@ -16,18 +16,18 @@ public class DetalhePedidoDtoConstants {
 
     public static final DetalhePedidoRegistrarDto DETALHE_PEDIDO_REGISTRAR_DTO = new DetalhePedidoRegistrarDto(4, 1L);
 
-    public static final List<DetalhePedidoRegistrarDto> LISTA_DETALHE_PEDIDO_REGISTRAR_DTO = new ArrayList<>() {
+    public static final List<DetalhePedidoRegistrarDto> LISTA_DETALHES_PEDIDO_REGISTRAR_DTO = new ArrayList<>() {
         {
             add(DETALHE_PEDIDO_REGISTRAR_DTO);
         }
     };
-    public static final List<DetalhePedidoRegistrarDto> LISTA_DETALHE_PEDIDO_REGISTRAR_DTO_INVALIDO = new ArrayList<>() {
+    public static final List<DetalhePedidoRegistrarDto> LISTA_DETALHES_PEDIDO_REGISTRAR_DTO_INVALIDO = new ArrayList<>() {
         {
             add(null);
         }
     };
 
-    public static final List<DetalhePedidoDto> LISTA_DETALHE_PEDIDO_DTO = new ArrayList<>() {
+    public static final List<DetalhePedidoDto> LISTA_DETALHES_PEDIDO_DTO = new ArrayList<>() {
         {
             add(DETALHE_PEDIDO_DTO);
         }
