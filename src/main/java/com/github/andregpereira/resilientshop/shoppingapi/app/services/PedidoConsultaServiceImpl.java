@@ -16,8 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @RequiredArgsConstructor
 @Slf4j
 @Service
@@ -42,17 +40,17 @@ public class PedidoConsultaServiceImpl implements PedidoConsultaService {
 
     @Override
     public PedidoDetalharDto consultarPorId(Long id) {
-        Optional<PedidoEntity> optionalPedido = repository.findById(id);
-        if (optionalPedido.isEmpty()) {
+        return repository.findById(id).map(p -> {
+            Pedido pedido = pedidoMapper.toPedido(p);
+            log.info("Setando produto(s)...");
+            pedido.getDetalhePedido().parallelStream().forEach(
+                    dp -> dp.setProduto(produtoMapper.toProduto(produtoFeignClient.consultarPorId(dp.getIdProduto()))));
+            log.info("Retornando pedido com id " + id);
+            return pedidoMapper.toPedidoDetalharDto(pedido);
+        }).orElseThrow(() -> {
             log.info("Pedido com id {} não encontrado", id);
-            throw new PedidoNotFoundException(id);
-        }
-        Pedido pedido = pedidoMapper.toPedido(optionalPedido.get());
-        log.info("Setando produto(s)...");
-        pedido.getDetalhePedido().parallelStream().forEach(
-                dp -> dp.setProduto(produtoMapper.toProduto(produtoFeignClient.consultarPorId(dp.getIdProduto()))));
-        log.info("Retornando pedido com id " + id);
-        return pedidoMapper.toPedidoDetalharDto(pedido);
+            return new PedidoNotFoundException(id);
+        });
     }
 
     @Override
