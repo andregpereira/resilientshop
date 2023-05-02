@@ -4,7 +4,9 @@ import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.Pedid
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.DetalhePedidoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.PedidoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.ProdutoMapper;
+import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.UsuarioMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.ProdutoFeignClient;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.UsuarioFeignClient;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.DetalhePedidoRepository;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.PedidoRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -29,6 +31,8 @@ import static com.github.andregpereira.resilientshop.shoppingapi.constants.Pedid
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoEntityConstants.PEDIDO_ENTITY_INVALIDO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.ProdutoConstants.PRODUTO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.ProdutoDtoConstants.PRODUTO_DTO;
+import static com.github.andregpereira.resilientshop.shoppingapi.constants.UsuarioConstants.USUARIO;
+import static com.github.andregpereira.resilientshop.shoppingapi.constants.UsuarioDtoConstants.USUARIO_DTO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
@@ -49,6 +53,9 @@ class PedidoManutencaoServiceTest {
     private DetalhePedidoMapper detalhePedidoMapper;
 
     @Mock
+    private UsuarioMapper usuarioMapper;
+
+    @Mock
     private ProdutoMapper produtoMapper;
 
     @Mock
@@ -56,6 +63,9 @@ class PedidoManutencaoServiceTest {
 
     @Mock
     private DetalhePedidoRepository detalhePedidoRepository;
+
+    @Mock
+    private UsuarioFeignClient usuarioFeignClient;
 
     @Mock
     private ProdutoFeignClient produtoFeignClient;
@@ -78,6 +88,8 @@ class PedidoManutencaoServiceTest {
         given(pedidoRepository.save(PEDIDO_ENTITY)).willReturn(PEDIDO_ENTITY);
         given(detalhePedidoRepository.saveAll(LISTA_DETALHES_PEDIDO_ENTITY)).willReturn(LISTA_DETALHES_PEDIDO_ENTITY);
         given(pedidoMapper.toPedido(PEDIDO_ENTITY)).willReturn(PEDIDO);
+        given(usuarioFeignClient.consultarPorId(1L)).willReturn(USUARIO_DTO);
+        given(usuarioMapper.toUsuario(USUARIO_DTO)).willReturn(USUARIO);
         given(detalhePedidoMapper.toListaDetalhePedido(LISTA_DETALHES_PEDIDO_ENTITY)).willReturn(LISTA_DETALHES_PEDIDO);
         given(pedidoMapper.toPedidoDetalharDto(PEDIDO)).willReturn(PEDIDO_DETALHAR_DTO);
         try (MockedStatic<LocalDateTime> mockedStatic = mockStatic(LocalDateTime.class)) {

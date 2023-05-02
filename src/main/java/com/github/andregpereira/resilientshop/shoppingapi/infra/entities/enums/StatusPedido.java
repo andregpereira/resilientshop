@@ -2,6 +2,8 @@ package com.github.andregpereira.resilientshop.shoppingapi.infra.entities;
 
 import lombok.Getter;
 
+import java.util.stream.Stream;
+
 @Getter
 public enum StatusPedido {
     CANCELADO(0),
@@ -18,10 +20,6 @@ public enum StatusPedido {
     }
 
     public static StatusPedido getStatusPorId(Integer status) {
-        for (StatusPedido sp : values()) {
-            if (sp.status == status)
-                return sp;
-        }
-        return null;
+        return Stream.of(values()).filter(sp -> sp.status == status).findFirst().orElse(null);
     }
 }

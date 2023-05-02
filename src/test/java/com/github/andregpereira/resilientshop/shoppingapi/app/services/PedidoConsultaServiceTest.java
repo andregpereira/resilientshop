@@ -126,7 +126,15 @@ class PedidoConsultaServiceTest {
         given(repository.findAllByStatus(3, pageable)).willReturn(Page.empty());
         assertThatThrownBy(() -> consultaService.consultarPorStatus(3, pageable)).isInstanceOf(
                 PedidoNotFoundException.class).hasMessage(
-                "Opa! Não foram encontrados pedidos com o status 3 (EM_SEPARACAO)");
+                "Opa! Não foram encontrados pedidos com o status em separação");
+    }
+
+    @Test
+    void consultarPedidosPorStatusInvalidoThrowsException() {
+        PageRequest pageable = PageRequest.of(0, 10, Sort.Direction.ASC, "id");
+        given(repository.findAllByStatus(9, pageable)).willReturn(Page.empty());
+        assertThatThrownBy(() -> consultaService.consultarPorStatus(9, pageable)).isInstanceOf(
+                PedidoNotFoundException.class).hasMessage("Opa! Não foram encontrados pedidos com o status informado");
     }
 
 }

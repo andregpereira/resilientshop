@@ -17,6 +17,8 @@ import static com.github.andregpereira.resilientshop.shoppingapi.constants.Pedid
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoDtoConstants.*;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoEntityConstants.PEDIDO_ENTITY;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoEntityConstants.PEDIDO_ENTITY_MAPEADO;
+import static com.github.andregpereira.resilientshop.shoppingapi.constants.UsuarioConstants.USUARIO;
+import static com.github.andregpereira.resilientshop.shoppingapi.constants.UsuarioDtoConstants.USUARIO_DTO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -29,6 +31,9 @@ class PedidoMapperTest {
 
     @Mock
     private DetalhePedidoMapper detalhePedidoMapper;
+
+    @Mock
+    private UsuarioMapper usuarioMapper;
 
     @BeforeEach
     void beforeEach() {
@@ -70,6 +75,7 @@ class PedidoMapperTest {
 
     @Test
     void pedidoRetornaPedidoDetalharDto() {
+        given(usuarioMapper.toUsuarioDto(USUARIO)).willReturn(USUARIO_DTO);
         given(detalhePedidoMapper.toListaDetalhePedidoDto(LISTA_DETALHES_PEDIDO)).willReturn(LISTA_DETALHES_PEDIDO_DTO);
         assertThat(pedidoMapper.toPedidoDetalharDto(PEDIDO)).isEqualTo(PEDIDO_DETALHAR_DTO);
     }
