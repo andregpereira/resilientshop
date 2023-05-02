@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.shoppingapi.infra.entities;
+package com.github.andregpereira.resilientshop.shoppingapi.infra.entities.enums;
 
 import lombok.Getter;
 

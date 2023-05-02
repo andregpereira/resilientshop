@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.StringJoiner;
 
@@ -17,10 +16,7 @@ import java.util.StringJoiner;
 public class Produto {
 
     private Long id;
-    private Long sku;
     private String nome;
-    private String descricao;
-    private LocalDateTime dataCriacao;
     private BigDecimal valorUnitario;
     private int estoque;
 
@@ -31,22 +27,19 @@ public class Produto {
         if (o == null || getClass() != o.getClass())
             return false;
         Produto produto = (Produto) o;
-        return estoque == produto.estoque && Objects.equals(id, produto.id) && Objects.equals(sku,
-                produto.sku) && Objects.equals(nome, produto.nome) && Objects.equals(descricao,
-                produto.descricao) && Objects.equals(dataCriacao, produto.dataCriacao) && Objects.equals(valorUnitario,
-                produto.valorUnitario);
+        return estoque == produto.estoque && Objects.equals(id, produto.id) && Objects.equals(nome,
+                produto.nome) && Objects.equals(valorUnitario, produto.valorUnitario);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, sku, nome, descricao, dataCriacao, valorUnitario, estoque);
+        return Objects.hash(id, nome, valorUnitario, estoque);
     }
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", Produto.class.getSimpleName() + "[", "]").add("id=" + id).add("sku=" + sku).add(
-                "nome='" + nome + "'").add("descricao='" + descricao + "'").add("dataCriacao=" + dataCriacao).add(
-                "valorUnitario=" + valorUnitario).add("estoque=" + estoque).toString();
+        return new StringJoiner(", ", Produto.class.getSimpleName() + "[", "]").add("id=" + id).add(
+                "nome='" + nome + "'").add("valorUnitario=" + valorUnitario).add("estoque=" + estoque).toString();
     }
 
 }

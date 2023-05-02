@@ -13,6 +13,8 @@ import java.util.Optional;
 @Repository
 public interface PedidoRepository extends JpaRepository<PedidoEntity, Long> {
 
+    Page<PedidoEntity> findAllByIdUsuario(Long id, Pageable pageable);
+
     Page<PedidoEntity> findAllByStatus(Integer status, Pageable pageable);
 
     @Query(value = """
