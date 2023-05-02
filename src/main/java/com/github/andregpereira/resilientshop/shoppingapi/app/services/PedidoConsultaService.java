@@ -11,6 +11,8 @@ public interface PedidoConsultaService {
 
     PedidoDetalharDto consultarPorId(Long id);
 
+    Page<PedidoDetalharDto> consultarPorIdUsuario(Long id, Pageable pageable);
+
     Page<PedidoDto> consultarPorStatus(int status, Pageable pageable);
 
 }
