@@ -10,7 +10,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants.ComponentModel;
 import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = ComponentModel.SPRING, uses = DetalhePedidoMapper.class,
+@Mapper(componentModel = ComponentModel.SPRING, uses = {UsuarioMapper.class, DetalhePedidoMapper.class},
         injectionStrategy = InjectionStrategy.CONSTRUCTOR, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface PedidoMapper {
 
