@@ -43,14 +43,17 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
     @Override
     public PedidoDetalharDto criar(PedidoRegistrarDto dto) {
         PedidoEntity pedidoEntity = pedidoMapper.toPedidoEntity(dto);
+        log.info("Procurando usuário...");
+        pedidoEntity.setUsuario(usuarioMapper.toUsuario(usuarioFeignClient.consultarPorId(dto.idUsuario())));
+        log.info("Usuário encontrado");
         log.info("Calculando subtotal e setando produto(s)...");
-        pedidoEntity.setUsuario(usuarioMapper.toUsuario(usuarioFeignClient.consultarPorId(1L)));
         pedidoEntity.getDetalhePedido().parallelStream().forEach(dp -> Optional.of(
                 produtoMapper.toProduto(produtoFeignClient.consultarPorId(dp.getIdProduto()))).ifPresent(p -> {
             dp.setSubtotal(p.getValorUnitario().multiply(BigDecimal.valueOf(dp.getQuantidade())));
             dp.setProduto(p);
             dp.setPedido(pedidoEntity);
         }));
+        log.info("Calculando subtotal e setando OK");
         LocalDateTime agora = LocalDateTime.now();
         pedidoEntity.setDataCriacao(agora);
         pedidoEntity.setDataModificacao(agora);
