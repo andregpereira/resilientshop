@@ -9,9 +9,9 @@ public interface PedidoConsultaService {
 
     Page<PedidoDto> listar(Pageable pageable);
 
-    PedidoDetalharDto consultarPorId(Long id);
+    Page<PedidoDto> listarPorUsuario(Long id, Pageable pageable);
 
-    Page<PedidoDetalharDto> consultarPorIdUsuario(Long id, Pageable pageable);
+    PedidoDetalharDto consultarPorId(Long id);
 
     Page<PedidoDto> consultarPorStatus(int status, Pageable pageable);
 
