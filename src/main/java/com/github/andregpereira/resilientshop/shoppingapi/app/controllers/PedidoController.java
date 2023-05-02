@@ -6,6 +6,7 @@ import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.Pedido
 import com.github.andregpereira.resilientshop.shoppingapi.app.services.PedidoConsultaService;
 import com.github.andregpereira.resilientshop.shoppingapi.app.services.PedidoManutencaoService;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.enums.StatusPedido;
+import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -32,6 +33,7 @@ import java.text.MessageFormat;
 @RequestMapping("/pedidos")
 public class PedidoController {
 
+    private static final String REGEX_USUARIO = ".*\\buser\\b.*";
     private final PedidoManutencaoService manutencaoService;
     private final PedidoConsultaService consultaService;
 
@@ -46,9 +48,17 @@ public class PedidoController {
         return ResponseEntity.created(uri).body(pedido);
     }
 
-    public ResponseEntity<String> cadastrarFallbackMethod(Exception e) {
-        log.error(MessageFormat.format("Erro ao tentar acessar a API de produtos: {0}", e));
+    public ResponseEntity<String> cadastrarFallbackMethod(FeignException.ServiceUnavailable e) {
+        log.error(MessageFormat.format("Erro ao tentar acessar a API de {0}: {1}",
+                e.getMessage().matches(REGEX_USUARIO) ? "usuários" : "produtos", e));
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Ops! Não foi possível cadastrar o pedido");
+    }
+
+    public ResponseEntity<String> cadastrarFallbackMethod(FeignException.NotFound e) {
+        log.error(MessageFormat.format("{0} nao encontrado: {1}",
+                e.getMessage().matches(REGEX_USUARIO) ? "Usuário" : "Produto", e));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                "Ops! Não foi possível cadastrar o pedido. O usuário não foi encontrado");
     }
 
     @DeleteMapping("/{id}")
@@ -64,6 +74,29 @@ public class PedidoController {
         return ResponseEntity.ok(consultaService.listar(pageable));
     }
 
+    @GetMapping("/usuarios/{id}")
+    @CircuitBreaker(name = "listarPorUsuario", fallbackMethod = "listarPorUsuarioFallbackMethod")
+    public ResponseEntity<Page<PedidoDto>> listarPorUsuario(@PathVariable Long id,
+            @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pageable) {
+        log.info("Procurando pedidos...");
+        return ResponseEntity.ok(consultaService.listarPorUsuario(id, pageable));
+    }
+
+    public ResponseEntity<String> listarPorUsuarioFallbackMethod(Long id, Pageable pageable,
+            FeignException.ServiceUnavailable e) {
+        log.error(
+                MessageFormat.format("Erro ao tentar acessar a API de usuários: id: {0} - {1} - {2}", id, pageable, e));
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(
+                MessageFormat.format("Ops! Não foi possível consultar os pedidos do usuário com id {0}", id));
+    }
+
+    public ResponseEntity<String> listarPorUsuarioFallbackMethod(Long id, Pageable pageable,
+            FeignException.NotFound e) {
+        log.error(MessageFormat.format("Usuário com id {0} não encontrado: {1} - {2}", id, pageable, e));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body((MessageFormat.format(
+                "Ops! Não foi possível consultar os pedidos do usuário com id {0}. O usuário não existe", id)));
+    }
+
     @GetMapping("/{id}")
     @CircuitBreaker(name = "consultarPorId", fallbackMethod = "consultarPorIdFallbackMethod")
     public ResponseEntity<PedidoDetalharDto> consultarPorId(@PathVariable Long id) {
@@ -71,8 +104,9 @@ public class PedidoController {
         return ResponseEntity.ok(consultaService.consultarPorId(id));
     }
 
-    public ResponseEntity<String> consultarPorIdFallbackMethod(Long id, Exception e) {
-        log.error(MessageFormat.format("Erro ao tentar acessar a API de produtos: id :{0} {1}", id, e));
+    public ResponseEntity<String> consultarPorIdFallbackMethod(Long id, FeignException.ServiceUnavailable e) {
+        log.error(MessageFormat.format("Erro ao tentar acessar a API de {0}: id: {1}: {2}",
+                e.getMessage().matches(REGEX_USUARIO) ? "usuários" : "produtos", id, e));
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(
                 (MessageFormat.format("Ops! Não foi possível consultar o pedido com id {0}", id)));
     }
