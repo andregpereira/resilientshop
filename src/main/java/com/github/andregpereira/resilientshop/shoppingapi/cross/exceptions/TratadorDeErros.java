@@ -1,6 +1,8 @@
 package com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions;
 
 import feign.FeignException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -11,11 +13,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import java.security.InvalidParameterException;
 import java.util.stream.Stream;
 
 @RestControllerAdvice
 public class TratadorDeErros {
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Stream<DadoInvalido>> erro400(ConstraintViolationException e) {
+        Stream<ConstraintViolation<?>> erros = e.getConstraintViolations().stream();
+        return ResponseEntity.badRequest().body(erros.map(DadoInvalido::new));
+    }
 
     @ExceptionHandler(FeignException.class)
     public ResponseEntity<String> erro400(FeignException e) {
@@ -30,11 +37,6 @@ public class TratadorDeErros {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<String> erro400(HttpMessageNotReadableException e) {
         return ResponseEntity.badRequest().body("Informação inválida. Verifique os dados e tente novamente");
-    }
-
-    @ExceptionHandler(InvalidParameterException.class)
-    public ResponseEntity<String> erro400(InvalidParameterException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -64,6 +66,11 @@ public class TratadorDeErros {
 
         public DadoInvalido(FieldError erro) {
             this(erro.getField(), erro.getDefaultMessage());
+        }
+
+        public DadoInvalido(ConstraintViolation<?> erro) {
+            this(new StringBuffer(erro.getPropertyPath().toString()).replace(0,
+                    erro.getPropertyPath().toString().indexOf(".") + 1, "").toString(), erro.getMessageTemplate());
         }
 
     }
