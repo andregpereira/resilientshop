@@ -6,9 +6,9 @@ import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.Pedid
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.DetalhePedidoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.PedidoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.ProdutoMapper;
+import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.UsuarioMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.Pedido;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.Produto;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.StatusPedido;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.enums.StatusPedido;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.ProdutoFeignClient;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.UsuarioFeignClient;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.DetalhePedidoRepository;
@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -37,17 +38,19 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
     private final UsuarioFeignClient usuarioFeignClient;
     private final ProdutoFeignClient produtoFeignClient;
     private final ProdutoMapper produtoMapper;
+    private final UsuarioMapper usuarioMapper;
 
     @Override
     public PedidoDetalharDto criar(PedidoRegistrarDto dto) {
         PedidoEntity pedidoEntity = pedidoMapper.toPedidoEntity(dto);
         log.info("Calculando subtotal e setando produto(s)...");
-        pedidoEntity.getDetalhePedido().parallelStream().forEach(dp -> {
-            Produto produto = produtoMapper.toProduto(produtoFeignClient.consultarPorId(dp.getIdProduto()));
-            dp.setSubtotal(produto.getValorUnitario().multiply(BigDecimal.valueOf(dp.getQuantidade())));
-            dp.setProduto(produto);
+        pedidoEntity.setUsuario(usuarioMapper.toUsuario(usuarioFeignClient.consultarPorId(1L)));
+        pedidoEntity.getDetalhePedido().parallelStream().forEach(dp -> Optional.of(
+                produtoMapper.toProduto(produtoFeignClient.consultarPorId(dp.getIdProduto()))).ifPresent(p -> {
+            dp.setSubtotal(p.getValorUnitario().multiply(BigDecimal.valueOf(dp.getQuantidade())));
+            dp.setProduto(p);
             dp.setPedido(pedidoEntity);
-        });
+        }));
         LocalDateTime agora = LocalDateTime.now();
         pedidoEntity.setDataCriacao(agora);
         pedidoEntity.setDataModificacao(agora);
