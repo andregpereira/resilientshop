@@ -58,7 +58,7 @@ class PedidoControllerTest {
                         PEDIDO_DETALHAR_DTO.dataCriacao().format(DateTimeFormatter.ofPattern("dd/MM/uuuu HH:mm"))),
                 jsonPath("$.status").value(1), jsonPath("$.total").value(48),
                 jsonPath("$.detalhePedido[0].quantidade").value(4), jsonPath("$.detalhePedido[0].subtotal").value(48),
-                jsonPath("$.detalhePedido[0].produto.sku").value(123456789));
+                jsonPath("$.detalhePedido[0].produto.nome").value("nome"));
         then(manutencaoService).should().criar(PEDIDO_REGISTRAR_DTO);
     }
 
