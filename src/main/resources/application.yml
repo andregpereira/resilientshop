@@ -8,7 +8,7 @@ spring:
     password: root
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
 
 server:
   port: 8761
@@ -29,6 +29,8 @@ eureka:
     fetchRegistry: true
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka
+  server:
+    eviction-interval-timer-in-ms: 5000
 
 resilience4j:
   circuitbreaker:
