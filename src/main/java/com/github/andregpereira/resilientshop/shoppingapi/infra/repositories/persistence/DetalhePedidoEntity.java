@@ -45,11 +45,11 @@ public class DetalhePedidoEntity {
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (o == null || getClass() != o.getClass())
+        if (!(o instanceof DetalhePedidoEntity detalhePedido))
             return false;
-        DetalhePedidoEntity that = (DetalhePedidoEntity) o;
-        return quantidade == that.quantidade && Objects.equals(id, that.id) && Objects.equals(subtotal,
-                that.subtotal) && Objects.equals(idProduto, that.idProduto) && Objects.equals(produto, that.produto);
+        return quantidade == detalhePedido.quantidade && Objects.equals(id, detalhePedido.id) && Objects.equals(
+                subtotal, detalhePedido.subtotal) && Objects.equals(idProduto,
+                detalhePedido.idProduto) && Objects.equals(produto, detalhePedido.produto);
     }
 
     @Override

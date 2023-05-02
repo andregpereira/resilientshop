@@ -1,5 +1,6 @@
 package com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence;
 
+import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.Usuario;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,31 +39,38 @@ public class PedidoEntity {
     @Column(nullable = false)
     private BigDecimal total;
 
-    @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY)
+    @Column(nullable = false)
+    private Long idUsuario;
+
+    @OneToMany(mappedBy = "pedido")
     private List<DetalhePedidoEntity> detalhePedido;
+
+    @Transient
+    private Usuario usuario;
 
     @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (o == null || getClass() != o.getClass())
+        if (!(o instanceof PedidoEntity pedido))
             return false;
-        PedidoEntity pedido = (PedidoEntity) o;
-        return Objects.equals(id, pedido.id) && Objects.equals(dataCriacao, pedido.dataCriacao) && Objects.equals(
-                dataModificacao, pedido.dataModificacao) && status == pedido.status && Objects.equals(total,
-                pedido.total) && Objects.equals(detalhePedido, pedido.detalhePedido);
+        return status == pedido.status && Objects.equals(id, pedido.id) && Objects.equals(dataCriacao,
+                pedido.dataCriacao) && Objects.equals(dataModificacao, pedido.dataModificacao) && Objects.equals(total,
+                pedido.total) && Objects.equals(idUsuario, pedido.idUsuario) && Objects.equals(detalhePedido,
+                pedido.detalhePedido) && Objects.equals(usuario, pedido.usuario);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, dataCriacao, dataModificacao, status, total, detalhePedido);
+        return Objects.hash(id, dataCriacao, dataModificacao, status, total, idUsuario, detalhePedido, usuario);
     }
 
     @Override
     public String toString() {
         return new StringJoiner(", ", PedidoEntity.class.getSimpleName() + "[", "]").add("id=" + id).add(
                 "dataCriacao=" + dataCriacao).add("dataModificacao=" + dataModificacao).add("status=" + status).add(
-                "total=" + total).add("detalhePedido=" + detalhePedido).toString();
+                "total=" + total).add("idUsuario=" + idUsuario).add("detalhePedido=" + detalhePedido).add(
+                "usuario=" + usuario).toString();
     }
 
 }
