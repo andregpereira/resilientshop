@@ -16,10 +16,6 @@ class ProdutoMapperTest {
 
     @InjectMocks
     private ProdutoMapperImpl mapper;
-//    @BeforeEach
-//    void beforeEach() {
-//        PEDIDO_ENTITY.setDetalhePedido(LISTA_DETALHES_PEDIDO_ENTITY);
-//    }
 
     @Test
     void produtoRetornaProdutoDto() {
