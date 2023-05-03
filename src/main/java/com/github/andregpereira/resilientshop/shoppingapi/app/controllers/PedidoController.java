@@ -33,7 +33,6 @@ import java.text.MessageFormat;
 @RequestMapping("/pedidos")
 public class PedidoController {
 
-    private static final String REGEX_USUARIO = ".*\\buser\\b.*";
     private final PedidoManutencaoService manutencaoService;
     private final PedidoConsultaService consultaService;
 
@@ -49,16 +48,9 @@ public class PedidoController {
     }
 
     public ResponseEntity<String> cadastrarFallbackMethod(FeignException.ServiceUnavailable e) {
-        log.error(MessageFormat.format("Erro ao tentar acessar a API de {0}: {1}",
-                e.getMessage().matches(REGEX_USUARIO) ? "usuários" : "produtos", e));
+        String api = e.getMessage().matches(".*\\buser\\b.*") ? "usuários" : "produtos";
+        log.error(MessageFormat.format("Erro ao tentar acessar a API de {0}: {1}", api, e));
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Ops! Não foi possível cadastrar o pedido");
-    }
-
-    public ResponseEntity<String> cadastrarFallbackMethod(FeignException.NotFound e) {
-        log.error(MessageFormat.format("{0} nao encontrado: {1}",
-                e.getMessage().matches(REGEX_USUARIO) ? "Usuário" : "Produto", e));
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                "Ops! Não foi possível cadastrar o pedido. O usuário não foi encontrado");
     }
 
     @DeleteMapping("/{id}")
@@ -74,11 +66,11 @@ public class PedidoController {
         return ResponseEntity.ok(consultaService.listar(pageable));
     }
 
-    @GetMapping("/usuarios/{id}")
+    @GetMapping("/usuario/{id}")
     @CircuitBreaker(name = "listarPorUsuario", fallbackMethod = "listarPorUsuarioFallbackMethod")
     public ResponseEntity<Page<PedidoDto>> listarPorUsuario(@PathVariable Long id,
             @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pageable) {
-        log.info("Procurando pedidos...");
+        log.info("Procurando pedidos do usuário com id {}...", id);
         return ResponseEntity.ok(consultaService.listarPorUsuario(id, pageable));
     }
 
@@ -90,13 +82,6 @@ public class PedidoController {
                 MessageFormat.format("Ops! Não foi possível consultar os pedidos do usuário com id {0}", id));
     }
 
-    public ResponseEntity<String> listarPorUsuarioFallbackMethod(Long id, Pageable pageable,
-            FeignException.NotFound e) {
-        log.error(MessageFormat.format("Usuário com id {0} não encontrado: {1} - {2}", id, pageable, e));
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body((MessageFormat.format(
-                "Ops! Não foi possível consultar os pedidos do usuário com id {0}. O usuário não existe", id)));
-    }
-
     @GetMapping("/{id}")
     @CircuitBreaker(name = "consultarPorId", fallbackMethod = "consultarPorIdFallbackMethod")
     public ResponseEntity<PedidoDetalharDto> consultarPorId(@PathVariable Long id) {
@@ -106,9 +91,9 @@ public class PedidoController {
 
     public ResponseEntity<String> consultarPorIdFallbackMethod(Long id, FeignException.ServiceUnavailable e) {
         log.error(MessageFormat.format("Erro ao tentar acessar a API de {0}: id: {1}: {2}",
-                e.getMessage().matches(REGEX_USUARIO) ? "usuários" : "produtos", id, e));
+                e.getMessage().matches(".*\\buser\\b.*") ? "usuários" : "produtos", id, e));
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(
-                (MessageFormat.format("Ops! Não foi possível consultar o pedido com id {0}", id)));
+                (MessageFormat.format("Ops! Não foi possível consultar o pedido com id {0}. Tente novamente", id)));
     }
 
     @GetMapping("/status")
@@ -116,7 +101,8 @@ public class PedidoController {
             @RequestParam @Min(message = "O status mínimo é 0", value = 0) @Max(message = "O status máximo é 5",
                     value = 5) int status,
             @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pageable) {
-        log.info("Pesquisando pedidos com status {} ({})...", StatusPedido.getStatusPorId(status), status);
+        log.info("Pesquisando pedidos com status {} ({})...", StatusPedido.getStatusPorId(
+                status).toString().toLowerCase().replace("_", "").replace("separacao", "separação"), status);
         return ResponseEntity.ok(consultaService.consultarPorStatus(status, pageable));
     }
 
