@@ -4,6 +4,8 @@ eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
+    registry-fetch-interval-seconds: 5
+    instance-info-replication-interval-seconds: 5
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka
 
@@ -22,11 +24,43 @@ spring:
           uri: lb://resilientshop-shopping-api
           predicates:
             - Path=/pedidos/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: fallback
+                fallbackUri: forward:/fallback/pedidos
         - id: resilientshop-user-api
           uri: lb://resilientshop-user-api
           predicates:
-            - Path=/usuarios/**
+            - Path=/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: fallback
+                fallbackUri: "forward:/fallback/usu\u00E1rios"
         - id: resilientshop-products-api
           uri: lb://resilientshop-products-api
           predicates:
-            - Path=/produtos/**
+            - Path=/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: fallback
+                fallbackUri: forward:/fallback/produtos
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+        permittedNumberOfCallsInHalfOpenState: 4
+        minimumNumberOfCalls: 10
+        waitDurationInOpenState: 5s
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: 5s
+        failureRateThreshold: 5
+    instances:
+      fallback:
+        baseConfig: default
