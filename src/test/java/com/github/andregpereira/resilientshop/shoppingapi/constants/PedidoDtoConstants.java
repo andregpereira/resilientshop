@@ -22,8 +22,8 @@ public class PedidoDtoConstants {
     public static final PedidoDetalharDto PEDIDO_DETALHAR_DTO = new PedidoDetalharDto(null, PEDIDO_LOCAL_DATE_TIME,
             PEDIDO_LOCAL_DATE_TIME, 1, BigDecimal.valueOf(48), USUARIO_DTO, LISTA_DETALHES_PEDIDO_DTO);
 
-    public static final PedidoRegistrarDto PEDIDO_REGISTRAR_DTO = new PedidoRegistrarDto(1L,
+    public static final PedidoRegistrarDto PEDIDO_REGISTRAR_DTO = new PedidoRegistrarDto(1L, "apelido",
             LISTA_DETALHES_PEDIDO_REGISTRAR_DTO);
-    public static final PedidoRegistrarDto PEDIDO_REGISTRAR_DTO_INVALIDO = new PedidoRegistrarDto(null, null);
+    public static final PedidoRegistrarDto PEDIDO_REGISTRAR_DTO_INVALIDO = new PedidoRegistrarDto(null, "", null);
 
 }
