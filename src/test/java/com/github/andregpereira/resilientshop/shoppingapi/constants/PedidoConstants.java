@@ -11,9 +11,9 @@ import static com.github.andregpereira.resilientshop.shoppingapi.constants.Usuar
 public class PedidoConstants {
 
     public static final Pedido PEDIDO = new Pedido(null, PEDIDO_LOCAL_DATE_TIME, PEDIDO_LOCAL_DATE_TIME, 1,
-            BigDecimal.valueOf(48), 1L, LISTA_DETALHES_PEDIDO, USUARIO);
+            BigDecimal.valueOf(48), 1L, 1L, LISTA_DETALHES_PEDIDO, USUARIO);
 
     public static final Pedido PEDIDO_ATUALIZADO = new Pedido(null, PEDIDO_LOCAL_DATE_TIME, PEDIDO_LOCAL_DATE_TIME, 1,
-            BigDecimal.valueOf(48), 2L, LISTA_DETALHES_PEDIDO, USUARIO);
+            BigDecimal.valueOf(48), 2L, 2L, LISTA_DETALHES_PEDIDO, USUARIO);
 
 }

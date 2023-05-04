@@ -1,10 +1,7 @@
 package com.github.andregpereira.resilientshop.shoppingapi.app.services;
 
 import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.PedidoNotFoundException;
-import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.DetalhePedidoMapper;
-import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.PedidoMapper;
-import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.ProdutoMapper;
-import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.UsuarioMapper;
+import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.*;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.ProdutoFeignClient;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.UsuarioFeignClient;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.DetalhePedidoRepository;
@@ -24,6 +21,8 @@ import java.util.Optional;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.DetalhePedidoConstants.LISTA_DETALHES_PEDIDO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.DetalhePedidoEntityConstants.LISTA_DETALHES_PEDIDO_ENTITY;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.DetalhePedidoEntityConstants.LISTA_DETALHES_PEDIDO_ENTITY_VAZIO;
+import static com.github.andregpereira.resilientshop.shoppingapi.constants.EnderecoConstants.ENDERECO;
+import static com.github.andregpereira.resilientshop.shoppingapi.constants.EnderecoDtoConstants.ENDERECO_DTO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.LocalDateTimeConstants.PEDIDO_LOCAL_DATE_TIME;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoConstants.PEDIDO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoDtoConstants.*;
@@ -56,6 +55,9 @@ class PedidoManutencaoServiceTest {
     private UsuarioMapper usuarioMapper;
 
     @Mock
+    private EnderecoMapper enderecoMapper;
+
+    @Mock
     private ProdutoMapper produtoMapper;
 
     @Mock
@@ -82,14 +84,15 @@ class PedidoManutencaoServiceTest {
 
     @Test
     void criarPedidoComDadosValidosRetornaPedidoDetalharDto() {
+        given(usuarioFeignClient.consultarEnderecoPorId(1L)).willReturn(USUARIO_DTO);
+        given(usuarioMapper.toUsuario(USUARIO_DTO)).willReturn(USUARIO);
+        given(usuarioFeignClient.consultarEnderecoPorApelido(1L, "apelido")).willReturn(ENDERECO_DTO);
+        given(enderecoMapper.toEndereco(ENDERECO_DTO)).willReturn(ENDERECO);
         given(pedidoMapper.toPedidoEntity(PEDIDO_REGISTRAR_DTO)).willReturn(PEDIDO_ENTITY);
         given(produtoFeignClient.consultarPorId(1L)).willReturn(PRODUTO_DTO);
         given(produtoMapper.toProduto(PRODUTO_DTO)).willReturn(PRODUTO);
         given(pedidoRepository.save(PEDIDO_ENTITY)).willReturn(PEDIDO_ENTITY);
-        given(detalhePedidoRepository.saveAll(LISTA_DETALHES_PEDIDO_ENTITY)).willReturn(LISTA_DETALHES_PEDIDO_ENTITY);
         given(pedidoMapper.toPedido(PEDIDO_ENTITY)).willReturn(PEDIDO);
-        given(usuarioFeignClient.consultarPorId(1L)).willReturn(USUARIO_DTO);
-        given(usuarioMapper.toUsuario(USUARIO_DTO)).willReturn(USUARIO);
         given(detalhePedidoMapper.toListaDetalhePedido(LISTA_DETALHES_PEDIDO_ENTITY)).willReturn(LISTA_DETALHES_PEDIDO);
         given(pedidoMapper.toPedidoDetalharDto(PEDIDO)).willReturn(PEDIDO_DETALHAR_DTO);
         try (MockedStatic<LocalDateTime> mockedStatic = mockStatic(LocalDateTime.class)) {

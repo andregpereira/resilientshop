@@ -3,10 +3,9 @@ package com.github.andregpereira.resilientshop.shoppingapi.app.services;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoDetalharDto;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoDto;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.PedidoNotFoundException;
-import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.DetalhePedidoMapper;
-import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.PedidoMapper;
-import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.ProdutoMapper;
+import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.*;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.ProdutoFeignClient;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.UsuarioFeignClient;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.PedidoRepository;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence.PedidoEntity;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,12 +24,16 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.DetalhePedidoEntityConstants.LISTA_DETALHES_PEDIDO_ENTITY;
+import static com.github.andregpereira.resilientshop.shoppingapi.constants.EnderecoConstants.ENDERECO;
+import static com.github.andregpereira.resilientshop.shoppingapi.constants.EnderecoDtoConstants.ENDERECO_DTO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoConstants.PEDIDO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoDtoConstants.PEDIDO_DETALHAR_DTO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoDtoConstants.PEDIDO_DTO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoEntityConstants.PEDIDO_ENTITY;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoEntityConstants.PEDIDO_ENTITY_ATUALIZADO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.ProdutoDtoConstants.PRODUTO_DTO;
+import static com.github.andregpereira.resilientshop.shoppingapi.constants.UsuarioConstants.USUARIO;
+import static com.github.andregpereira.resilientshop.shoppingapi.constants.UsuarioDtoConstants.USUARIO_DTO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
@@ -43,6 +46,15 @@ class PedidoConsultaServiceTest {
 
     @Mock
     private PedidoMapper pedidoMapper;
+
+    @Mock
+    private UsuarioMapper usuarioMapper;
+
+    @Mock
+    private EnderecoMapper enderecoMapper;
+
+    @Mock
+    private UsuarioFeignClient usuarioFeignClient;
 
     @Mock
     private DetalhePedidoMapper detalhePedidoMapper;
@@ -90,6 +102,10 @@ class PedidoConsultaServiceTest {
     void consultarPedidoPorIdExistenteRetornaPedidoDetalharDto() {
         given(repository.findById(1L)).willReturn(Optional.of(PEDIDO_ENTITY));
         given(pedidoMapper.toPedido(PEDIDO_ENTITY)).willReturn(PEDIDO);
+        given(usuarioFeignClient.consultarEnderecoPorId(1L)).willReturn(USUARIO_DTO);
+        given(usuarioMapper.toUsuario(USUARIO_DTO)).willReturn(USUARIO);
+        given(usuarioFeignClient.consultarEnderecoPorId(1L, 1L)).willReturn(ENDERECO_DTO);
+        given(enderecoMapper.toEndereco(ENDERECO_DTO)).willReturn(ENDERECO);
         given(produtoFeignClient.consultarPorId(1L)).willReturn(PRODUTO_DTO);
         given(pedidoMapper.toPedidoDetalharDto(PEDIDO)).willReturn(PEDIDO_DETALHAR_DTO);
         PedidoDetalharDto sut = consultaService.consultarPorId(1L);

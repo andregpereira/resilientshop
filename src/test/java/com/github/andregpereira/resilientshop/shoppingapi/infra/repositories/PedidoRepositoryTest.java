@@ -61,7 +61,7 @@ class PedidoRepositoryTest {
         em.persist(PEDIDO_ENTITY);
         em.persist(DETALHE_PEDIDO_ENTITY);
         PedidoEntity sut2 = new PedidoEntity(null, PEDIDO_LOCAL_DATE_TIME, PEDIDO_LOCAL_DATE_TIME, 1,
-                BigDecimal.valueOf(48), 2L, LISTA_DETALHES_PEDIDO_ENTITY, USUARIO);
+                BigDecimal.valueOf(48), 2L, 2L, LISTA_DETALHES_PEDIDO_ENTITY, USUARIO);
         em.persist(sut2);
         PageRequest pageable = PageRequest.of(0, 10, Sort.Direction.ASC, "id");
         Page<PedidoEntity> pagePedidos = repository.findAll(pageable);
