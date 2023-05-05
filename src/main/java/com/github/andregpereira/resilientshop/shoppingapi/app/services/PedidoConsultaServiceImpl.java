@@ -3,13 +3,14 @@ package com.github.andregpereira.resilientshop.shoppingapi.app.services;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoDetalharDto;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoDto;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.PedidoNotFoundException;
+import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.EnderecoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.PedidoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.ProdutoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.UsuarioMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.Pedido;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.enums.StatusPedido;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.ProdutoFeignClient;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.UsuarioFeignClient;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.ProdutosFeignClient;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.UsuariosFeignClient;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.PedidoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,16 +25,17 @@ public class PedidoConsultaServiceImpl implements PedidoConsultaService {
 
     private final PedidoRepository repository;
     private final PedidoMapper pedidoMapper;
-    private final UsuarioFeignClient usuarioFeignClient;
-    private final ProdutoFeignClient produtoFeignClient;
+    private final UsuariosFeignClient usuariosFeignClient;
+    private final ProdutosFeignClient produtosFeignClient;
     private final UsuarioMapper usuarioMapper;
+    private final EnderecoMapper enderecoMapper;
     private final ProdutoMapper produtoMapper;
 
     @Override
     public Page<PedidoDto> listarPorUsuario(Long id, Pageable pageable) {
         log.info("Procurando usuário com id {}...", id);
-        Page<Pedido> pedidos = repository.findAllByIdUsuario(usuarioFeignClient.consultarPorId(id).id(), pageable).map(
-                pedidoMapper::toPedido);
+        Page<Pedido> pedidos = repository.findAllByIdUsuario(usuariosFeignClient.consultarUsuarioPorId(id).id(),
+                pageable).map(pedidoMapper::toPedido);
         if (pedidos.isEmpty()) {
             log.info("Nenhum pedido foi encontrado");
             throw new PedidoNotFoundException();
@@ -57,10 +59,14 @@ public class PedidoConsultaServiceImpl implements PedidoConsultaService {
     public PedidoDetalharDto consultarPorId(Long id) {
         return repository.findById(id).map(p -> {
             Pedido pedido = pedidoMapper.toPedido(p);
-            pedido.setUsuario(usuarioMapper.toUsuario(usuarioFeignClient.consultarPorId(p.getIdUsuario())));
+            log.info("Setando usuário...");
+            pedido.setUsuario(usuarioMapper.toUsuario(usuariosFeignClient.consultarUsuarioPorId(p.getIdUsuario())));
+            log.info("Setando endereço...");
+            pedido.getUsuario().setEndereco(enderecoMapper.toEndereco(
+                    usuariosFeignClient.consultarEnderecoPorId(pedido.getIdEndereco(), pedido.getIdUsuario())));
             log.info("Setando produto(s)...");
             pedido.getDetalhePedido().parallelStream().forEach(
-                    dp -> dp.setProduto(produtoMapper.toProduto(produtoFeignClient.consultarPorId(dp.getIdProduto()))));
+                    dp -> dp.setProduto(produtoMapper.toProduto(produtosFeignClient.consultarPorId(dp.getIdProduto()))));
             log.info("Retornando pedido com id " + id);
             return pedidoMapper.toPedidoDetalharDto(pedido);
         }).orElseThrow(() -> {
