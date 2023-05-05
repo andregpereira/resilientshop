@@ -9,7 +9,7 @@ import java.util.List;
 
 public record PedidoRegistrarDto(@NotNull(message = "O usuário é obrigatório") @Positive(
         message = "O valor mínimo para esse campo é 1") Long idUsuario,
-        @NotBlank(message = "O apelido do endereço é obrigatório") String apelidoEndereco,
+        @NotBlank(message = "O apelido do endereço é obrigatório") String enderecoApelido,
         @NotNull(message = "Os detalhes do pedido são obrigatórios") List<DetalhePedidoRegistrarDto> detalhePedido) {
 
 }
