@@ -42,7 +42,10 @@ public class PedidoEntity {
     @Column(nullable = false)
     private Long idUsuario;
 
-    @OneToMany(mappedBy = "pedido")
+    @Column(nullable = false)
+    private Long idEndereco;
+
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<DetalhePedidoEntity> detalhePedido;
 
     @Transient
