@@ -23,6 +23,7 @@ public class Pedido {
     private int status;
     private BigDecimal total;
     private Long idUsuario;
+    private Long idEndereco;
     private List<DetalhePedido> detalhePedido;
     private Usuario usuario;
 
