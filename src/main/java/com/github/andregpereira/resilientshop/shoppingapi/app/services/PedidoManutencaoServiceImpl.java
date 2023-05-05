@@ -2,16 +2,16 @@ package com.github.andregpereira.resilientshop.shoppingapi.app.services;
 
 import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoDetalharDto;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoRegistrarDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.produto.ProdutoAtualizarEstoqueDto;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.PedidoNotFoundException;
-import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.DetalhePedidoMapper;
+import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.EnderecoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.PedidoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.ProdutoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.UsuarioMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.Pedido;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.enums.StatusPedido;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.ProdutoFeignClient;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.UsuarioFeignClient;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.DetalhePedidoRepository;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.ProdutosFeignClient;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.UsuariosFeignClient;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.PedidoRepository;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence.DetalhePedidoEntity;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence.PedidoEntity;
@@ -33,27 +33,31 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
 
     private final PedidoRepository pedidoRepository;
     private final PedidoMapper pedidoMapper;
-    private final DetalhePedidoRepository detalhePedidoRepository;
-    private final DetalhePedidoMapper detalhePedidoMapper;
-    private final UsuarioFeignClient usuarioFeignClient;
-    private final ProdutoFeignClient produtoFeignClient;
+    private final UsuariosFeignClient usuariosFeignClient;
+    private final ProdutosFeignClient produtosFeignClient;
     private final ProdutoMapper produtoMapper;
     private final UsuarioMapper usuarioMapper;
+    private final EnderecoMapper enderecoMapper;
 
     @Override
     public PedidoDetalharDto criar(PedidoRegistrarDto dto) {
         PedidoEntity pedidoEntity = pedidoMapper.toPedidoEntity(dto);
         log.info("Procurando usuário...");
-        pedidoEntity.setUsuario(usuarioMapper.toUsuario(usuarioFeignClient.consultarPorId(dto.idUsuario())));
-        log.info("Usuário encontrado");
+        pedidoEntity.setUsuario(usuarioMapper.toUsuario(usuariosFeignClient.consultarUsuarioPorId(dto.idUsuario())));
+        log.info("Usuário OK");
+        log.info("Procurando endereço...");
+        pedidoEntity.getUsuario().setEndereco(enderecoMapper.toEndereco(
+                usuariosFeignClient.consultarEnderecoPorApelido(dto.idUsuario(), dto.enderecoApelido())));
+        log.info("Endereço OK");
+        pedidoEntity.setIdEndereco(pedidoEntity.getUsuario().getEndereco().getId());
         log.info("Calculando subtotal e setando produto(s)...");
         pedidoEntity.getDetalhePedido().parallelStream().forEach(dp -> Optional.of(
-                produtoMapper.toProduto(produtoFeignClient.consultarPorId(dp.getIdProduto()))).ifPresent(p -> {
+                produtoMapper.toProduto(produtosFeignClient.consultarPorId(dp.getIdProduto()))).ifPresent(p -> {
+            produtosFeignClient.subtrair(p.getId(), new ProdutoAtualizarEstoqueDto(dp.getQuantidade()));
             dp.setSubtotal(p.getValorUnitario().multiply(BigDecimal.valueOf(dp.getQuantidade())));
             dp.setProduto(p);
             dp.setPedido(pedidoEntity);
         }));
-        log.info("Calculando subtotal e setando OK");
         LocalDateTime agora = LocalDateTime.now();
         pedidoEntity.setDataCriacao(agora);
         pedidoEntity.setDataModificacao(agora);
@@ -62,9 +66,9 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
         pedidoEntity.setTotal(
                 pedidoEntity.getDetalhePedido().parallelStream().map(DetalhePedidoEntity::getSubtotal).reduce(
                         BigDecimal.ZERO, BigDecimal::add));
+        log.info("Salvando pedido...");
         Pedido pedido = pedidoMapper.toPedido(pedidoRepository.save(pedidoEntity));
-        pedido.setDetalhePedido(detalhePedidoMapper.toListaDetalhePedido(
-                detalhePedidoRepository.saveAll(pedidoEntity.getDetalhePedido())));
+        log.info("Salvando detalhe pedido...");
         return pedidoMapper.toPedidoDetalharDto(pedido);
     }
 
