@@ -18,8 +18,9 @@ public interface PedidoRepository extends JpaRepository<PedidoEntity, Long> {
     Page<PedidoEntity> findAllByStatus(Integer status, Pageable pageable);
 
     @Query(value = """
-            select * from tb_pedidos p
-            where p.id_pedido=:id and p.status=1
+            SELECT * FROM tb_pedidos p
+            WHERE p.id_pedido=:id
+              AND p.status=1
             """, nativeQuery = true)
     Optional<PedidoEntity> findByIdAndStatusAguardandoPagamento(@Param("id") Long id);
 
