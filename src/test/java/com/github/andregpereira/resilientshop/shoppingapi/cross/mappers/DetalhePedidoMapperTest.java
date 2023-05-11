@@ -28,7 +28,7 @@ class DetalhePedidoMapperTest {
     private ProdutoMapper produtoMapper;
 
     @BeforeEach
-    void beforeEach(){
+    void beforeEach() {
         DETALHE_PEDIDO.setProduto(PRODUTO);
     }
 

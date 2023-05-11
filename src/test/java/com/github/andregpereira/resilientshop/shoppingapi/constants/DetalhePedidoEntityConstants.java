@@ -6,7 +6,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoEntityConstants.*;
+import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoEntityConstants.PEDIDO_ENTITY;
+import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoEntityConstants.PEDIDO_ENTITY_ATUALIZADO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.ProdutoConstants.PRODUTO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.ProdutoConstants.PRODUTO_ATUALIZADO;
 

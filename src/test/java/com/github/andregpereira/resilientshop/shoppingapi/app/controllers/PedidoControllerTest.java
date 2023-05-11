@@ -70,13 +70,6 @@ class PedidoControllerTest {
         then(manutencaoService).should(never()).criar(PEDIDO_REGISTRAR_DTO);
     }
 
-//    @Test
-//    void criarPedidoComProdutoInexistenteThrowsException() throws Exception {
-//        given(manutencaoService.criar(any(PedidoRegistrarDto.class))).willThrow(FeignException.NotFound.class);
-//        mockMvc.perform(post("/pedidos").content(objectMapper.writeValueAsString(PEDIDO_REGISTRAR_DTO)).contentType(
-//                MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
-//    }
-
     @Test
     void criarPedidoComRequestBodyNuloRetornaBadRequest() throws Exception {
         mockMvc.perform(post("/pedidos").content(objectMapper.writeValueAsString(null)).contentType(
@@ -180,6 +173,13 @@ class PedidoControllerTest {
     void consultarPedidoPorIdComAPIProdutosIndisponívelRetornaServiceUnavailable() throws Exception {
         given(consultaService.consultarPorId(25L)).willThrow(FeignException.ServiceUnavailable.class);
         mockMvc.perform(get("/pedidos/25")).andExpect(status().isServiceUnavailable());
+    }
+
+    @Test
+    void criarPedidoComApiIndisponivelThrowsException() throws Exception {
+        given(manutencaoService.criar(PEDIDO_REGISTRAR_DTO)).willThrow(FeignException.NotFound.class);
+        mockMvc.perform(post("/pedidos").content(objectMapper.writeValueAsString(PEDIDO_REGISTRAR_DTO)).contentType(
+                MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
     }
 
 }
