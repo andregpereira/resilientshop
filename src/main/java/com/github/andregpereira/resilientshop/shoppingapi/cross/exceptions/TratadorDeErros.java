@@ -42,9 +42,7 @@ public class TratadorDeErros {
 
     @ExceptionHandler(FeignException.NotFound.class)
     public ResponseEntity<String> erro404(FeignException.NotFound e) {
-        String mensagem = e.getMessage();
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                mensagem.substring(mensagem.lastIndexOf("[") + 1, mensagem.lastIndexOf("]")));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.contentUTF8());
     }
 
     @ExceptionHandler(PedidoNotFoundException.class)

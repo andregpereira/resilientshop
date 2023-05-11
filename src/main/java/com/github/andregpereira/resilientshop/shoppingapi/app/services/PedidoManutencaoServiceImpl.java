@@ -68,7 +68,6 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
                         BigDecimal.ZERO, BigDecimal::add));
         log.info("Salvando pedido...");
         Pedido pedido = pedidoMapper.toPedido(pedidoRepository.save(pedidoEntity));
-        log.info("Salvando detalhe pedido...");
         return pedidoMapper.toPedidoDetalharDto(pedido);
     }
 
