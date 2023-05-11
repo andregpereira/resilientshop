@@ -2,6 +2,7 @@ package com.github.andregpereira.resilientshop.shoppingapi.infra.repositories;
 
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence.DetalhePedidoEntity;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -24,9 +25,14 @@ class DetalhePedidoRepositoryTest {
     private TestEntityManager em;
 
     @AfterEach
-    public void afterEach() {
+    void afterEach() {
         PEDIDO_ENTITY.setId(null);
         LISTA_DETALHES_PEDIDO_ENTITY.stream().forEach(dp -> dp.setId(null));
+    }
+
+    @BeforeEach
+    void beforeEach() {
+        PEDIDO_ENTITY.setIdEndereco(1L);
     }
 
     @Test

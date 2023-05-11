@@ -4,8 +4,8 @@ import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.Pedido
 import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoDto;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.PedidoNotFoundException;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.*;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.ProdutoFeignClient;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.UsuarioFeignClient;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.ProdutosFeignClient;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.UsuariosFeignClient;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.PedidoRepository;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence.PedidoEntity;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +36,8 @@ import static com.github.andregpereira.resilientshop.shoppingapi.constants.Usuar
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.UsuarioDtoConstants.USUARIO_DTO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -54,7 +56,7 @@ class PedidoConsultaServiceTest {
     private EnderecoMapper enderecoMapper;
 
     @Mock
-    private UsuarioFeignClient usuarioFeignClient;
+    private UsuariosFeignClient usuariosFeignClient;
 
     @Mock
     private DetalhePedidoMapper detalhePedidoMapper;
@@ -66,7 +68,7 @@ class PedidoConsultaServiceTest {
     private PedidoRepository repository;
 
     @Mock
-    private ProdutoFeignClient produtoFeignClient;
+    private ProdutosFeignClient produtosFeignClient;
 
     @BeforeEach
     void beforeEach() {
@@ -102,11 +104,11 @@ class PedidoConsultaServiceTest {
     void consultarPedidoPorIdExistenteRetornaPedidoDetalharDto() {
         given(repository.findById(1L)).willReturn(Optional.of(PEDIDO_ENTITY));
         given(pedidoMapper.toPedido(PEDIDO_ENTITY)).willReturn(PEDIDO);
-        given(usuarioFeignClient.consultarEnderecoPorId(1L)).willReturn(USUARIO_DTO);
+        given(usuariosFeignClient.consultarUsuarioPorId(1L)).willReturn(USUARIO_DTO);
         given(usuarioMapper.toUsuario(USUARIO_DTO)).willReturn(USUARIO);
-        given(usuarioFeignClient.consultarEnderecoPorId(1L, 1L)).willReturn(ENDERECO_DTO);
+        given(usuariosFeignClient.consultarEnderecoPorId(any(), any())).willReturn(ENDERECO_DTO);
         given(enderecoMapper.toEndereco(ENDERECO_DTO)).willReturn(ENDERECO);
-        given(produtoFeignClient.consultarPorId(1L)).willReturn(PRODUTO_DTO);
+        given(produtosFeignClient.consultarPorId(1L)).willReturn(PRODUTO_DTO);
         given(pedidoMapper.toPedidoDetalharDto(PEDIDO)).willReturn(PEDIDO_DETALHAR_DTO);
         PedidoDetalharDto sut = consultaService.consultarPorId(1L);
         assertThat(sut).isNotNull().isEqualTo(PEDIDO_DETALHAR_DTO);

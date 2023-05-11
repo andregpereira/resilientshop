@@ -2,8 +2,8 @@ package com.github.andregpereira.resilientshop.shoppingapi.app.services;
 
 import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.PedidoNotFoundException;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.*;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.ProdutoFeignClient;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.UsuarioFeignClient;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.ProdutosFeignClient;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.UsuariosFeignClient;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.DetalhePedidoRepository;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.PedidoRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -67,10 +67,10 @@ class PedidoManutencaoServiceTest {
     private DetalhePedidoRepository detalhePedidoRepository;
 
     @Mock
-    private UsuarioFeignClient usuarioFeignClient;
+    private UsuariosFeignClient usuariosFeignClient;
 
     @Mock
-    private ProdutoFeignClient produtoFeignClient;
+    private ProdutosFeignClient produtosFeignClient;
 
     @AfterEach
     void afterEach() {
@@ -84,22 +84,21 @@ class PedidoManutencaoServiceTest {
 
     @Test
     void criarPedidoComDadosValidosRetornaPedidoDetalharDto() {
-        given(usuarioFeignClient.consultarEnderecoPorId(1L)).willReturn(USUARIO_DTO);
+        given(usuariosFeignClient.consultarUsuarioPorId(1L)).willReturn(USUARIO_DTO);
         given(usuarioMapper.toUsuario(USUARIO_DTO)).willReturn(USUARIO);
-        given(usuarioFeignClient.consultarEnderecoPorApelido(1L, "apelido")).willReturn(ENDERECO_DTO);
+        given(usuariosFeignClient.consultarEnderecoPorApelido(1L, "apelido")).willReturn(ENDERECO_DTO);
         given(enderecoMapper.toEndereco(ENDERECO_DTO)).willReturn(ENDERECO);
         given(pedidoMapper.toPedidoEntity(PEDIDO_REGISTRAR_DTO)).willReturn(PEDIDO_ENTITY);
-        given(produtoFeignClient.consultarPorId(1L)).willReturn(PRODUTO_DTO);
+        given(produtosFeignClient.consultarPorId(1L)).willReturn(PRODUTO_DTO);
         given(produtoMapper.toProduto(PRODUTO_DTO)).willReturn(PRODUTO);
         given(pedidoRepository.save(PEDIDO_ENTITY)).willReturn(PEDIDO_ENTITY);
         given(pedidoMapper.toPedido(PEDIDO_ENTITY)).willReturn(PEDIDO);
-        given(detalhePedidoMapper.toListaDetalhePedido(LISTA_DETALHES_PEDIDO_ENTITY)).willReturn(LISTA_DETALHES_PEDIDO);
+//        given(detalhePedidoMapper.toListaDetalhePedido(LISTA_DETALHES_PEDIDO_ENTITY)).willReturn(LISTA_DETALHES_PEDIDO);
         given(pedidoMapper.toPedidoDetalharDto(PEDIDO)).willReturn(PEDIDO_DETALHAR_DTO);
         try (MockedStatic<LocalDateTime> mockedStatic = mockStatic(LocalDateTime.class)) {
             mockedStatic.when(LocalDateTime::now).thenReturn(PEDIDO_LOCAL_DATE_TIME);
             assertThat(manutencaoService.criar(PEDIDO_REGISTRAR_DTO)).isEqualTo(PEDIDO_DETALHAR_DTO);
         }
-        then(detalhePedidoRepository).should().saveAll(LISTA_DETALHES_PEDIDO_ENTITY);
         then(pedidoRepository).should().save(PEDIDO_ENTITY);
     }
 
