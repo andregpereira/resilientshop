@@ -15,14 +15,6 @@ server:
   error:
     include-stacktrace: never
 
-#Swagger
-spring-doc:
-  api-docs:
-    path: /swagger/api-docs
-
-  swagger-ui:
-    path: /swagger/swagger-ui
-
 eureka:
   instance:
     hostname: localhost
