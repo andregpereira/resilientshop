@@ -18,7 +18,10 @@ server:
 #Swagger
 spring-doc:
   api-docs:
-    path: /api-docs
+    path: /swagger/api-docs
+
+  swagger-ui:
+    path: /swagger/swagger-ui
 
 eureka:
   instance:
