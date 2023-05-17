@@ -14,7 +14,7 @@ public class DetalhePedidoDtoConstants {
     public static final DetalhePedidoDto DETALHE_PEDIDO_DTO = new DetalhePedidoDto(null, 4, BigDecimal.valueOf(48),
             PRODUTO_DTO);
 
-    public static final DetalhePedidoRegistrarDto DETALHE_PEDIDO_REGISTRAR_DTO = new DetalhePedidoRegistrarDto(4, 1L);
+    public static final DetalhePedidoRegistrarDto DETALHE_PEDIDO_REGISTRAR_DTO = new DetalhePedidoRegistrarDto(1L, 4);
 
     public static final List<DetalhePedidoRegistrarDto> LISTA_DETALHES_PEDIDO_REGISTRAR_DTO = new ArrayList<>() {
         {
