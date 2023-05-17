@@ -20,4 +20,7 @@ public interface ProdutosFeignClient {
     @PutMapping("/produtos/subtrair")
     void subtrair(List<ProdutoAtualizarEstoqueDto> dto);
 
+    @PutMapping("/produtos/estoque/retornar")
+    void retornarEstoque(List<ProdutoAtualizarEstoqueDto> dto);
+
 }
