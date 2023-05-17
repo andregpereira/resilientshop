@@ -50,10 +50,12 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
                 usuariosFeignClient.consultarEnderecoPorApelido(dto.idUsuario(), dto.enderecoApelido())));
         log.info("Endereço OK");
         pedidoEntity.setIdEndereco(pedidoEntity.getUsuario().getEndereco().getId());
+        log.info("Deduzindo produtos do estoque...");
+        produtosFeignClient.subtrair(pedidoEntity.getDetalhePedido().stream().map(
+                dp -> new ProdutoAtualizarEstoqueDto(dp.getIdProduto(), dp.getQuantidade())).toList());
         log.info("Calculando subtotal e setando produto(s)...");
         pedidoEntity.getDetalhePedido().parallelStream().forEach(dp -> Optional.of(
                 produtoMapper.toProduto(produtosFeignClient.consultarPorId(dp.getIdProduto()))).ifPresent(p -> {
-            produtosFeignClient.subtrair(p.getId(), new ProdutoAtualizarEstoqueDto(dp.getQuantidade()));
             dp.setSubtotal(p.getValorUnitario().multiply(BigDecimal.valueOf(dp.getQuantidade())));
             dp.setProduto(p);
             dp.setPedido(pedidoEntity);
