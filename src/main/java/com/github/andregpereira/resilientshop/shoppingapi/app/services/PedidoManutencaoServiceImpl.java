@@ -76,6 +76,9 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
     @Override
     public String cancelar(Long id) {
         return pedidoRepository.findByIdAndStatusAguardandoPagamento(id).map(p -> {
+            log.info("Retornando produtos ao estoque...");
+            produtosFeignClient.retornarEstoque(p.getDetalhePedido().stream().map(
+                    dp -> new ProdutoAtualizarEstoqueDto(dp.getIdProduto(), dp.getQuantidade())).toList());
             p.setStatus(StatusPedido.CANCELADO.getStatus());
             pedidoRepository.save(p);
             log.info("Pedido com id {} cancelado com sucesso", id);
