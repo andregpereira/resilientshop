@@ -1,7 +1,11 @@
 package com.github.andregpereira.resilientshop.shoppingapi.app.services;
 
+import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.produto.ProdutoAtualizarEstoqueDto;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.PedidoNotFoundException;
-import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.*;
+import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.EnderecoMapper;
+import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.PedidoMapper;
+import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.ProdutoMapper;
+import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.UsuarioMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.ProdutosFeignClient;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.UsuariosFeignClient;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.DetalhePedidoRepository;
@@ -16,11 +20,10 @@ import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Optional;
 
-import static com.github.andregpereira.resilientshop.shoppingapi.constants.DetalhePedidoConstants.LISTA_DETALHES_PEDIDO;
-import static com.github.andregpereira.resilientshop.shoppingapi.constants.DetalhePedidoEntityConstants.LISTA_DETALHES_PEDIDO_ENTITY;
-import static com.github.andregpereira.resilientshop.shoppingapi.constants.DetalhePedidoEntityConstants.LISTA_DETALHES_PEDIDO_ENTITY_VAZIO;
+import static com.github.andregpereira.resilientshop.shoppingapi.constants.DetalhePedidoEntityConstants.*;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.EnderecoConstants.ENDERECO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.EnderecoDtoConstants.ENDERECO_DTO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.LocalDateTimeConstants.PEDIDO_LOCAL_DATE_TIME;
@@ -34,8 +37,7 @@ import static com.github.andregpereira.resilientshop.shoppingapi.constants.Usuar
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.UsuarioDtoConstants.USUARIO_DTO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.never;
 
@@ -47,9 +49,6 @@ class PedidoManutencaoServiceTest {
 
     @Mock
     private PedidoMapper pedidoMapper;
-
-    @Mock
-    private DetalhePedidoMapper detalhePedidoMapper;
 
     @Mock
     private UsuarioMapper usuarioMapper;
@@ -87,13 +86,15 @@ class PedidoManutencaoServiceTest {
         given(usuariosFeignClient.consultarUsuarioPorId(1L)).willReturn(USUARIO_DTO);
         given(usuarioMapper.toUsuario(USUARIO_DTO)).willReturn(USUARIO);
         given(usuariosFeignClient.consultarEnderecoPorApelido(1L, "apelido")).willReturn(ENDERECO_DTO);
+        willDoNothing().given(produtosFeignClient).subtrair(Collections.singletonList(
+                new ProdutoAtualizarEstoqueDto(DETALHE_PEDIDO_ENTITY.getIdProduto(),
+                        DETALHE_PEDIDO_ENTITY.getQuantidade())));
         given(enderecoMapper.toEndereco(ENDERECO_DTO)).willReturn(ENDERECO);
         given(pedidoMapper.toPedidoEntity(PEDIDO_REGISTRAR_DTO)).willReturn(PEDIDO_ENTITY);
         given(produtosFeignClient.consultarPorId(1L)).willReturn(PRODUTO_DTO);
         given(produtoMapper.toProduto(PRODUTO_DTO)).willReturn(PRODUTO);
         given(pedidoRepository.save(PEDIDO_ENTITY)).willReturn(PEDIDO_ENTITY);
         given(pedidoMapper.toPedido(PEDIDO_ENTITY)).willReturn(PEDIDO);
-//        given(detalhePedidoMapper.toListaDetalhePedido(LISTA_DETALHES_PEDIDO_ENTITY)).willReturn(LISTA_DETALHES_PEDIDO);
         given(pedidoMapper.toPedidoDetalharDto(PEDIDO)).willReturn(PEDIDO_DETALHAR_DTO);
         try (MockedStatic<LocalDateTime> mockedStatic = mockStatic(LocalDateTime.class)) {
             mockedStatic.when(LocalDateTime::now).thenReturn(PEDIDO_LOCAL_DATE_TIME);
@@ -113,6 +114,9 @@ class PedidoManutencaoServiceTest {
     @Test
     void cancelarPedidoComStatus1PorIdExistenteRetornaString() {
         given(pedidoRepository.findByIdAndStatusAguardandoPagamento(1L)).willReturn(Optional.of(PEDIDO_ENTITY));
+        willDoNothing().given(produtosFeignClient).retornarEstoque(Collections.singletonList(
+                new ProdutoAtualizarEstoqueDto(DETALHE_PEDIDO_ENTITY.getIdProduto(),
+                        DETALHE_PEDIDO_ENTITY.getQuantidade())));
         assertThat(manutencaoService.cancelar(1L)).isEqualTo("Pedido com id 1 cancelado");
     }
 
