@@ -29,7 +29,6 @@ import java.text.MessageFormat;
 /**
  * Controller de pedidos da API de Pedidos
  */
-
 @RequiredArgsConstructor
 @Slf4j
 @Validated
