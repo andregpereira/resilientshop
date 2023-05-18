@@ -17,7 +17,7 @@ public interface ProdutosFeignClient {
     @GetMapping("/produtos/{id}")
     ProdutoDto consultarPorId(@PathVariable Long id);
 
-    @PutMapping("/produtos/subtrair")
+    @PutMapping("/produtos/estoque/subtrair")
     void subtrair(List<ProdutoAtualizarEstoqueDto> dto);
 
     @PutMapping("/produtos/estoque/retornar")
