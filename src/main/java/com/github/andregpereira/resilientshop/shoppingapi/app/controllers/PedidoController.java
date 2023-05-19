@@ -56,11 +56,10 @@ public class PedidoController {
      */
     @PostMapping
     @CircuitBreaker(name = "cadastrar", fallbackMethod = "cadastrarFallbackMethod")
-    public ResponseEntity<PedidoDetalharDto> criar(@RequestBody @Valid PedidoRegistrarDto dto,
-            UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<PedidoDetalharDto> criar(@RequestBody @Valid PedidoRegistrarDto dto) {
         log.info("Criando pedido...");
         PedidoDetalharDto pedido = manutencaoService.criar(dto);
-        URI uri = uriBuilder.path("/pedidos/{id}").buildAndExpand(pedido.id()).toUri();
+        URI uri = UriComponentsBuilder.fromPath("/pedidos/{id}").buildAndExpand(pedido.id()).toUri();
         log.info("Pedido criado com sucesso");
         return ResponseEntity.created(uri).body(pedido);
     }
