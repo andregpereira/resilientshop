@@ -1,5 +1,12 @@
+spring:
+  application:
+    name: resilientshop-eureka-server
+
 server:
   port: 8761
+  error:
+    include-stacktrace: never
+
 eureka:
   instance:
     hostname: localhost
@@ -10,10 +17,3 @@ eureka:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
   server:
     eviction-interval-timer-in-ms: 5000
-
-
-
-
-#zuul:
-#  routes:
-#    usuarios:
