@@ -11,53 +11,28 @@ info:
 
 servers:
   - url: http://localhost:8763
-    description: Caminho base da API
+    description: |-
+      Caminho base da API Gateway
 
 tags:
   - name: Pedidos
     description: |-
-      Operações de criação, cancelamento e consulta de pedidos.
+      Operações de criação, cancelamento e consulta de pedidos
 
 paths:
   /pedidos:
-    get:
-      tags:
-      - Pedidos
-      operationId: listar
-      summary: Retorna todos os pedidos
-
-      responses:
-        "200":
-          description: Listados todos os pedidos
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PagePedidoDto'
-
-        "404":
-          $ref: '#/components/responses/PedidoNotFound'
-
     post:
       tags:
-      - Pedidos
+        - Pedidos
       operationId: cadastrar
-      summary: Criar um pedido
-
+      summary: |-
+        Cria um pedido
       requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PedidoRegistrarDto'
-        required: true
-
+        $ref: '#/components/requestBodies/PedidoRegistrarDto'
       responses:
         "201":
-          description: Pedido criado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PedidoDetalharDto'
-                
+          $ref: '#/components/responses/PedidoCreated'
+
         "400":
           $ref: '#/components/responses/BadRequest'
 
@@ -75,20 +50,32 @@ paths:
         "503":
           $ref: '#/components/responses/ServiceUnavailable'
 
+    get:
+      tags:
+        - Pedidos
+      operationId: listar
+      summary: |-
+        Retorna todos os pedidos
+      responses:
+        "200":
+          description: Listados todos os pedidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagePedidoDto'
+
+        "404":
+          $ref: '#/components/responses/PedidoNotFound'
+
   /pedidos/{id}:
     get:
       tags:
-      - Pedidos
+        - Pedidos
       operationId: consultarPorId
-      summary: Consultar um pedido por id
+      summary: |-
+        Consultar um pedido por id
       parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
-
+        - $ref: '#/components/parameters/Id'
       responses:
         "200":
           description: Pedido encontrado por id
@@ -102,16 +89,17 @@ paths:
 
     delete:
       tags:
-      - Pedidos
+        - Pedidos
       operationId: cancelar
-      summary: Cancelar um pedido por id
+      summary: |-
+        Cancelar um pedido por id
       parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
 
       responses:
         "200":
@@ -125,20 +113,35 @@ paths:
         "404":
           $ref: '#/components/responses/PedidoNotFound'
 
+  /pedidos/status:
+    get:
+      tags:
+        - Pedidos
+      operationId: consultarPorStatus
+      summary: |-
+        Listar todos os pedidos pelo status
+      parameters:
+        - $ref: '#/components/parameters/Status'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagePedidoDto'
+
+        "404":
+          $ref: '#/components/responses/PedidoNotFound'
+
   /pedidos/usuario/{id}:
     get:
       tags:
-      - Pedidos
+        - Pedidos
       operationId: listarPorUsuario
-      summary: Listar todos os pedidos de um usuário
+      summary: |-
+        Listar todos os pedidos de um usuário
       parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
-
+        - $ref: '#/components/parameters/Id'
       responses:
         "200":
           description: Listados todos os pedidos do usuário
@@ -153,39 +156,12 @@ paths:
         "503":
           $ref: '#/components/responses/ServiceUnavailable'
 
-  /pedidos/status:
-    get:
-      tags:
-      - Pedidos
-      operationId: consultarPorStatus
-      summary: Listar todos os pedidos pelo status
-      parameters:
-      - name: status
-        in: query
-        required: true
-        schema:
-          maximum: 5
-          minimum: 0
-          type: integer
-          format: int32
-
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PagePedidoDto'
-
-        "404":
-          $ref: '#/components/responses/PedidoNotFound'
-
 components:
   schemas:
     DetalhePedidoRegistrarDto:
       required:
-      - idProduto
-      - quantidade
+        - idProduto
+        - quantidade
       type: object
       properties:
         quantidade:
@@ -199,9 +175,9 @@ components:
 
     PedidoRegistrarDto:
       required:
-      - detalhePedido
-      - enderecoApelido
-      - idUsuario
+        - detalhePedido
+        - enderecoApelido
+        - idUsuario
       type: object
       properties:
         idUsuario:
@@ -389,7 +365,7 @@ components:
           type: string
         mensagem:
           type: string
-          
+
     ResponseBadrequest:
       type: string
       example: Parâmetro inválido
@@ -403,29 +379,41 @@ components:
       example: Não foi possível fazer a requisição
 
   responses:
+    PedidoCreated:
+      description: |-
+        Pedido criado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PedidoDetalharDto'
+
     BadRequest:
-      description: Problema ao processar requisição
+      description: |-
+        Problema ao processar JSON
       content:
         '*/*':
           schema:
             $ref: '#/components/schemas/ResponseBadrequest'
 
     PedidoNotFound:
-      description: Pedido não encontrado
+      description: |-
+        Pedido não encontrado
       content:
         '*/*':
           schema:
             $ref: '#/components/schemas/ResponsePedidoNotFound'
 
     UnprocessableEntity:
-      description: Campo inválido
+      description: |-
+        Campo inválido
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DadoInvalido'
 
     ServiceUnavailable:
-      description: API indisponível
+      description: |-
+        API indisponível
       content:
         '*/*':
           schema:
@@ -433,8 +421,26 @@ components:
 
   requestBodies:
     PedidoRegistrarDto:
-      description: Pedido a ser realizado
+      description: |-
+        Pedido a ser realizado
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/PedidoRegistrarDto'
+      required: true
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+
+    Status:
+      name: status
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int32
