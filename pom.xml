@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.6</version>
+        <version>3.0.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.github.andregpereira</groupId>
@@ -15,7 +15,7 @@
     <description>API Gateway for Resilient Shop Ecommerce Project</description>
     <properties>
         <java.version>17</java.version>
-        <org.projectlombok.version>1.18.26</org.projectlombok.version>
+        <lombok.version>1.18.26</lombok.version>
         <spring-cloud.version>2022.0.2</spring-cloud.version>
     </properties>
     <dependencyManagement>
