@@ -19,6 +19,12 @@ spring:
     name: resilientshop-api-gateway
   cloud:
     gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedHeaders: "*"
+            allowedMethods: "*"
       routes:
         - id: resilientshop-shopping-api
           uri: lb://resilientshop-shopping-api
@@ -32,7 +38,7 @@ spring:
         - id: resilientshop-user-api
           uri: lb://resilientshop-user-api
           predicates:
-            - Path=/**
+            - Path=/usuarios/**, /enderecos/**
           filters:
             - name: CircuitBreaker
               args:
@@ -41,7 +47,7 @@ spring:
         - id: resilientshop-products-api
           uri: lb://resilientshop-products-api
           predicates:
-            - Path=/**
+            - Path=/produtos/**, /subcategorias/**, /categorias/**
           filters:
             - name: CircuitBreaker
               args:
@@ -53,14 +59,14 @@ resilience4j:
     configs:
       default:
         registerHealthIndicator: true
-        slidingWindowSize: 10
+        slidingWindowSize: 15
         slidingWindowType: COUNT_BASED
         permittedNumberOfCallsInHalfOpenState: 4
-        minimumNumberOfCalls: 10
+        minimumNumberOfCalls: 15
         waitDurationInOpenState: 5s
         slowCallRateThreshold: 50
-        slowCallDurationThreshold: 5s
-        failureRateThreshold: 5
+        slowCallDurationThreshold: 10s
+        failureRateThreshold: 10
     instances:
       fallback:
         baseConfig: default
