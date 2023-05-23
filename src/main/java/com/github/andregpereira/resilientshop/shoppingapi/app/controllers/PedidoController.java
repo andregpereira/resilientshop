@@ -50,7 +50,6 @@ public class PedidoController {
      * Cadastra um pedido. Retorna um {@link PedidoDetalharDto}.
      *
      * @param dto        o pedido a ser cadastrado.
-     * @param uriBuilder
      *
      * @return Um {@link PedidoDetalharDto} com o pedido criado.
      */
