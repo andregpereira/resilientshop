@@ -8,7 +8,6 @@ import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.PedidoMa
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.ProdutoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.UsuarioMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.Pedido;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.enums.StatusPedido;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.ProdutosFeignClient;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.UsuariosFeignClient;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.PedidoRepository;
@@ -17,6 +16,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+import static java.util.function.Predicate.not;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -34,25 +37,25 @@ public class PedidoConsultaServiceImpl implements PedidoConsultaService {
     @Override
     public Page<PedidoDto> listarPorUsuario(Long id, Pageable pageable) {
         log.info("Procurando usuário com id {}...", id);
-        Page<Pedido> pedidos = repository.findAllByIdUsuario(usuariosFeignClient.consultarUsuarioPorId(id).id(),
-                pageable).map(pedidoMapper::toPedido);
-        if (pedidos.isEmpty()) {
-            log.info("Nenhum pedido foi encontrado");
-            throw new PedidoNotFoundException();
-        }
-        log.info("Retornando pedidos");
-        return pedidos.map(pedidoMapper::toPedidoDto);
+        return Optional.of(repository.findAllByIdUsuario(usuariosFeignClient.consultarUsuarioPorId(id).id(), pageable))
+                .filter(not(Page::isEmpty)).map(p -> {
+                    log.info("Retornando todos os pedidos do usuário");
+                    return p.map(pedidoMapper::toPedidoDto);
+                }).orElseThrow(() -> {
+                    log.info("Nenhum pedido foi encontrado");
+                    return new PedidoNotFoundException();
+                });
     }
 
     @Override
     public Page<PedidoDto> listar(Pageable pageable) {
-        Page<Pedido> pedidos = repository.findAll(pageable).map(pedidoMapper::toPedido);
-        if (pedidos.isEmpty()) {
+        return Optional.of(repository.findAll(pageable)).filter(not(Page::isEmpty)).map(p -> {
+            log.info("Retornando todos os pedidos");
+            return p.map(pedidoMapper::toPedidoDto);
+        }).orElseThrow(() -> {
             log.info("Nenhum pedido foi encontrado");
-            throw new PedidoNotFoundException();
-        }
-        log.info("Retornando pedidos");
-        return pedidos.map(pedidoMapper::toPedidoDto);
+            return new PedidoNotFoundException();
+        });
     }
 
     @Override
@@ -77,13 +80,13 @@ public class PedidoConsultaServiceImpl implements PedidoConsultaService {
 
     @Override
     public Page<PedidoDto> consultarPorStatus(int status, Pageable pageable) {
-        Page<Pedido> pedidos = repository.findAllByStatus(status, pageable).map(pedidoMapper::toPedido);
-        if (pedidos.isEmpty()) {
-            log.info("Pedidos com status {} ({}) não encontrados", status, StatusPedido.getStatusPorId(status));
-            throw new PedidoNotFoundException(status);
-        }
-        log.info("Retornando pedidos com status {} ({})", status, StatusPedido.getStatusPorId(status));
-        return pedidos.map(pedidoMapper::toPedidoDto);
+        return Optional.of(repository.findAllByStatus(status, pageable)).filter(not(Page::isEmpty)).map(p -> {
+            log.info("Retornando todos os usuários");
+            return p.map(pedidoMapper::toPedidoDto);
+        }).orElseThrow(() -> {
+            log.info("Nenhum usuário foi encontrado");
+            return new PedidoNotFoundException(status);
+        });
     }
 
 }
