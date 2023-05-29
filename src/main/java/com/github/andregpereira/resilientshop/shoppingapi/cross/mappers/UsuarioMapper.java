@@ -1,6 +1,6 @@
 package com.github.andregpereira.resilientshop.shoppingapi.cross.mappers;
 
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.usuario.UsuarioDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dto.usuario.UsuarioDto;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.Usuario;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;

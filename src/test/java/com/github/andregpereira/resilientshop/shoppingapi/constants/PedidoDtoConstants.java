@@ -1,8 +1,8 @@
 package com.github.andregpereira.resilientshop.shoppingapi.constants;
 
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoDetalharDto;
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoDto;
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoRegistrarDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoDetalharDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoRegistrarDto;
 
 import java.math.BigDecimal;
 

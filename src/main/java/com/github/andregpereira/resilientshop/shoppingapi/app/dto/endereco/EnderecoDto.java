@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.shoppingapi.app.dtos.endereco;
+package com.github.andregpereira.resilientshop.shoppingapi.app.dto.endereco;
 
 public record EnderecoDto(Long id,
         String apelido,

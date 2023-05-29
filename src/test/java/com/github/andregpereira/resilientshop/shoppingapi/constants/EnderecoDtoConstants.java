@@ -1,6 +1,6 @@
 package com.github.andregpereira.resilientshop.shoppingapi.constants;
 
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.endereco.EnderecoDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dto.endereco.EnderecoDto;
 
 public class EnderecoDtoConstants {
 
