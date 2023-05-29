@@ -20,6 +20,8 @@ public interface PedidoMapper {
 
     PedidoDto toPedidoDto(Pedido pedido);
 
+    PedidoDto toPedidoDto(PedidoEntity pedido);
+
     PedidoDetalharDto toPedidoDetalharDto(Pedido pedido);
 
 }
