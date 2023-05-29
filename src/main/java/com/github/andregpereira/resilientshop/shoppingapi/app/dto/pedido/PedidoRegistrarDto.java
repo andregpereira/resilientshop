@@ -1,6 +1,6 @@
-package com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido;
+package com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido;
 
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.detalhepedido.DetalhePedidoRegistrarDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dto.detalhepedido.DetalhePedidoRegistrarDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

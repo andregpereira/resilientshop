@@ -1,7 +1,7 @@
 package com.github.andregpereira.resilientshop.shoppingapi.app.services;
 
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoDetalharDto;
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoDetalharDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoDto;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.PedidoNotFoundException;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.*;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.ProdutosFeignClient;
@@ -37,7 +37,6 @@ import static com.github.andregpereira.resilientshop.shoppingapi.constants.Usuar
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)

@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.shoppingapi.app.dtos.produto;
+package com.github.andregpereira.resilientshop.shoppingapi.app.dto.produto;
 
 import java.math.BigDecimal;
 

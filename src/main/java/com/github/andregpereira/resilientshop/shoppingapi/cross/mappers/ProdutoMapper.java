@@ -1,6 +1,6 @@
 package com.github.andregpereira.resilientshop.shoppingapi.cross.mappers;
 
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.produto.ProdutoDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dto.produto.ProdutoDto;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.Produto;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants.ComponentModel;

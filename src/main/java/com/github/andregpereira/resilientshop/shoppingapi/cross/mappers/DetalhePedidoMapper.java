@@ -1,7 +1,7 @@
 package com.github.andregpereira.resilientshop.shoppingapi.cross.mappers;
 
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.detalhepedido.DetalhePedidoDto;
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.detalhepedido.DetalhePedidoRegistrarDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dto.detalhepedido.DetalhePedidoDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dto.detalhepedido.DetalhePedidoRegistrarDto;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.DetalhePedido;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence.DetalhePedidoEntity;
 import org.mapstruct.InjectionStrategy;

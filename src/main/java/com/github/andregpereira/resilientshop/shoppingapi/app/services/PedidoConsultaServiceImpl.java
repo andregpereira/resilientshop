@@ -1,7 +1,7 @@
 package com.github.andregpereira.resilientshop.shoppingapi.app.services;
 
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoDetalharDto;
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido.PedidoDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoDetalharDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoDto;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.PedidoNotFoundException;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.EnderecoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.PedidoMapper;

@@ -1,7 +1,7 @@
 package com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients;
 
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.produto.ProdutoAtualizarEstoqueDto;
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.produto.ProdutoDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dto.produto.ProdutoAtualizarEstoqueDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dto.produto.ProdutoDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;

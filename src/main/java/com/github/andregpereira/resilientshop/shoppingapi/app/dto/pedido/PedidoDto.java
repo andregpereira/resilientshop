@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.shoppingapi.app.dtos.pedido;
+package com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

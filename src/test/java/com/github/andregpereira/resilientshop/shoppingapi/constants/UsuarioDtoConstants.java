@@ -1,6 +1,6 @@
 package com.github.andregpereira.resilientshop.shoppingapi.constants;
 
-import com.github.andregpereira.resilientshop.shoppingapi.app.dtos.usuario.UsuarioDto;
+import com.github.andregpereira.resilientshop.shoppingapi.app.dto.usuario.UsuarioDto;
 
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.EnderecoDtoConstants.ENDERECO_DTO;
 
