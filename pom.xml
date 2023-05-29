@@ -7,11 +7,9 @@
     <artifactId>commons</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <java.version>17</java.version>
         <lombok.version>1.18.26</lombok.version>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
