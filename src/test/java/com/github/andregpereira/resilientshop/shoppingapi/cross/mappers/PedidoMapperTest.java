@@ -1,5 +1,6 @@
 package com.github.andregpereira.resilientshop.shoppingapi.cross.mappers;
 
+import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.Pedido;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -70,7 +71,7 @@ class PedidoMapperTest {
 
     @Test
     void pedidoNuloRetornaPedidoDtoNull() {
-        assertThat(pedidoMapper.toPedidoDto(null)).isNull();
+        assertThat(pedidoMapper.toPedidoDto((Pedido) null)).isNull();
     }
 
     @Test
