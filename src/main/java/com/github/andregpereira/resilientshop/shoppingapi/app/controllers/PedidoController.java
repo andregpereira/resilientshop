@@ -28,6 +28,8 @@ import java.text.MessageFormat;
 
 /**
  * Controller de pedidos da API de Pedidos
+ *
+ * @author André Garcia
  */
 @RequiredArgsConstructor
 @Slf4j
@@ -49,7 +51,7 @@ public class PedidoController {
     /**
      * Cadastra um pedido. Retorna um {@link PedidoDetalharDto}.
      *
-     * @param dto        o pedido a ser cadastrado.
+     * @param dto o pedido a ser cadastrado.
      *
      * @return Um {@link PedidoDetalharDto} com o pedido criado.
      */
