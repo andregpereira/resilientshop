@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
-import java.util.List;
+import java.util.Set;
 
 @Component
 @FeignClient(name = "resilientshop-products-api")
@@ -18,9 +18,9 @@ public interface ProdutosFeignClient {
     Produto consultarPorId(@PathVariable Long id);
 
     @PutMapping("/produtos/estoque/subtrair")
-    void subtrair(List<ProdutoAtualizarEstoqueDto> dto);
+    void subtrair(Set<ProdutoAtualizarEstoqueDto> dto);
 
     @PutMapping("/produtos/estoque/retornar")
-    void retornarEstoque(List<ProdutoAtualizarEstoqueDto> dto);
+    void retornarEstoque(Set<ProdutoAtualizarEstoqueDto> dto);
 
 }
