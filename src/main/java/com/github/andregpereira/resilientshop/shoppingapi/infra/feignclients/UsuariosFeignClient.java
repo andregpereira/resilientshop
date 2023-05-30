@@ -1,7 +1,7 @@
 package com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients;
 
-import com.github.andregpereira.resilientshop.shoppingapi.app.dto.endereco.EnderecoDto;
-import com.github.andregpereira.resilientshop.shoppingapi.app.dto.usuario.UsuarioDto;
+import com.github.andregpereira.resilientshop.commons.entities.Endereco;
+import com.github.andregpereira.resilientshop.commons.entities.Usuario;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "resilientshop-user-api")
 public interface UsuariosFeignClient {
 
-    @GetMapping("/usuarios/{id}")
-    UsuarioDto consultarUsuarioPorId(@PathVariable Long id);
+    @GetMapping(value = "/usuarios/{id}")
+    Usuario consultarUsuarioPorId(@PathVariable Long id);
 
     @GetMapping("/enderecos/{id}/usuario/{idUsuario}")
-    EnderecoDto consultarEnderecoPorId(@PathVariable Long id, @PathVariable Long idUsuario);
+    Endereco consultarEnderecoPorId(@PathVariable Long id, @PathVariable Long idUsuario);
 
     @GetMapping("/enderecos/usuario/{idUsuario}/apelido")
-    EnderecoDto consultarEnderecoPorApelido(@PathVariable Long idUsuario, @RequestParam String apelido);
+    Endereco consultarEnderecoPorApelido(@PathVariable Long idUsuario, @RequestParam String apelido);
 
 }
