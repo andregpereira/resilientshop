@@ -4,11 +4,7 @@ import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoD
 import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoRegistrarDto;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dto.produto.ProdutoAtualizarEstoqueDto;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.PedidoNotFoundException;
-import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.EnderecoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.PedidoMapper;
-import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.ProdutoMapper;
-import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.UsuarioMapper;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.Pedido;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.enums.StatusPedido;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.ProdutosFeignClient;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.UsuariosFeignClient;
@@ -35,42 +31,37 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
     private final PedidoMapper pedidoMapper;
     private final UsuariosFeignClient usuariosFeignClient;
     private final ProdutosFeignClient produtosFeignClient;
-    private final ProdutoMapper produtoMapper;
-    private final UsuarioMapper usuarioMapper;
-    private final EnderecoMapper enderecoMapper;
 
     @Override
     public PedidoDetalharDto criar(PedidoRegistrarDto dto) {
-        PedidoEntity pedidoEntity = pedidoMapper.toPedidoEntity(dto);
+        PedidoEntity pedido = pedidoMapper.toPedidoEntity(dto);
         log.info("Procurando usuário...");
-        pedidoEntity.setUsuario(usuarioMapper.toUsuario(usuariosFeignClient.consultarUsuarioPorId(dto.idUsuario())));
+        pedido.setUsuario(usuariosFeignClient.consultarUsuarioPorId(dto.idUsuario()));
         log.info("Usuário OK");
         log.info("Procurando endereço...");
-        pedidoEntity.getUsuario().setEndereco(enderecoMapper.toEndereco(
-                usuariosFeignClient.consultarEnderecoPorApelido(dto.idUsuario(), dto.enderecoApelido())));
+        pedido.setEndereco(usuariosFeignClient.consultarEnderecoPorApelido(dto.idUsuario(), dto.enderecoApelido()));
         log.info("Endereço OK");
-        pedidoEntity.setIdEndereco(pedidoEntity.getUsuario().getEndereco().getId());
+        pedido.setIdEndereco(pedido.getEndereco().getId());
         log.info("Deduzindo produtos do estoque...");
-        produtosFeignClient.subtrair(pedidoEntity.getDetalhePedido().stream().map(
+        produtosFeignClient.subtrair(pedido.getDetalhePedido().stream().map(
                 dp -> new ProdutoAtualizarEstoqueDto(dp.getIdProduto(), dp.getQuantidade())).toList());
         log.info("Calculando subtotal e setando produto(s)...");
-        pedidoEntity.getDetalhePedido().parallelStream().forEach(dp -> Optional.of(
-                produtoMapper.toProduto(produtosFeignClient.consultarPorId(dp.getIdProduto()))).ifPresent(p -> {
-            dp.setSubtotal(p.getValorUnitario().multiply(BigDecimal.valueOf(dp.getQuantidade())));
-            dp.setProduto(p);
-            dp.setPedido(pedidoEntity);
-        }));
+        pedido.getDetalhePedido().parallelStream().forEach(
+                dp -> Optional.of(produtosFeignClient.consultarPorId(dp.getIdProduto())).ifPresent(p -> {
+                    dp.setSubtotal(p.getValorUnitario().multiply(BigDecimal.valueOf(dp.getQuantidade())));
+                    dp.setProduto(p);
+                    dp.setPedido(pedido);
+                }));
         LocalDateTime agora = LocalDateTime.now();
-        pedidoEntity.setDataCriacao(agora);
-        pedidoEntity.setDataModificacao(agora);
-        pedidoEntity.setStatus(StatusPedido.AGUARDANDO_PAGAMENTO.getStatus());
+        pedido.setDataCriacao(agora);
+        pedido.setDataModificacao(agora);
+        pedido.setStatus(StatusPedido.AGUARDANDO_PAGAMENTO.getStatus());
         log.info("Calculando total...");
-        pedidoEntity.setTotal(
-                pedidoEntity.getDetalhePedido().parallelStream().map(DetalhePedidoEntity::getSubtotal).reduce(
-                        BigDecimal.ZERO, BigDecimal::add));
+        pedido.setTotal(
+                pedido.getDetalhePedido().parallelStream().map(DetalhePedidoEntity::getSubtotal).reduce(BigDecimal.ZERO,
+                        BigDecimal::add));
         log.info("Salvando pedido...");
-        Pedido pedido = pedidoMapper.toPedido(pedidoRepository.save(pedidoEntity));
-        return pedidoMapper.toPedidoDetalharDto(pedido);
+        return pedidoMapper.toPedidoDetalharDto(pedidoRepository.save(pedido));
     }
 
     @Override
