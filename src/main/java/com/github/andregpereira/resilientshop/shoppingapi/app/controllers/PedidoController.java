@@ -177,8 +177,8 @@ public class PedidoController {
             @RequestParam @Min(message = "O status mínimo é 0", value = 0) @Max(message = "O status máximo é 5",
                     value = 5) int status,
             @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pageable) {
-        log.info("Pesquisando pedidos com status {} ({})...", StatusPedido.getStatusPorId(status).toString()
-                .toLowerCase().replace("_", "").replace("separacao", "separação"), status);
+        log.info("Pesquisando pedidos com status {} ({})...", StatusPedido.getStatusPorId(
+                status).toString().toLowerCase().replace("_", "").replace("separacao", "separação"), status);
         return ResponseEntity.ok(consultaService.consultarPorStatus(status, pageable));
     }
 
