@@ -24,4 +24,6 @@ public interface PedidoMapper {
 
     PedidoDetalharDto toPedidoDetalharDto(Pedido pedido);
 
+    PedidoDetalharDto toPedidoDetalharDto(PedidoEntity pedido);
+
 }
