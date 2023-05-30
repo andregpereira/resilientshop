@@ -1,7 +1,7 @@
 package com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients;
 
+import com.github.andregpereira.resilientshop.commons.entities.Produto;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dto.produto.ProdutoAtualizarEstoqueDto;
-import com.github.andregpereira.resilientshop.shoppingapi.app.dto.produto.ProdutoDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,7 @@ import java.util.List;
 public interface ProdutosFeignClient {
 
     @GetMapping("/produtos/{id}")
-    ProdutoDto consultarPorId(@PathVariable Long id);
+    Produto consultarPorId(@PathVariable Long id);
 
     @PutMapping("/produtos/estoque/subtrair")
     void subtrair(List<ProdutoAtualizarEstoqueDto> dto);
