@@ -1,5 +1,7 @@
 package com.github.andregpereira.resilientshop.commons.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +22,10 @@ public class Produto {
     private Long sku;
     private String nome;
     private String descricao;
+
+    @JsonFormat(shape = Shape.STRING, pattern = "dd/MM/uuuu HH:mm")
     private LocalDateTime dataCriacao;
+
     private BigDecimal valorUnitario;
     private int estoque;
     private Subcategoria subcategoria;
@@ -45,9 +50,9 @@ public class Produto {
     @Override
     public String toString() {
         return new StringJoiner(", ", Produto.class.getSimpleName() + "[", "]").add("id=" + id).add("sku=" + sku).add(
-                        "nome='" + nome + "'").add("descricao='" + descricao + "'").add("dataCriacao=" + dataCriacao).add(
-                        "valorUnitario=" + valorUnitario).add("estoque=" + estoque).add("subcategoria=" + subcategoria)
-                .toString();
+                "nome='" + nome + "'").add("descricao='" + descricao + "'").add("dataCriacao=" + dataCriacao).add(
+                "valorUnitario=" + valorUnitario).add("estoque=" + estoque).add(
+                "subcategoria=" + subcategoria).toString();
     }
 
 }

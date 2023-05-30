@@ -1,5 +1,7 @@
 package com.github.andregpereira.resilientshop.commons.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,8 +23,13 @@ public class Usuario {
     private String sobrenome;
     private String cpf;
     private String telefone;
+
+    @JsonFormat(shape = Shape.STRING, pattern = "dd/MM/uuuu")
     private LocalDate dataCriacao;
+
+    @JsonFormat(shape = Shape.STRING, pattern = "dd/MM/uuuu")
     private LocalDate dataModificacao;
+
     private boolean ativo;
     private List<Endereco> enderecos;
 
