@@ -58,7 +58,7 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
     private final UsuariosFeignClient usuariosFeignClient;
 
     /**
-     * Injeção da dependência {@link UsuariosFeignClient} para realizar
+     * Injeção da dependência {@link ProdutosFeignClient} para realizar
      * requisoções na API de Produtos.
      */
     private final ProdutosFeignClient produtosFeignClient;
