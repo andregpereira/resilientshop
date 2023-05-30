@@ -47,7 +47,7 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
 
     /**
      * Injeção da dependência {@link PedidoMapper} para realizar
-     * conversões de entidade para DTO de pedidos.
+     * conversões de DTO e entidade de pedidos.
      */
     private final PedidoMapper pedidoMapper;
 
