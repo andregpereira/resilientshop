@@ -1,6 +1,7 @@
 package com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence;
 
-import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.Usuario;
+import com.github.andregpereira.resilientshop.commons.entities.Endereco;
+import com.github.andregpereira.resilientshop.commons.entities.Usuario;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -51,6 +52,9 @@ public class PedidoEntity {
     @Transient
     private Usuario usuario;
 
+    @Transient
+    private Endereco endereco;
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -59,21 +63,23 @@ public class PedidoEntity {
             return false;
         return status == pedido.status && Objects.equals(id, pedido.id) && Objects.equals(dataCriacao,
                 pedido.dataCriacao) && Objects.equals(dataModificacao, pedido.dataModificacao) && Objects.equals(total,
-                pedido.total) && Objects.equals(idUsuario, pedido.idUsuario) && Objects.equals(detalhePedido,
-                pedido.detalhePedido) && Objects.equals(usuario, pedido.usuario);
+                pedido.total) && Objects.equals(idUsuario, pedido.idUsuario) && Objects.equals(idEndereco,
+                pedido.idEndereco) && Objects.equals(detalhePedido, pedido.detalhePedido) && Objects.equals(usuario,
+                pedido.usuario) && Objects.equals(endereco, pedido.endereco);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, dataCriacao, dataModificacao, status, total, idUsuario, detalhePedido, usuario);
+        return Objects.hash(id, dataCriacao, dataModificacao, status, total, idUsuario, idEndereco, detalhePedido,
+                usuario, endereco);
     }
 
     @Override
     public String toString() {
         return new StringJoiner(", ", PedidoEntity.class.getSimpleName() + "[", "]").add("id=" + id).add(
                 "dataCriacao=" + dataCriacao).add("dataModificacao=" + dataModificacao).add("status=" + status).add(
-                "total=" + total).add("idUsuario=" + idUsuario).add("detalhePedido=" + detalhePedido).add(
-                "usuario=" + usuario).toString();
+                "total=" + total).add("idUsuario=" + idUsuario).add("idEndereco=" + idEndereco).add(
+                "detalhePedido=" + detalhePedido).add("usuario=" + usuario).add("endereco=" + endereco).toString();
     }
 
 }
