@@ -1,6 +1,6 @@
 package com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence;
 
-import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.Produto;
+import com.github.andregpereira.resilientshop.commons.entities.Produto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
