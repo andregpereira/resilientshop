@@ -1,7 +1,7 @@
 package com.github.andregpereira.resilientshop.shoppingapi.cross.mappers;
 
+import com.github.andregpereira.resilientshop.commons.entities.Usuario;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dto.usuario.UsuarioDto;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.Usuario;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants.ComponentModel;
