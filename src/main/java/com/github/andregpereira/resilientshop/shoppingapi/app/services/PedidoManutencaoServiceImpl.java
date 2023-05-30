@@ -11,6 +11,7 @@ import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.Usu
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.PedidoRepository;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence.DetalhePedidoEntity;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence.PedidoEntity;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,15 +27,40 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Classe de serviço de manutenção de {@link PedidoEntity}.
+ *
+ * @author André Garcia
+ * @see PedidoManutencaoService
+ */
 @RequiredArgsConstructor
 @Slf4j
 @Service
 @Transactional
 public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
 
+    /**
+     * Injeção da dependência {@link PedidoRepository} para realizar operações de
+     * consulta e manutenção na tabela de pedidos no banco de dados.
+     */
     private final PedidoRepository pedidoRepository;
+
+    /**
+     * Injeção da dependência {@link PedidoMapper} para realizar
+     * conversões de entidade para DTO de pedidos.
+     */
     private final PedidoMapper pedidoMapper;
+
+    /**
+     * Injeção da dependência {@link UsuariosFeignClient} para realizar
+     * requisoções na API de Usuários.
+     */
     private final UsuariosFeignClient usuariosFeignClient;
+
+    /**
+     * Injeção da dependência {@link UsuariosFeignClient} para realizar
+     * requisoções na API de Produtos.
+     */
     private final ProdutosFeignClient produtosFeignClient;
 
     private static Set<ProdutoAtualizarEstoqueDto> coletarProdutos(List<DetalhePedidoEntity> detalhePedido) {
@@ -43,6 +69,17 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
                 Collectors.toSet());
     }
 
+    /**
+     * Cadastra um {@linkplain PedidoEntity pedido}.
+     * Retorna um {@linkplain PedidoDetalharDto pedido detalhado}.
+     *
+     * @param dto o pedido a ser cadastrado.
+     *
+     * @return o pedido salvo no banco de dados.
+     *
+     * @throws FeignException.NotFound           caso o usuário, endereço ou produto não sejam encontrados.
+     * @throws FeignException.ServiceUnavailable caso a API de Usuários ou Produtos estejam indisponíveis.
+     */
     @Override
     public PedidoDetalharDto criar(PedidoRegistrarDto dto) {
         PedidoEntity pedido = pedidoMapper.toPedidoEntity(dto);
@@ -79,6 +116,17 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
         return pedidoMapper.toPedidoDetalharDto(pedidoRepository.save(pedido));
     }
 
+    /**
+     * Cancela um {@linkplain PedidoEntity pedido} por {@code id}.
+     * Retorna uma mensagem de confirmação de cancelamento.
+     *
+     * @param id o {@code id} do pedido a ser cancelado.
+     *
+     * @return uma mensagem de confirmação de cancelamento.
+     *
+     * @throws PedidoNotFoundException           caso o pedido não seja encontrado.
+     * @throws FeignException.ServiceUnavailable caso a API de Produtos esteja indisponível.
+     */
     @Override
     public String cancelar(Long id) {
         return pedidoRepository.findByIdAndStatusAguardandoPagamento(id).map(p -> {
