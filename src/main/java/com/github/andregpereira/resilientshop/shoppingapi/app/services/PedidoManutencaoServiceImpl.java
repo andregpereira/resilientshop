@@ -19,7 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -32,6 +37,12 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
     private final UsuariosFeignClient usuariosFeignClient;
     private final ProdutosFeignClient produtosFeignClient;
 
+    private static Set<ProdutoAtualizarEstoqueDto> coletarProdutos(List<DetalhePedidoEntity> detalhePedido) {
+        return detalhePedido.stream().map(
+                dp -> new ProdutoAtualizarEstoqueDto(dp.getIdProduto(), dp.getQuantidade())).collect(
+                Collectors.toSet());
+    }
+
     @Override
     public PedidoDetalharDto criar(PedidoRegistrarDto dto) {
         PedidoEntity pedido = pedidoMapper.toPedidoEntity(dto);
@@ -42,9 +53,13 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
         pedido.setEndereco(usuariosFeignClient.consultarEnderecoPorApelido(dto.idUsuario(), dto.enderecoApelido()));
         log.info("Endereço OK");
         pedido.setIdEndereco(pedido.getEndereco().getId());
+        log.info("Removendo produtos duplicados...");
+        pedido.setDetalhePedido(new ArrayList<>(pedido.getDetalhePedido().stream().collect(
+                Collectors.toMap(DetalhePedidoEntity::getIdProduto, Function.identity(),
+                        (oldVal, newVal) -> oldVal.getQuantidade() < newVal.getQuantidade() ? newVal
+                                : oldVal)).values()));
         log.info("Deduzindo produtos do estoque...");
-        produtosFeignClient.subtrair(pedido.getDetalhePedido().stream().map(
-                dp -> new ProdutoAtualizarEstoqueDto(dp.getIdProduto(), dp.getQuantidade())).toList());
+        produtosFeignClient.subtrair(coletarProdutos(pedido.getDetalhePedido()));
         log.info("Calculando subtotal e setando produto(s)...");
         pedido.getDetalhePedido().parallelStream().forEach(
                 dp -> Optional.of(produtosFeignClient.consultarPorId(dp.getIdProduto())).ifPresent(p -> {
@@ -68,8 +83,7 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
     public String cancelar(Long id) {
         return pedidoRepository.findByIdAndStatusAguardandoPagamento(id).map(p -> {
             log.info("Retornando produtos ao estoque...");
-            produtosFeignClient.retornarEstoque(p.getDetalhePedido().stream().map(
-                    dp -> new ProdutoAtualizarEstoqueDto(dp.getIdProduto(), dp.getQuantidade())).toList());
+            produtosFeignClient.retornarEstoque(coletarProdutos(p.getDetalhePedido()));
             p.setStatus(StatusPedido.CANCELADO.getStatus());
             pedidoRepository.save(p);
             log.info("Pedido com id {} cancelado com sucesso", id);
