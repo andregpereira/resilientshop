@@ -1,5 +1,6 @@
 package com.github.andregpereira.resilientshop.shoppingapi.infra.entities;
 
+import com.github.andregpereira.resilientshop.commons.entities.Produto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
