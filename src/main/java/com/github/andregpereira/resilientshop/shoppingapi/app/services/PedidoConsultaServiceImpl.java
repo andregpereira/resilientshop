@@ -114,7 +114,7 @@ public class PedidoConsultaServiceImpl implements PedidoConsultaService {
             log.info("Setando usuário...");
             p.setUsuario(usuariosFeignClient.consultarUsuarioPorId(p.getIdUsuario()));
             log.info("Setando endereço...");
-            p.setEndereco(usuariosFeignClient.consultarEnderecoPorId(p.getIdEndereco(), p.getUsuario().getId()));
+            p.setEndereco(usuariosFeignClient.consultarEnderecoPorId(p.getIdEndereco()));
             log.info("Setando produto(s)...");
             p.getDetalhePedido().parallelStream().forEach(
                     dp -> dp.setProduto(produtosFeignClient.consultarPorId(dp.getIdProduto())));

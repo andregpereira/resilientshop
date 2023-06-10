@@ -15,8 +15,8 @@ public interface UsuariosFeignClient {
     @GetMapping(value = "/usuarios/{id}")
     Usuario consultarUsuarioPorId(@PathVariable Long id);
 
-    @GetMapping("/enderecos/{id}/usuario/{idUsuario}")
-    Endereco consultarEnderecoPorId(@PathVariable Long id, @PathVariable Long idUsuario);
+    @GetMapping("/enderecos/{id}")
+    Endereco consultarEnderecoPorId(@PathVariable Long id);
 
     @GetMapping("/enderecos/usuario/{idUsuario}/apelido")
     Endereco consultarEnderecoPorApelido(@PathVariable Long idUsuario, @RequestParam String apelido);
