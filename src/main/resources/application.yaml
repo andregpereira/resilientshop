@@ -26,6 +26,15 @@ spring:
             allowedHeaders: "*"
             allowedMethods: "*"
       routes:
+        - id: resilientshop-authentication-api
+          uri: lb://resilientshop-authentication-api
+          predicates:
+            - Path=/auth/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: fallback
+                fallbackUri: forward:/fallback/autenticação
         - id: resilientshop-shopping-api
           uri: lb://resilientshop-shopping-api
           predicates:
@@ -70,3 +79,40 @@ resilience4j:
     instances:
       fallback:
         baseConfig: default
+
+#role-permissions:
+#  role-permissions:
+#    admin:
+#      GET:
+#        - "/pedidos/**"
+#        - "/produtos/**"
+#        - "/usuarios/**"
+#        - "/auth/**"
+#      POST:
+#        - "/pedidos/**"
+#        - "/produtos/**"
+#        - "/usuarios/**"
+#        - "/auth/**"
+#      PUT:
+#        - "/pedidos/**"
+#        - "/produtos/**"
+#        - "/usuarios/**"
+#        - "/auth/**"
+#      DELETE:
+#        - "/pedidos/**"
+#        - "/produtos/**"
+#        - "/usuarios/**"
+#        - "/auth/**"
+#      PATCH:
+#        - "/usuarios/**"
+#    user:
+#      GET:
+#        - "/produtos/**"
+#        - "/usuarios/**"
+#      POST:
+#        - "/usuarios/**"
+#    anonymous:
+#      GET:
+#        - "/produtos/**"
+#      POST:
+#        - "/auth"
