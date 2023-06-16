@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.authenticationapi.infra.entity;
+package com.github.andregpereira.resilientshop.authenticationapi.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
