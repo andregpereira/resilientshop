@@ -2,7 +2,7 @@ package com.github.andregpereira.resilientshop.authenticationapi.infra.security.
 
 import com.github.andregpereira.resilientshop.authenticationapi.domain.entity.UsuarioCredential;
 import com.github.andregpereira.resilientshop.authenticationapi.infra.repository.UserCredentialRepository;
-import com.github.andregpereira.resilientshop.authenticationapi.infra.security.CustomUserDetails;
+import com.github.andregpereira.resilientshop.authenticationapi.infra.security.domain.CustomUserDetails;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
