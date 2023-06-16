@@ -1,6 +1,6 @@
-package com.github.andregpereira.resilientshop.authenticationapi.security.config;
+package com.github.andregpereira.resilientshop.authenticationapi.infra.security.config;
 
-import com.github.andregpereira.resilientshop.authenticationapi.security.service.CustomUserDetailsService;
+import com.github.andregpereira.resilientshop.authenticationapi.infra.security.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

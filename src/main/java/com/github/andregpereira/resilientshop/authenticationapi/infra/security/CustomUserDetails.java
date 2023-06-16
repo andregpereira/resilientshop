@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.authenticationapi.security;
+package com.github.andregpereira.resilientshop.authenticationapi.infra.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
