@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.authenticationapi.infra.security.service;
+package com.github.andregpereira.resilientshop.authenticationapi.infra.security.jwt;
 
 import com.github.andregpereira.resilientshop.authenticationapi.domain.entity.UsuarioCredential;
 import io.jsonwebtoken.Jwts;
@@ -11,7 +11,7 @@ import java.security.Key;
 import java.util.Date;
 
 @Service
-public class JwtService {
+public class JwtProvider {
 
     private static final String SECRET = "Som35ecretK3y109jP2n8PaMS05mDKAPOjd23ur98yoej";
     private int jwtExpirationInMs = 3600000;
