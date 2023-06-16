@@ -1,8 +1,8 @@
-package com.github.andregpereira.resilientshop.authenticationapi.security.service;
+package com.github.andregpereira.resilientshop.authenticationapi.infra.security.service;
 
-import com.github.andregpereira.resilientshop.authenticationapi.infra.entity.UsuarioCredential;
+import com.github.andregpereira.resilientshop.authenticationapi.domain.entity.UsuarioCredential;
 import com.github.andregpereira.resilientshop.authenticationapi.infra.repository.UserCredentialRepository;
-import com.github.andregpereira.resilientshop.authenticationapi.security.CustomUserDetails;
+import com.github.andregpereira.resilientshop.authenticationapi.infra.security.CustomUserDetails;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

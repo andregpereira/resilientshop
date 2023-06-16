@@ -1,6 +1,6 @@
 package com.github.andregpereira.resilientshop.authenticationapi.infra.repository;
 
-import com.github.andregpereira.resilientshop.authenticationapi.infra.entity.UsuarioCredential;
+import com.github.andregpereira.resilientshop.authenticationapi.domain.entity.UsuarioCredential;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

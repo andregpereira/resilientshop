@@ -1,6 +1,6 @@
-package com.github.andregpereira.resilientshop.authenticationapi.security.service;
+package com.github.andregpereira.resilientshop.authenticationapi.infra.security.service;
 
-import com.github.andregpereira.resilientshop.authenticationapi.infra.entity.UsuarioCredential;
+import com.github.andregpereira.resilientshop.authenticationapi.domain.entity.UsuarioCredential;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
