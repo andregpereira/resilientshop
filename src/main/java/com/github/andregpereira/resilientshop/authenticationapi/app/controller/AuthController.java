@@ -1,15 +1,12 @@
 package com.github.andregpereira.resilientshop.authenticationapi.app.controller;
 
-import com.github.andregpereira.resilientshop.authenticationapi.app.dto.AuthRequestDto;
+import com.github.andregpereira.resilientshop.authenticationapi.app.dto.LoginDto;
 import com.github.andregpereira.resilientshop.authenticationapi.app.dto.UsuarioCredentialDto;
 import com.github.andregpereira.resilientshop.authenticationapi.app.dto.UsuarioCredentialRegistroDto;
 import com.github.andregpereira.resilientshop.authenticationapi.app.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -19,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService service;
-    private final AuthenticationManager authenticationManager;
 
     @PostMapping
     public ResponseEntity<UsuarioCredentialDto> criar(@RequestBody UsuarioCredentialRegistroDto dto) {
@@ -31,14 +27,8 @@ public class AuthController {
     }
 
     @PostMapping("/token")
-    public String token(@RequestBody AuthRequestDto authRequest) {
-        Authentication authenticate = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequest.email(), authRequest.senha()));
-        if (authenticate.isAuthenticated()) {
-            return service.gerarToken(authRequest.email());
-        } else {
-            throw new RuntimeException("invalid access");
-        }
+    public ResponseEntity<String> token(@RequestBody LoginDto authRequest) {
+        return ResponseEntity.ok(service.gerarToken(authRequest));
     }
 
     @GetMapping("/validate")
