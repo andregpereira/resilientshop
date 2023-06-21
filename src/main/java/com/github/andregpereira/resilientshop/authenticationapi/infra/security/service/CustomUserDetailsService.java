@@ -3,7 +3,6 @@ package com.github.andregpereira.resilientshop.authenticationapi.infra.security.
 import com.github.andregpereira.resilientshop.authenticationapi.domain.entity.UsuarioCredential;
 import com.github.andregpereira.resilientshop.authenticationapi.infra.repository.UserCredentialRepository;
 import com.github.andregpereira.resilientshop.authenticationapi.infra.security.domain.CustomUserDetails;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -22,7 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserCredentialRepository repository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         Optional<UsuarioCredential> credential = repository.findByEmail(username);
         return credential.map(usuarioCredential -> new CustomUserDetails(usuarioCredential.getEmail(),
                 usuarioCredential.getSenha())).orElseThrow(
