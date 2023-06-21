@@ -8,27 +8,26 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.Clock;
+import java.time.Instant;
 import java.util.Date;
 
 @Service
-public class JwtProvider {
+public class JwtProviderImpl implements JwtProvider {
 
     private static final String SECRET = "Som35ecretK3y109jP2n8PaMS05mDKAPOjd23ur98yoej";
-    private int jwtExpirationInMs = 3600000;
 
-    public void validateToken(String token) {
-        Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);
+    @Override
+    public String gerarToken(UsuarioCredential user) {
+        Date inicio = Date.from(Instant.now(Clock.systemUTC()));
+        return Jwts.builder().setSubject(user.getEmail()).claim("role", user.getRole()).setIssuedAt(
+                inicio).setExpiration(new Date(inicio.getTime() + 3600000)).signWith(getSignKey(),
+                SignatureAlgorithm.HS256).compact();
     }
 
-    public String generateToken(UsuarioCredential user) {
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
-//        return Jwts.builder().setClaims(claims).setSubject(userName).setIssuedAt(
-//                new Date(System.currentTimeMillis())).setExpiration(
-//                new Date(System.currentTimeMillis() + 1000 * 60 * 30)).signWith(getSignKey(),
-//                SignatureAlgorithm.HS256).compact();
-        return Jwts.builder().setSubject(user.getEmail()).claim("role", user.getRole()).setIssuedAt(now).setExpiration(
-                expiryDate).signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
+    @Override
+    public void validarToken(String token) {
+        Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);
     }
 
     private Key getSignKey() {
