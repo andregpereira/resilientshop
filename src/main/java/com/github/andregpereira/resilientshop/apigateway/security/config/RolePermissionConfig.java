@@ -29,7 +29,7 @@ public class RolePermissionConfig {
         rolePermissions.put("user", new RolePermissions(userPermissions));
         Map<HttpMethod, List<String>> anonymousPermissions = new HashMap<>();
         anonymousPermissions.put(HttpMethod.GET, Arrays.asList("/produtos/**", "/auth/**"));
-        anonymousPermissions.put(HttpMethod.POST, Arrays.asList("/auth/**"));
+        anonymousPermissions.put(HttpMethod.POST, Arrays.asList("/usuarios/**", "/auth/**"));
         rolePermissions.put("anonymous", new RolePermissions(anonymousPermissions));
     }
 
