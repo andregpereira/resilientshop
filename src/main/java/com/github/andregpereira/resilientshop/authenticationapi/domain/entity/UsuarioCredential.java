@@ -1,5 +1,6 @@
 package com.github.andregpereira.resilientshop.authenticationapi.domain.entity;
 
+import com.github.andregpereira.resilientshop.commons.security.role.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,13 +32,13 @@ public class UsuarioCredential {
     private String senha;
 
     @Column(nullable = false)
-    private String role;
+    private Role role;
 
     @Override
     public String toString() {
         return new StringJoiner(", ", UsuarioCredential.class.getSimpleName() + "[", "]").add("id=" + id).add(
                 "nome='" + nome + "'").add("email='" + email + "'").add("senha='" + senha + "'").add(
-                "admin=" + role).toString();
+                "role=" + role).toString();
     }
 
 }

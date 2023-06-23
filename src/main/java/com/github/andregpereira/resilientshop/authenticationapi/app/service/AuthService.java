@@ -6,7 +6,9 @@ import com.github.andregpereira.resilientshop.authenticationapi.app.dto.UsuarioC
 
 public interface AuthService {
 
-    UsuarioCredentialDto criar(UsuarioCredentialRegistroDto dto);
+    UsuarioCredentialDto cadastrarAdmin(UsuarioCredentialRegistroDto dto);
+
+    UsuarioCredentialDto cadastrarUsuario(UsuarioCredentialRegistroDto dto);
 
     String gerarToken(LoginDto username);
 
