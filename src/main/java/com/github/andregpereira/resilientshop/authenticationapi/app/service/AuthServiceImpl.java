@@ -1,5 +1,6 @@
 package com.github.andregpereira.resilientshop.authenticationapi.app.service;
 
+import com.github.andregpereira.resilientshop.commons.security.role.Role;
 import com.github.andregpereira.resilientshop.authenticationapi.app.dto.LoginDto;
 import com.github.andregpereira.resilientshop.authenticationapi.app.dto.UsuarioCredentialDto;
 import com.github.andregpereira.resilientshop.authenticationapi.app.dto.UsuarioCredentialRegistroDto;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,20 +29,26 @@ public class AuthServiceImpl implements AuthService {
     private final JwtProvider jwtProvider;
 
     @Override
-    public UsuarioCredentialDto criar(UsuarioCredentialRegistroDto dto) {
+    public UsuarioCredentialDto cadastrarAdmin(UsuarioCredentialRegistroDto dto) {
         UsuarioCredential usuario = mapper.toUsuarioCredential(dto);
         usuario.setSenha(passwordEncoder.encode(dto.senha()));
-        usuario.setRole("admin");
+        usuario.setRole(Role.ADMIN);
+        return mapper.toUsuarioCredentialDto(repository.save(usuario));
+    }
+
+    @Override
+    public UsuarioCredentialDto cadastrarUsuario(UsuarioCredentialRegistroDto dto) {
+        UsuarioCredential usuario = mapper.toUsuarioCredential(dto);
+        usuario.setSenha(passwordEncoder.encode(dto.senha()));
+        usuario.setRole(Role.USER);
         return mapper.toUsuarioCredentialDto(repository.save(usuario));
     }
 
     @Override
     public String gerarToken(LoginDto dto) {
         try {
-            log.info("auth1");
             Authentication authenticate = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(dto.email(), dto.senha()));
-            log.info("auth2");
             if (authenticate.isAuthenticated()) {
                 log.info(repository.toString());
                 return repository.findByEmail(dto.email()).map(jwtProvider::gerarToken).orElseThrow(
@@ -48,7 +56,7 @@ public class AuthServiceImpl implements AuthService {
             } else {
                 throw new RuntimeException("invalid access");
             }
-        } catch (Exception e) {
+        } catch (AuthenticationException e) {
             log.info(e.getMessage());
             return null;
         }

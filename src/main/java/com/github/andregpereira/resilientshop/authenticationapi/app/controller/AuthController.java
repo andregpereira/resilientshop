@@ -17,10 +17,19 @@ public class AuthController {
 
     private final AuthService service;
 
-    @PostMapping
-    public ResponseEntity<UsuarioCredentialDto> criar(@RequestBody UsuarioCredentialRegistroDto dto) {
+    @PostMapping("/admin")
+    public ResponseEntity<UsuarioCredentialDto> cadastrarAdmin(@RequestBody UsuarioCredentialRegistroDto dto) {
+        log.info("Criando admin...");
+        UsuarioCredentialDto usuario = service.cadastrarAdmin(dto);
+        log.info("Admin criado com sucesso");
+//        URI uri = UriComponentsBuilder.fromPath("/auth/{id}").buildAndExpand(usuario.id()).toUri();
+        return ResponseEntity.ok(usuario);
+    }
+
+    @PostMapping("/usuario")
+    public ResponseEntity<UsuarioCredentialDto> cadastrarUsuario(@RequestBody UsuarioCredentialRegistroDto dto) {
         log.info("Criando usuário...");
-        UsuarioCredentialDto usuario = service.criar(dto);
+        UsuarioCredentialDto usuario = service.cadastrarUsuario(dto);
         log.info("Usuário criado com sucesso");
 //        URI uri = UriComponentsBuilder.fromPath("/auth/{id}").buildAndExpand(usuario.id()).toUri();
         return ResponseEntity.ok(usuario);
