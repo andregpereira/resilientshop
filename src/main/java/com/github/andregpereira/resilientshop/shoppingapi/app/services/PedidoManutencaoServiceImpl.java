@@ -70,6 +70,33 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
     }
 
     /**
+     * Cancela um {@linkplain PedidoEntity pedido} por {@code id}.
+     * Retorna uma mensagem de confirmação de cancelamento.
+     *
+     * @param id o {@code id} do pedido a ser cancelado.
+     *
+     * @return uma mensagem de confirmação de cancelamento.
+     *
+     * @throws PedidoNotFoundException           caso o pedido não seja encontrado.
+     * @throws FeignException.ServiceUnavailable caso a API de Produtos esteja indisponível.
+     */
+    @Override
+    public String cancelar(Long id) {
+        return pedidoRepository.findByIdAndStatusAguardandoPagamento(id).map(p -> {
+            log.info("Retornando produtos ao estoque...");
+            produtosFeignClient.retornarEstoque(coletarProdutos(p.getDetalhePedido()));
+            p.setStatus(StatusPedido.CANCELADO.getStatus());
+            pedidoRepository.save(p);
+            log.info("Pedido com id {} cancelado com sucesso", id);
+            return MessageFormat.format("Pedido com id {0} cancelado", id);
+        }).orElseThrow(() -> {
+            log.info("Pedido aguardando pagamento com id {} não encontrado", id);
+            return new PedidoNotFoundException(
+                    MessageFormat.format("Poxa! Não foi encontrado um pedido aguardando pagamento com o id {0}", id));
+        });
+    }
+
+    /**
      * Cadastra um {@linkplain PedidoEntity pedido}.
      * Retorna um {@linkplain PedidoDetalharDto pedido detalhado}.
      *
@@ -81,6 +108,7 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
      * @throws FeignException.ServiceUnavailable caso a API de Usuários ou Produtos estejam indisponíveis.
      */
     @Override
+    // TODO refatorar busca por endereço
     public PedidoDetalharDto criar(PedidoRegistrarDto dto) {
         PedidoEntity pedido = pedidoMapper.toPedidoEntity(dto);
         log.info("Procurando usuário...");
@@ -114,33 +142,6 @@ public class PedidoManutencaoServiceImpl implements PedidoManutencaoService {
                         BigDecimal::add));
         log.info("Salvando pedido...");
         return pedidoMapper.toPedidoDetalharDto(pedidoRepository.save(pedido));
-    }
-
-    /**
-     * Cancela um {@linkplain PedidoEntity pedido} por {@code id}.
-     * Retorna uma mensagem de confirmação de cancelamento.
-     *
-     * @param id o {@code id} do pedido a ser cancelado.
-     *
-     * @return uma mensagem de confirmação de cancelamento.
-     *
-     * @throws PedidoNotFoundException           caso o pedido não seja encontrado.
-     * @throws FeignException.ServiceUnavailable caso a API de Produtos esteja indisponível.
-     */
-    @Override
-    public String cancelar(Long id) {
-        return pedidoRepository.findByIdAndStatusAguardandoPagamento(id).map(p -> {
-            log.info("Retornando produtos ao estoque...");
-            produtosFeignClient.retornarEstoque(coletarProdutos(p.getDetalhePedido()));
-            p.setStatus(StatusPedido.CANCELADO.getStatus());
-            pedidoRepository.save(p);
-            log.info("Pedido com id {} cancelado com sucesso", id);
-            return MessageFormat.format("Pedido com id {0} cancelado", id);
-        }).orElseThrow(() -> {
-            log.info("Pedido aguardando pagamento com id {} não encontrado", id);
-            return new PedidoNotFoundException(
-                    MessageFormat.format("Poxa! Não foi encontrado um pedido aguardando pagamento com o id {0}", id));
-        });
     }
 
 }
