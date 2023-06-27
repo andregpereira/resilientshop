@@ -1,6 +1,6 @@
-package com.github.andregpereira.resilientshop.apigateway.security.config;
+package com.github.andregpereira.resilientshop.apigateway.infra.security.config;
 
-import com.github.andregpereira.resilientshop.apigateway.security.role.RolePermissions;
+import com.github.andregpereira.resilientshop.apigateway.infra.security.role.RolePermissions;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.apigateway.security.role;
+package com.github.andregpereira.resilientshop.apigateway.infra.security.role;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;

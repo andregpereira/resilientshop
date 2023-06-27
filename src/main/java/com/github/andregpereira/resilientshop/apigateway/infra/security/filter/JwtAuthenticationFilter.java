@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.apigateway.security.filter;
+package com.github.andregpereira.resilientshop.apigateway.infra.security.filter;
 
 import com.github.andregpereira.resilientshop.commons.security.role.Role;
 import io.jsonwebtoken.JwtException;
