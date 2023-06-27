@@ -1,6 +1,6 @@
 package com.github.andregpereira.resilientshop.apigateway.security.filter;
 
-import com.github.andregpereira.resilientshop.apigateway.security.config.RolePermissionConfig;
+import com.github.andregpereira.resilientshop.commons.security.role.Role;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -25,24 +25,15 @@ import reactor.core.publisher.Mono;
 public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
 
     private static final String SECRET_KEY = "Som35ecretK3y109jP2n8PaMS05mDKAPOjd23ur98yoej";
-    private final RolePermissionConfig rolePermissionConfig;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        String path = exchange.getRequest().getURI().getPath();
-        HttpMethod method = exchange.getRequest().getMethod();
-        String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-        String userRole;
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String jwtToken = authHeader.replace("Bearer ", "");
-            userRole = this.getRoleFromToken(jwtToken);
-        } else {
-            userRole = "anonymous";
-        }
-        if (hasPermission(userRole, path, method)) {
-            return chain.filter(exchange);
-        }
-        return onError(exchange, "Access Denied", HttpStatus.UNAUTHORIZED);
+        return Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION)).filter(
+                authHeader -> authHeader.startsWith("Bearer ")).map(
+                authHeader -> authHeader.replace("Bearer ", "")).map(this::getRoleFromToken).defaultIfEmpty(
+                Role.ANONYMOUS).filter(role -> hasPermission(role, exchange.getRequest().getURI().getPath(),
+                exchange.getRequest().getMethod())).flatMap(role -> chain.filter(exchange)).switchIfEmpty(
+                Mono.defer(() -> onError(exchange, "Acesso negado", HttpStatus.UNAUTHORIZED)));
     }
 
     @Override
@@ -50,8 +41,8 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
         return -100;
     }
 
-    private boolean hasPermission(String role, String path, HttpMethod method) {
-        return rolePermissionConfig.getRolePermissions(role).getPermissions(method).stream().anyMatch(
+    private boolean hasPermission(Role role, String path, HttpMethod method) {
+        return role.getPermissions(method).stream().anyMatch(
                 permittedPath -> new AntPathMatcher().match(permittedPath, path));
     }
 
@@ -62,14 +53,14 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
         return response.setComplete();
     }
 
-    private String getRoleFromToken(String token) {
+    private Role getRoleFromToken(String token) {
         try {
-            return Jwts.parserBuilder().setSigningKey(
+            return Role.valueOf(Jwts.parserBuilder().setSigningKey(
                     Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY))).build().parseClaimsJws(token).getBody().get(
-                    "role", String.class);
+                    "role", String.class));
         } catch (JwtException e) {
             log.warn(e.getMessage());
-            return "anonymous";
+            return Role.ANONYMOUS;
         }
     }
 
