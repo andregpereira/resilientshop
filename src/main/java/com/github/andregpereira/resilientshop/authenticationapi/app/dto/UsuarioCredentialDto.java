@@ -1,8 +1,11 @@
 package com.github.andregpereira.resilientshop.authenticationapi.app.dto;
 
+import com.github.andregpereira.resilientshop.commons.security.role.Role;
+
 public record UsuarioCredentialDto(Long id,
-        String nome,
         String email,
-        String senha) {
+        String senha,
+        Role role,
+        boolean ativo) {
 
 }

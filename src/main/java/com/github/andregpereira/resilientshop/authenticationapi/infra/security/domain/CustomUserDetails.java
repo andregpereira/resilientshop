@@ -1,24 +1,27 @@
 package com.github.andregpereira.resilientshop.authenticationapi.infra.security.domain;
 
-import lombok.AllArgsConstructor;
+import com.github.andregpereira.resilientshop.commons.security.role.Role;
+import com.github.andregpereira.resilientshop.authenticationapi.domain.entity.UsuarioCredential;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
+import java.util.Set;
 
-@Getter(onMethod_ = {@Override})
-@AllArgsConstructor
+@Getter
 public class CustomUserDetails implements UserDetails {
 
     private String username;
     private String password;
+    private Set<Role> authorities;
+    private boolean enabled;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("USER"));
+    public CustomUserDetails(UsuarioCredential usuario) {
+        this.username = usuario.getEmail();
+        this.password = usuario.getSenha();
+        this.authorities = Collections.singleton(usuario.getRole());
+        this.enabled = usuario.isAtivo();
     }
 
     @Override
@@ -33,11 +36,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
         return true;
     }
 

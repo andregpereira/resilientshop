@@ -1,10 +1,12 @@
 package com.github.andregpereira.resilientshop.authenticationapi.infra.security.jwt;
 
-import com.github.andregpereira.resilientshop.authenticationapi.domain.entity.UsuarioCredential;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.Collection;
 
 public interface JwtProvider {
 
-    String gerarToken(UsuarioCredential user);
+    String gerarToken(String email, Collection<? extends GrantedAuthority> roles);
 
     void validarToken(String token);
 
