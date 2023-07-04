@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.authenticationapi.domain.exception;
+package com.github.andregpereira.resilientshop.authenticationapi.cross.exception;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
