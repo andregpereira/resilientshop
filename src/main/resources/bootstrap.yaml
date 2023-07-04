@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: resilientshop-authentication-api
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
