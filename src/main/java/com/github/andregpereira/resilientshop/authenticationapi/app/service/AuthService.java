@@ -1,8 +1,8 @@
 package com.github.andregpereira.resilientshop.authenticationapi.app.service;
 
+import com.github.andregpereira.resilientshop.commons.dto.UsuarioCredentialRegistroDto;
 import com.github.andregpereira.resilientshop.authenticationapi.app.dto.LoginDto;
 import com.github.andregpereira.resilientshop.authenticationapi.app.dto.UsuarioCredentialDto;
-import com.github.andregpereira.resilientshop.authenticationapi.app.dto.UsuarioCredentialRegistroDto;
 
 public interface AuthService {
 
@@ -10,7 +10,7 @@ public interface AuthService {
 
     UsuarioCredentialDto cadastrarUsuario(UsuarioCredentialRegistroDto dto);
 
-    String gerarToken(LoginDto username);
+    String login(LoginDto dto);
 
     void validarToken(String token);
 

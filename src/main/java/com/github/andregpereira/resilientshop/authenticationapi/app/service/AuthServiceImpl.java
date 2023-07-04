@@ -1,9 +1,9 @@
 package com.github.andregpereira.resilientshop.authenticationapi.app.service;
 
+import com.github.andregpereira.resilientshop.commons.dto.UsuarioCredentialRegistroDto;
 import com.github.andregpereira.resilientshop.commons.security.role.Role;
 import com.github.andregpereira.resilientshop.authenticationapi.app.dto.LoginDto;
 import com.github.andregpereira.resilientshop.authenticationapi.app.dto.UsuarioCredentialDto;
-import com.github.andregpereira.resilientshop.authenticationapi.app.dto.UsuarioCredentialRegistroDto;
 import com.github.andregpereira.resilientshop.authenticationapi.app.mapper.UsuarioCredentialMapper;
 import com.github.andregpereira.resilientshop.authenticationapi.domain.entity.UsuarioCredential;
 import com.github.andregpereira.resilientshop.authenticationapi.infra.repository.UserCredentialRepository;
@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -29,33 +30,38 @@ public class AuthServiceImpl implements AuthService {
     private final JwtProvider jwtProvider;
 
     @Override
+    @Transactional
     public UsuarioCredentialDto cadastrarAdmin(UsuarioCredentialRegistroDto dto) {
-        UsuarioCredential usuario = mapper.toUsuarioCredential(dto);
-        usuario.setSenha(passwordEncoder.encode(dto.senha()));
-        usuario.setRole(Role.ADMIN);
-        return mapper.toUsuarioCredentialDto(repository.save(usuario));
+        UsuarioCredential admin = setarSenha(dto);
+        admin.setRole(Role.ADMIN);
+        admin.setAtivo(true);
+        return mapper.toUsuarioCredentialDto(repository.save(admin));
     }
 
     @Override
+    @Transactional
     public UsuarioCredentialDto cadastrarUsuario(UsuarioCredentialRegistroDto dto) {
-        UsuarioCredential usuario = mapper.toUsuarioCredential(dto);
-        usuario.setSenha(passwordEncoder.encode(dto.senha()));
+        UsuarioCredential usuario = setarSenha(dto);
         usuario.setRole(Role.USER);
+        usuario.setAtivo(true);
         return mapper.toUsuarioCredentialDto(repository.save(usuario));
     }
 
+    private UsuarioCredential setarSenha(UsuarioCredentialRegistroDto dto) {
+        UsuarioCredential usuario = mapper.toUsuarioCredential(dto);
+        usuario.setSenha(passwordEncoder.encode(dto.senha()));
+        return usuario;
+    }
+
     @Override
-    public String gerarToken(LoginDto dto) {
+    public String login(LoginDto dto) {
         try {
             Authentication authenticate = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(dto.email(), dto.senha()));
-            if (authenticate.isAuthenticated()) {
-                log.info(repository.toString());
-                return repository.findByEmail(dto.email()).map(jwtProvider::gerarToken).orElseThrow(
-                        () -> new RuntimeException("erro ao gerar token"));
-            } else {
-                throw new RuntimeException("invalid access");
-            }
+            if (authenticate.isAuthenticated())
+                return jwtProvider.gerarToken(authenticate.getName(), authenticate.getAuthorities());
+            else
+                throw new RuntimeException("Erro ao gerar token");
         } catch (AuthenticationException e) {
             log.info(e.getMessage());
             return null;
