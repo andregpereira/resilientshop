@@ -5,7 +5,6 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     registry-fetch-interval-seconds: 5
-    instance-info-replication-interval-seconds: 5
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka
 
@@ -15,10 +14,14 @@ server:
     include-stacktrace: never
 
 spring:
-  main:
-    web-application-type: REACTIVE
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.security.reactive.ReativoSecurityAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.security.reactive.ReativoManagementWebSecurityAutoConfiguration
   application:
     name: resilientshop-api-gateway
+  main:
+    web-application-type: REACTIVE
   cloud:
     gateway:
       globalcors:
@@ -78,6 +81,13 @@ resilience4j:
         slowCallRateThreshold: 50
         slowCallDurationThreshold: 10s
         failureRateThreshold: 10
+    instances:
+      fallback:
+        baseConfig: default
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 10s
     instances:
       fallback:
         baseConfig: default
