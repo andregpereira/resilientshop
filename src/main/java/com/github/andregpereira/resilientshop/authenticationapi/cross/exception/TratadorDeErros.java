@@ -20,13 +20,13 @@ import java.util.stream.Stream;
 public class TratadorDeErros {
 
     @ExceptionHandler(DisabledException.class)
-    public ResponseEntity<Object> erro403(DisabledException e) {
+    public ResponseEntity<String> erro403(DisabledException e) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
                 "Não foi possível realizar o login. O usuário está desativado");
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<Object> erro403(BadCredentialsException e) {
+    public ResponseEntity<String> erro403(BadCredentialsException e) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("E-mail ou senha incorretos");
     }
 
