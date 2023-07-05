@@ -3,12 +3,12 @@ spring:
     name: resilientshop-authentication-api
   #PostgreSQL
   datasource:
-    url: jdbc:postgresql://localhost:5432/resilientshop-authentication
-    username: postgres
-    password: root
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: ${DDL_AUTO}
 
 server:
   port: 0
