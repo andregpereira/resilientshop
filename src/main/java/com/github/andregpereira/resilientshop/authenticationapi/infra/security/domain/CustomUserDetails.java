@@ -3,7 +3,6 @@ package com.github.andregpereira.resilientshop.authenticationapi.infra.security.
 import com.github.andregpereira.resilientshop.commons.security.role.Role;
 import com.github.andregpereira.resilientshop.authenticationapi.domain.entity.UsuarioCredential;
 import lombok.Getter;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collections;
