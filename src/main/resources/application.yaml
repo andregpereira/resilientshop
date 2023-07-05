@@ -9,7 +9,7 @@ eureka:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka
 
 server:
-  port: 8763
+  port: ${SERVER_PORT:8763}
   error:
     include-stacktrace: never
 
