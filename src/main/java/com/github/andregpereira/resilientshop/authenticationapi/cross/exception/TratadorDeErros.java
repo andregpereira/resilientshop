@@ -2,8 +2,11 @@ package com.github.andregpereira.resilientshop.authenticationapi.cross.exception
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -15,6 +18,17 @@ import java.util.stream.Stream;
 
 @RestControllerAdvice
 public class TratadorDeErros {
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<Object> erro403(DisabledException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                "Não foi possível realizar o login. O usuário está desativado");
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Object> erro403(BadCredentialsException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("E-mail ou senha incorretos");
+    }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Stream<DadoInvalido>> erro400(ConstraintViolationException e) {

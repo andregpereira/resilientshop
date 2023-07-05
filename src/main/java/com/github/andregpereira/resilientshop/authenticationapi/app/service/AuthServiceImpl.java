@@ -9,12 +9,12 @@ import com.github.andregpereira.resilientshop.authenticationapi.app.mapper.Usuar
 import com.github.andregpereira.resilientshop.authenticationapi.domain.entity.UsuarioCredential;
 import com.github.andregpereira.resilientshop.authenticationapi.infra.repository.UserCredentialRepository;
 import com.github.andregpereira.resilientshop.authenticationapi.infra.security.jwt.JwtProvider;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -59,18 +59,18 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String login(LoginDto dto) {
-        try {
-            Authentication authenticate = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(dto.email(), dto.senha()));
-            if (authenticate.isAuthenticated())
+        Authentication authenticate = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(dto.email(), dto.senha()));
+        if (authenticate.isAuthenticated())
+            try {
                 return jwtProvider.gerarToken(authenticate.getName(),
                         (List<? extends GrantedAuthority>) authenticate.getAuthorities());
-            else
-                throw new RuntimeException("Erro ao gerar token");
-        } catch (AuthenticationException e) {
-            log.info(e.getMessage());
-            return null;
-        }
+            } catch (JwtException e) {
+                log.info(e.getMessage());
+                return null;
+            }
+        else
+            throw new RuntimeException("Erro ao gerar token");
     }
 
     @Override
