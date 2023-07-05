@@ -11,9 +11,19 @@
         <jackson-databind.version>2.15.1</jackson-databind.version>
         <lombok.version>1.18.26</lombok.version>
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
-        <spring-boot.version>3.1.0</spring-boot.version>
+        <spring-boot.version>3.1.1</spring-boot.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
