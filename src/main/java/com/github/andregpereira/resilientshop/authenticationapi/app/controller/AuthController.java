@@ -40,6 +40,22 @@ public class AuthController {
         return ResponseEntity.ok(service.login(dto));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> desativar(@PathVariable Long id) {
+        log.info("Desativando usuário...");
+        service.desativar(id);
+        log.info("Usuário com id {} desativado com sucesso", id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/reativar/{id}")
+    public ResponseEntity<Void> reativar(@PathVariable Long id) {
+        log.info("Reativando usuário...");
+        service.reativar(id);
+        log.info("Usuário com id {} reativado com sucesso", id);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/validar")
     public String validarToken(@RequestParam("token") String token) {
         service.validarToken(token);

@@ -1,6 +1,7 @@
 package com.github.andregpereira.resilientshop.authenticationapi.app.service;
 
 import com.github.andregpereira.resilientshop.commons.dto.UsuarioCredentialRegistroDto;
+import com.github.andregpereira.resilientshop.commons.exception.UsuarioNotFoundException;
 import com.github.andregpereira.resilientshop.commons.security.role.Role;
 import com.github.andregpereira.resilientshop.authenticationapi.app.dto.LoginDto;
 import com.github.andregpereira.resilientshop.authenticationapi.app.dto.UsuarioCredentialDto;
@@ -14,9 +15,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -59,13 +63,38 @@ public class AuthServiceImpl implements AuthService {
             Authentication authenticate = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(dto.email(), dto.senha()));
             if (authenticate.isAuthenticated())
-                return jwtProvider.gerarToken(authenticate.getName(), authenticate.getAuthorities());
+                return jwtProvider.gerarToken(authenticate.getName(),
+                        (List<? extends GrantedAuthority>) authenticate.getAuthorities());
             else
                 throw new RuntimeException("Erro ao gerar token");
         } catch (AuthenticationException e) {
             log.info(e.getMessage());
             return null;
         }
+    }
+
+    @Override
+    public void desativar(Long id) {
+        repository.findByIdAndAtivoTrue(id).ifPresentOrElse(u -> {
+            u.setAtivo(false);
+            repository.save(u);
+            log.info("Usuário com id {} desativado com sucesso", id);
+        }, () -> {
+            log.info("Usuário ativo com id {} não encontrado", id);
+            throw new UsuarioNotFoundException(id, true);
+        });
+    }
+
+    @Override
+    public void reativar(Long id) {
+        repository.findByIdAndAtivoFalse(id).ifPresentOrElse(u -> {
+            u.setAtivo(true);
+            repository.save(u);
+            log.info("Usuário com id {} reativado com sucesso", id);
+        }, () -> {
+            log.info("Usuário inativo com id {} não encontrado", id);
+            throw new UsuarioNotFoundException(id, false);
+        });
     }
 
     @Override
