@@ -12,6 +12,10 @@ public interface AuthService {
 
     String login(LoginDto dto);
 
+    void desativar(Long id);
+
+    void reativar(Long id);
+
     void validarToken(String token);
 
 }
