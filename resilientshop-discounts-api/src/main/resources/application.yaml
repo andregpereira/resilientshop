@@ -1,0 +1,6 @@
+spring:
+  # H2
+  datasource:
+    url: jdbc:h2:mem:resilientshop-user-test
+    username: sa
+    password: sa
