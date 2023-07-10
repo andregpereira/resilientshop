@@ -1,6 +1,7 @@
 package com.github.andregpereira.resilientshop.shoppingapi.constants;
 
-import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.Usuario;
+
+import com.github.andregpereira.resilientshop.commons.entities.Usuario;
 
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.EnderecoConstants.ENDERECO;
 

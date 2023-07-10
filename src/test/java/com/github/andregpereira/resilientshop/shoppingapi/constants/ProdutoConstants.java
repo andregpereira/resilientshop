@@ -1,6 +1,7 @@
 package com.github.andregpereira.resilientshop.shoppingapi.constants;
 
-import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.Produto;
+
+import com.github.andregpereira.resilientshop.commons.entities.Produto;
 
 import java.math.BigDecimal;
 
