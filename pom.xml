@@ -25,6 +25,7 @@
     </properties>
     <modules>
         <module>resilientshop-discounts-api</module>
+        <module>resilientshop-eureka-server</module>
     </modules>
     <dependencies>
         <dependency>
