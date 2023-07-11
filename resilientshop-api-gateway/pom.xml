@@ -6,7 +6,7 @@
         <groupId>com.github.andregpereira</groupId>
         <artifactId>resilientshop</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath/>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>resilientshop-api-gateway</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.andregpereira</groupId>
-            <artifactId>commons</artifactId>
+            <artifactId>resilientshop-commons</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
