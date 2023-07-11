@@ -30,6 +30,7 @@
         <module>resilientshop-authentication-api</module>
         <module>resilientshop-discounts-api</module>
         <module>resilientshop-commons</module>
+        <module>resilientshop-api-gateway</module>
         <module>resilientshop-eureka-server</module>
     </modules>
     <dependencies>
