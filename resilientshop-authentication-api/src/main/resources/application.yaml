@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: resilientshop-authentication-api
+  #PostgreSQL
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+
+server:
+  port: ${SERVER_PORT:0}
+  error:
+    include-stacktrace: never
+
+#Eureka
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    registerWithEureka: true
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${EUREKA_SERVICE_NAME:localhost}:8761/eureka
