@@ -26,6 +26,7 @@
     </properties>
     <modules>
         <module>resilientshop-user-api</module>
+        <module>resilientshop-products-api</module>
         <module>resilientshop-shopping-api</module>
         <module>resilientshop-authentication-api</module>
         <module>resilientshop-discounts-api</module>
