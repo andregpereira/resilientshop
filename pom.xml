@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.github.andregpereira</groupId>
-    <artifactId>apigateway</artifactId>
+    <artifactId>resilientshop-api-gateway</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Resilient Shop API Gateway</name>
     <description>API Gateway for Resilient Shop Ecommerce Project</description>
