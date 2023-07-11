@@ -18,11 +18,10 @@ server:
 #Eureka
 eureka:
   instance:
-    hostname: ${EUREKA_INSTANCE_HOSTNAME:localhost}
+    prefer-ip-address: true
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     registerWithEureka: true
     fetchRegistry: false
-    instance-info-replication-interval-seconds: 5
     serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+      defaultZone: http://${EUREKA_SERVICE_NAME:localhost}:8761/eureka
