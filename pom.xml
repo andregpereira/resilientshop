@@ -4,8 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.andregpereira</groupId>
-    <artifactId>commons</artifactId>
+    <artifactId>resilientshop-commons</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <name>Resilient Shop Commons Library</name>
+    <description>Commons Library for Resilient Shop Ecommerce Project</description>
     <properties>
         <java.version>17</java.version>
         <jackson-databind.version>2.15.1</jackson-databind.version>
