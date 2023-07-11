@@ -1,22 +1,28 @@
 eureka:
   instance:
-    hostname: localhost
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     register-with-eureka: true
     fetch-registry: true
     registry-fetch-interval-seconds: 5
-    instance-info-replication-interval-seconds: 5
     serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+      defaultZone: http://${EUREKA_SERVICE_NAME:localhost}:8761/eureka
 
 server:
-  port: 8763
+  port: ${SERVER_PORT:8763}
   error:
     include-stacktrace: never
 
 spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.security.reactive.ReativoSecurityAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.security.reactive.ReativoManagementWebSecurityAutoConfiguration
   application:
     name: resilientshop-api-gateway
+  main:
+    web-application-type: REACTIVE
   cloud:
     gateway:
       globalcors:
@@ -26,6 +32,15 @@ spring:
             allowedHeaders: "*"
             allowedMethods: "*"
       routes:
+        - id: resilientshop-authentication-api
+          uri: lb://resilientshop-authentication-api
+          predicates:
+            - Path=/auth/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: fallback
+                fallbackUri: "forward:/fallback/autentica\u00e7\u00e3o"
         - id: resilientshop-shopping-api
           uri: lb://resilientshop-shopping-api
           predicates:
@@ -67,6 +82,13 @@ resilience4j:
         slowCallRateThreshold: 50
         slowCallDurationThreshold: 10s
         failureRateThreshold: 10
+    instances:
+      fallback:
+        baseConfig: default
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 10s
     instances:
       fallback:
         baseConfig: default
