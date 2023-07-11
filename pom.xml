@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.github.andregpereira</groupId>
-    <artifactId>shoppingapi</artifactId>
+    <artifactId>resilientshop-shopping-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>shoppingapi</name>
+    <name>Resilient Shop Shopping API</name>
     <description>Shopping Api for Resilient Shop Ecommerce Project</description>
     <properties>
         <java.version>17</java.version>
