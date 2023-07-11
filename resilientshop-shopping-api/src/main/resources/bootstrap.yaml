@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: resilientshop-shopping-api
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
