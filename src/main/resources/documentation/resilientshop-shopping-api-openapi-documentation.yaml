@@ -1,0 +1,446 @@
+openapi: 3.0.3
+info:
+  title: API de Pedidos
+  description: |-
+    API do microsserviço de Pedidos do e-Commerce Resilient Shop.
+  contact:
+    name: @author André Garcia
+    url: https://github.com/andregpereira
+    email: 61523970+andregpereira@users.noreply.github.com
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8763
+    description: |-
+      Caminho base da API Gateway
+
+tags:
+  - name: Pedidos
+    description: |-
+      Operações de criação, cancelamento e consulta de pedidos
+
+paths:
+  /pedidos:
+    post:
+      tags:
+        - Pedidos
+      operationId: cadastrar
+      summary: |-
+        Cria um pedido
+      requestBody:
+        $ref: '#/components/requestBodies/PedidoRegistrarDto'
+      responses:
+        "201":
+          $ref: '#/components/responses/PedidoCreated'
+
+        "400":
+          $ref: '#/components/responses/BadRequest'
+
+        "404":
+          description: Usuário/produto não encontrado
+          content:
+            '*/*':
+              schema:
+                type: string
+                example: Não foi possível realizar o pedido
+
+        "422":
+          $ref: '#/components/responses/UnprocessableEntity'
+
+        "503":
+          $ref: '#/components/responses/ServiceUnavailable'
+
+    get:
+      tags:
+        - Pedidos
+      operationId: listar
+      summary: |-
+        Retorna todos os pedidos
+      responses:
+        "200":
+          description: Listados todos os pedidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagePedidoDto'
+
+        "404":
+          $ref: '#/components/responses/PedidoNotFound'
+
+  /pedidos/{id}:
+    get:
+      tags:
+        - Pedidos
+      operationId: consultarPorId
+      summary: |-
+        Consultar um pedido por id
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        "200":
+          description: Pedido encontrado por id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PedidoDetalharDto'
+
+        "404":
+          $ref: '#/components/responses/PedidoNotFound'
+
+    delete:
+      tags:
+        - Pedidos
+      operationId: cancelar
+      summary: |-
+        Cancelar um pedido por id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+
+      responses:
+        "200":
+          description: Pedido cancelado
+          content:
+            '*/*':
+              schema:
+                type: string
+                example: Pedido com id 15 cancelado com sucesso
+
+        "404":
+          $ref: '#/components/responses/PedidoNotFound'
+
+  /pedidos/status:
+    get:
+      tags:
+        - Pedidos
+      operationId: consultarPorStatus
+      summary: |-
+        Listar todos os pedidos pelo status
+      parameters:
+        - $ref: '#/components/parameters/Status'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagePedidoDto'
+
+        "404":
+          $ref: '#/components/responses/PedidoNotFound'
+
+  /pedidos/usuario/{id}:
+    get:
+      tags:
+        - Pedidos
+      operationId: listarPorUsuario
+      summary: |-
+        Listar todos os pedidos de um usuário
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        "200":
+          description: Listados todos os pedidos do usuário
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagePedidoDto'
+
+        "404":
+          $ref: '#/components/responses/PedidoNotFound'
+
+        "503":
+          $ref: '#/components/responses/ServiceUnavailable'
+
+components:
+  schemas:
+    DetalhePedidoRegistrarDto:
+      required:
+        - idProduto
+        - quantidade
+      type: object
+      properties:
+        quantidade:
+          type: integer
+          format: int32
+          example: 2
+        idProduto:
+          type: integer
+          format: int64
+          example: 2
+
+    PedidoRegistrarDto:
+      required:
+        - detalhePedido
+        - enderecoApelido
+        - idUsuario
+      type: object
+      properties:
+        idUsuario:
+          type: integer
+          format: int64
+          example: 1
+        enderecoApelido:
+          type: string
+          example: casa
+        detalhePedido:
+          type: array
+          items:
+            $ref: '#/components/schemas/DetalhePedidoRegistrarDto'
+
+    DetalhePedidoDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        quantidade:
+          type: integer
+          format: int32
+        subtotal:
+          type: number
+        produto:
+          $ref: '#/components/schemas/ProdutoDto'
+
+    EnderecoDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        apelido:
+          type: string
+        cep:
+          type: string
+        estado:
+          type: string
+        cidade:
+          type: string
+        bairro:
+          type: string
+        rua:
+          type: string
+        numero:
+          type: string
+        complemento:
+          type: string
+
+    PedidoDetalharDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        dataCriacao:
+          type: string
+          format: date-time
+        dataModificacao:
+          type: string
+          format: date-time
+        status:
+          type: integer
+          format: int32
+        total:
+          type: number
+        usuario:
+          $ref: '#/components/schemas/UsuarioDto'
+        detalhePedido:
+          type: array
+          items:
+            $ref: '#/components/schemas/DetalhePedidoDto'
+
+    ProdutoDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nome:
+          type: string
+        valorUnitario:
+          type: number
+        estoque:
+          type: integer
+          format: int32
+
+    UsuarioDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nome:
+          type: string
+        endereco:
+          $ref: '#/components/schemas/EnderecoDto'
+
+    PagePedidoDto:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/PedidoDto'
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        first:
+          type: boolean
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        empty:
+          type: boolean
+
+    PageableObject:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageSize:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+
+    PedidoDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        dataCriacao:
+          type: string
+          format: date-time
+        dataModificacao:
+          type: string
+          format: date-time
+        status:
+          type: integer
+          format: int32
+        total:
+          type: number
+
+    SortObject:
+      type: object
+      properties:
+        empty:
+          type: boolean
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+
+    DadoInvalido:
+      type: object
+      properties:
+        campo:
+          type: string
+        mensagem:
+          type: string
+
+    ResponseBadrequest:
+      type: string
+      example: Parâmetro inválido
+
+    ResponsePedidoNotFound:
+      type: string
+      example: Nenhum pedido foi encontrado no banco de dados
+
+    ResponseServiceUnavailable:
+      type: string
+      example: Não foi possível fazer a requisição
+
+  responses:
+    PedidoCreated:
+      description: |-
+        Pedido criado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PedidoDetalharDto'
+
+    BadRequest:
+      description: |-
+        Problema ao processar JSON
+      content:
+        '*/*':
+          schema:
+            $ref: '#/components/schemas/ResponseBadrequest'
+
+    PedidoNotFound:
+      description: |-
+        Pedido não encontrado
+      content:
+        '*/*':
+          schema:
+            $ref: '#/components/schemas/ResponsePedidoNotFound'
+
+    UnprocessableEntity:
+      description: |-
+        Campo inválido
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DadoInvalido'
+
+    ServiceUnavailable:
+      description: |-
+        API indisponível
+      content:
+        '*/*':
+          schema:
+            $ref: '#/components/schemas/ResponseServiceUnavailable'
+
+  requestBodies:
+    PedidoRegistrarDto:
+      description: |-
+        Pedido a ser realizado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PedidoRegistrarDto'
+      required: true
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+
+    Status:
+      name: status
+      in: query
+      required: true
+      schema:
+        type: integer
+        format: int32
