@@ -26,7 +26,9 @@ public class CupomController {
 
     @PostMapping
     public ResponseEntity<CupomDto> registrar(@RequestBody CupomRegistroDto dto) {
+        log.info("Criando cupom...");
         CupomDto cupom = manutencaoService.registrar(dto);
+        log.info("Cupom criado com sucesso");
         URI uri = UriComponentsBuilder.fromPath("/cupons/{id}").buildAndExpand(cupom.id()).toUri();
         return ResponseEntity.created(uri).body(cupom);
     }
