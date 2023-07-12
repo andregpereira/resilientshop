@@ -1,0 +1,84 @@
+services:
+  resilientshop-eureka-server:
+    build:
+      context: ./resilientshop-eureka-server
+      dockerfile: ./Dockerfile
+    networks:
+      mynetwork:
+    ports:
+      - "8751:8761"
+  resilientshop-api-gateway:
+    build:
+      context: ./resilientshop-api-gateway
+      dockerfile: ./Dockerfile
+    depends_on:
+      resilientshop-eureka-server:
+        condition: service_started
+    environment:
+      - EUREKA_SERVICE_NAME=resilientshop-eureka-server
+    networks:
+      mynetwork:
+    ports:
+      - "8763:8763"
+  resilientshop-user-api:
+    build:
+      context: ./resilientshop-user-api
+      dockerfile: ./Dockerfile
+    depends_on:
+      resilientshop-eureka-server:
+        condition: service_started
+      user-db:
+        condition: service_started
+    environment:
+      - EUREKA_SERVICE_NAME=resilientshop-eureka-server
+#      - SERVER_PORT=8090
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://user-db:5432/resilientshop-user
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+    networks:
+      mynetwork:
+#    ports:
+#      - "8090:8090"
+  user-db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=resilientshop-user
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=root
+    networks:
+      mynetwork:
+    ports:
+      - "5434:5432"
+  resilientshop-authentication-api:
+    build:
+      context: ./resilientshop-authentication-api
+      dockerfile: ./Dockerfile
+    depends_on:
+      resilientshop-eureka-server:
+        condition: service_started
+      auth-db:
+        condition: service_started
+    environment:
+      - EUREKA_SERVICE_NAME=resilientshop-eureka-server
+#      - SERVER_PORT=8092
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://auth-db:5432/resilientshop-authentication
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+    networks:
+      mynetwork:
+#    ports:
+#      - "8092:8092"
+  auth-db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=resilientshop-authentication
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=root
+    networks:
+      mynetwork:
+    ports:
+      - "5436:5432"
+networks:
+  mynetwork:
