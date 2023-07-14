@@ -29,7 +29,7 @@ public class CupomDataProvider implements CupomGateway {
     @Override
     public Page<Cupom> findAll(Pageable pageable) {
         return Optional.of(repository.findAll(pageable)).filter(not(Page::isEmpty)).map(
-                p -> p.map(mapper::toCupom)).orElseThrow(()-> new CupomNotFoundException());
+                p -> p.map(mapper::toCupom)).orElseThrow(CupomNotFoundException::new);
     }
 
 }
