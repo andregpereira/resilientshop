@@ -13,7 +13,8 @@ public class CreateCupomImpl implements CreateCupom {
 
     @Override
     public Cupom criar(Cupom cupom) {
-        return gateway.registrar(cupom);
+        cupom.setAtivo(true);
+        return gateway.save(cupom);
     }
 
 }
