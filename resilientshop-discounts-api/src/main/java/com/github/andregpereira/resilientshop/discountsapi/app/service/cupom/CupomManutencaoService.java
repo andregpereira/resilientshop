@@ -7,4 +7,10 @@ public sealed interface CupomManutencaoService permits CupomManutencaoServiceImp
 
     CupomDto registrar(CupomRegistroDto dto);
 
+    String deactivate(Long id);
+
+    String activate(Long id);
+
+    CupomDto update(Long id, CupomRegistroDto dto);
+
 }
