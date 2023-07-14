@@ -1,9 +1,9 @@
-package com.github.andregpereira.resilientshop.discountsapi.app.service;
+package com.github.andregpereira.resilientshop.discountsapi.app.service.cupom;
 
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.mapper.CupomServiceMapper;
-import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.FindAllCupom;
-import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.FindByIdCupom;
+import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.FindAllCupom;
+import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.FindByIdCupom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

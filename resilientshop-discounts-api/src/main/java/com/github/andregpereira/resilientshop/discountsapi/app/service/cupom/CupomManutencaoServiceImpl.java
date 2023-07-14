@@ -1,12 +1,13 @@
-package com.github.andregpereira.resilientshop.discountsapi.app.service;
+package com.github.andregpereira.resilientshop.discountsapi.app.service.cupom;
 
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomRegistroDto;
+import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomUpdateDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.mapper.CupomServiceMapper;
-import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.ActivateCupom;
-import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.CreateCupom;
-import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.DeactivateCupom;
-import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.UpdateCupom;
+import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.ActivateCupom;
+import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.CreateCupom;
+import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.DeactivateCupom;
+import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.UpdateCupom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,13 +26,13 @@ public non-sealed class CupomManutencaoServiceImpl implements CupomManutencaoSer
     private final CupomServiceMapper mapper;
 
     @Override
-    public CupomDto registrar(CupomRegistroDto dto) {
+    public CupomDto criar(CupomRegistroDto dto) {
         return mapper.toCupomDto(createCupom.criar(mapper.toCupom(dto)));
     }
 
     @Override
-    public String deactivate(Long id) {
-        return deactivateCupom.deactivate(id);
+    public CupomDto update(Long id, CupomUpdateDto dto) {
+        return mapper.toCupomDto(updateCupom.update(id, mapper.toCupom(dto)));
     }
 
     @Override
@@ -40,8 +41,8 @@ public non-sealed class CupomManutencaoServiceImpl implements CupomManutencaoSer
     }
 
     @Override
-    public CupomDto update(Long id, CupomRegistroDto dto) {
-        return mapper.toCupomDto(updateCupom.update(id, mapper.toCupom(dto)));
+    public String deactivate(Long id) {
+        return deactivateCupom.deactivate(id);
     }
 
 }
