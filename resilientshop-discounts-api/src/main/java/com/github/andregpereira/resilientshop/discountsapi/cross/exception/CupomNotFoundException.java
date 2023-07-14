@@ -16,4 +16,8 @@ public class CupomNotFoundException extends RuntimeException {
         super(MessageFormat.format("Opa! Não foi encontrado um cupom com id {0}", id));
     }
 
+    public CupomNotFoundException(Long id, boolean ativo) {
+        super(MessageFormat.format("Opa! Não foi encontrado um cupom {1} com id {0}", id, ativo ? "ativo" : "inativo"));
+    }
+
 }
