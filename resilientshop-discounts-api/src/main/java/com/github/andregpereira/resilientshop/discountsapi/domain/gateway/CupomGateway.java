@@ -6,8 +6,14 @@ import org.springframework.data.domain.Pageable;
 
 public interface CupomGateway {
 
-    Cupom registrar(Cupom cupom);
+    Cupom save(Cupom cupom);
 
     Page<Cupom> findAll(Pageable pageable);
+
+    Cupom findById(Long id);
+
+    Cupom findActivatedById(Long id);
+
+    Cupom findDeactivatedById(Long id);
 
 }
