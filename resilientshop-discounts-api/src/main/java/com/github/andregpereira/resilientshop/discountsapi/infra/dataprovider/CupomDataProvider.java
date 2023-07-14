@@ -1,5 +1,6 @@
 package com.github.andregpereira.resilientshop.discountsapi.infra.dataprovider;
 
+import com.github.andregpereira.resilientshop.discountsapi.cross.exception.CupomNotFoundException;
 import com.github.andregpereira.resilientshop.discountsapi.domain.gateway.CupomGateway;
 import com.github.andregpereira.resilientshop.discountsapi.domain.model.Cupom;
 import com.github.andregpereira.resilientshop.discountsapi.infra.mapper.CupomDataProviderMapper;
@@ -28,7 +29,7 @@ public class CupomDataProvider implements CupomGateway {
     @Override
     public Page<Cupom> findAll(Pageable pageable) {
         return Optional.of(repository.findAll(pageable)).filter(not(Page::isEmpty)).map(
-                p -> p.map(mapper::toCupom)).orElseThrow(RuntimeException::new);
+                p -> p.map(mapper::toCupom)).orElseThrow(()-> new CupomNotFoundException());
     }
 
 }
