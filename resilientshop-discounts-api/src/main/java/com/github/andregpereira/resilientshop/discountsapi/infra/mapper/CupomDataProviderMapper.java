@@ -11,6 +11,6 @@ public interface CupomDataProviderMapper {
 
     CupomEntity toCupomEntity(Cupom cupom);
 
-    Cupom toCupom(CupomEntity cupomEntity);
+    Cupom toCupom(CupomEntity cupom);
 
 }
