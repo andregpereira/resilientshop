@@ -1,19 +1,21 @@
-package com.github.andregpereira.resilientshop.discountsapi.domain.usecase;
+package com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom;
 
 import com.github.andregpereira.resilientshop.discountsapi.domain.gateway.CupomGateway;
 import com.github.andregpereira.resilientshop.discountsapi.domain.model.Cupom;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class CreateCupomImpl implements CreateCupom {
+public class FindAllCupomImpl implements FindAllCupom {
 
     private final CupomGateway gateway;
 
     @Override
-    public Cupom criar(Cupom cupom) {
-        return gateway.registrar(cupom);
+    public Page<Cupom> findAll(Pageable pageable) {
+        return gateway.findAll(pageable);
     }
 
 }

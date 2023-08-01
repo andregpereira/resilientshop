@@ -6,6 +6,9 @@ spring:
     url: jdbc:h2:mem:resilientshop-user-test
     username: sa
     password: sa
+  jackson:
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: true
 
 eureka:
   instance:
