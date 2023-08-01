@@ -22,7 +22,7 @@ public class CupomDataProvider implements CupomGateway {
     private final CupomDataProviderMapper mapper;
 
     @Override
-    public Cupom registrar(Cupom cupom) {
+    public Cupom save(Cupom cupom) {
         return mapper.toCupom(repository.save(mapper.toCupomEntity(cupom)));
     }
 
@@ -30,6 +30,23 @@ public class CupomDataProvider implements CupomGateway {
     public Page<Cupom> findAll(Pageable pageable) {
         return Optional.of(repository.findAll(pageable)).filter(not(Page::isEmpty)).map(
                 p -> p.map(mapper::toCupom)).orElseThrow(CupomNotFoundException::new);
+    }
+
+    @Override
+    public Cupom findById(Long id) {
+        return repository.findById(id).map(mapper::toCupom).orElseThrow(() -> new CupomNotFoundException(id));
+    }
+
+    @Override
+    public Cupom findActivatedById(Long id) {
+        return repository.findByIdAndAtivoTrue(id).map(mapper::toCupom).orElseThrow(
+                () -> new CupomNotFoundException(id, true));
+    }
+
+    @Override
+    public Cupom findDeactivatedById(Long id) {
+        return repository.findByIdAndAtivoFalse(id).map(mapper::toCupom).orElseThrow(
+                () -> new CupomNotFoundException(id, false));
     }
 
 }
