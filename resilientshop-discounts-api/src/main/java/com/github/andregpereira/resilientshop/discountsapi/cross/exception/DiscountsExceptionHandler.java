@@ -1,8 +1,8 @@
 package com.github.andregpereira.resilientshop.discountsapi.cross.exception;
 
 import jakarta.validation.ConstraintViolation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+@Slf4j
 @RestControllerAdvice
 public class DiscountsExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(CupomNotFoundException.class)
-    public ResponseEntity<Object> handleNotFound(CupomNotFoundException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    @ExceptionHandler(CupomException.class)
+    public ResponseEntity<Object> handleCupomException(CupomException ex, WebRequest request) {
+        log.warn(ex.toString());
+        return handleExceptionInternal(ex, ex.getBody(), new HttpHeaders(), ex.getStatusCode(), request);
     }
 
     @Override
