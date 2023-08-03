@@ -10,10 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
-import static java.util.function.Predicate.not;
-
 @RequiredArgsConstructor
 @Component
 public class CupomDataProvider implements CupomGateway {
@@ -28,8 +24,7 @@ public class CupomDataProvider implements CupomGateway {
 
     @Override
     public Page<Cupom> findAll(Pageable pageable) {
-        return Optional.of(repository.findAll(pageable)).filter(not(Page::isEmpty)).map(
-                p -> p.map(mapper::toCupom)).orElseThrow(CupomNotFoundException::new);
+        return repository.findAll(pageable).map(mapper::toCupom);
     }
 
     @Override
