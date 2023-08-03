@@ -15,7 +15,6 @@ public abstract class CupomException extends RuntimeException implements ErrorRe
 
     protected CupomException(HttpStatusCode status, String msg) {
         super(msg);
-        ErrorResponse.criar(this, HttpStatus.NOT_FOUND,"");
         this.body = ProblemDetail.forStatusAndDetail(status, msg);
     }
 
