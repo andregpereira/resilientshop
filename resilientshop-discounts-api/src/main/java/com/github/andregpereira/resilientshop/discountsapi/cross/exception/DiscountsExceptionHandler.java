@@ -4,10 +4,11 @@ import jakarta.validation.ConstraintViolation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -16,17 +17,24 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class DiscountsExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(CupomException.class)
-    public ResponseEntity<Object> handleCupomException(CupomException ex, WebRequest request) {
-        log.warn(ex.toString());
-        return handleExceptionInternal(ex, ex.getBody(), new HttpHeaders(), ex.getStatusCode(), request);
+    private static final String LOG_TRATANDO_EXCECAO = "Tratando exceção: {}";
+
+    @Override
+    protected ResponseEntity<Object> handleErrorResponseException(ErrorResponseException ex, HttpHeaders headers,
+            HttpStatusCode status, WebRequest request) {
+        log.warn(LOG_TRATANDO_EXCECAO, ex.toString());
+        return super.handleErrorResponseException(ex, headers, status, request);
     }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
             HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getFieldErrors().stream().map(DadoInvalido::new), headers, status,
-                request);
+        log.warn(LOG_TRATANDO_EXCECAO, ex.toString());
+        ProblemDetail body = ex.getBody();
+        body.setTitle("Campos inválidos");
+        body.setDetail("Um ou mais campos não foram preenchidos corretamente");
+        body.setProperty("errors", ex.getFieldErrors().stream().map(DadoInvalido::new));
+        return super.handleMethodArgumentNotValid(ex, headers, status, request);
     }
 
     private record DadoInvalido(String campo,
