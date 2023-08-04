@@ -17,7 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class DiscountsExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private static final String LOG_TRATANDO_EXCECAO = "Tratando exceção: {}";
+    private static final String LOG_TRATANDO_EXCECAO = "Tratando exceção: '{}'";
 
     @Override
     protected ResponseEntity<Object> handleErrorResponseException(ErrorResponseException ex, HttpHeaders headers,
