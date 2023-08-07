@@ -11,10 +11,10 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CupomServiceMapper {
 
-    CupomDto toCupomDto(Cupom cupom);
-
     Cupom toCupom(CupomRegistroDto dto);
 
     Cupom toCupom(CupomUpdateDto dto);
+
+    CupomDto toCupomDto(Cupom c);
 
 }
