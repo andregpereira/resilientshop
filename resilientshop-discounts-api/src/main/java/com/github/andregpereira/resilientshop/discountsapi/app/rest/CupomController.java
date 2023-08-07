@@ -82,5 +82,9 @@ public class CupomController {
     public ResponseEntity<CupomDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(consultaService.consultarPorId(id));
     }
+    @GetMapping("/codigo")
+    public ResponseEntity<CupomDto> findByCodigo(@RequestParam String codigo) {
+        return ResponseEntity.ok(consultaService.consultarPorCodigo(codigo));
+    }
 
 }

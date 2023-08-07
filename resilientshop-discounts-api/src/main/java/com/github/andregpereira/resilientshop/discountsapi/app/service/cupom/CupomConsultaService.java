@@ -6,12 +6,14 @@ import org.springframework.data.domain.Pageable;
 
 public sealed interface CupomConsultaService permits CupomConsultaServiceImpl {
 
-    CupomDto consultarPorId(Long id);
-
     Page<CupomDto> consultarTodos(Pageable pageable);
 
     Page<CupomDto> consultarAtivo(Pageable pageable);
 
     Page<CupomDto> consultarInativo(Pageable pageable);
+
+    CupomDto consultarPorId(Long id);
+
+    CupomDto consultarPorCodigo(String codigo);
 
 }
