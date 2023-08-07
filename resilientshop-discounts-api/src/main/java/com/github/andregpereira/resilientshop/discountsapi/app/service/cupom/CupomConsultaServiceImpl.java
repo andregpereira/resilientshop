@@ -15,18 +15,18 @@ import org.springframework.stereotype.Service;
 @Service
 public non-sealed class CupomConsultaServiceImpl implements CupomConsultaService {
 
-    private final CupomFindAllUc cupomFindAllUc;
-    private final CupomFindByIdUc cupomFindByIdUc;
+    private final CupomFindAllUc findAllUc;
+    private final CupomFindByIdUc findByIdUc;
     private final CupomServiceMapper mapper;
 
     @Override
     public Page<CupomDto> consultarTodos(Pageable pageable) {
-        return cupomFindAllUc.findAll(pageable).map(mapper::toCupomDto);
+        return findAllUc.findAll(pageable).map(mapper::toCupomDto);
     }
 
     @Override
     public CupomDto consultarPorId(Long id) {
-        return mapper.toCupomDto(cupomFindByIdUc.findById(id));
+        return mapper.toCupomDto(findByIdUc.findById(id));
     }
 
 }
