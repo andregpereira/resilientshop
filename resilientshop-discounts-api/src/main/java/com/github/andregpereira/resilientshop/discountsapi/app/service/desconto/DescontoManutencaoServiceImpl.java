@@ -1,7 +1,7 @@
 package com.github.andregpereira.resilientshop.discountsapi.app.service.desconto;
 
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.DescontoDto;
-import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.DescontoRegistroDto;
+import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.DescontoCreateDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.mapper.DescontoServiceMapper;
 import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.desconto.DescontoActivateUc;
 import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.desconto.DescontoCreateUc;
@@ -25,12 +25,12 @@ public non-sealed class DescontoManutencaoServiceImpl implements DescontoManuten
     private final DescontoServiceMapper mapper;
 
     @Override
-    public DescontoDto criar(DescontoRegistroDto dto) {
+    public DescontoDto criar(DescontoCreateDto dto) {
         return mapper.toDescontoDto(descontoCreateUc.criar(mapper.toDesconto(dto)));
     }
 
     @Override
-    public DescontoDto update(Long id, DescontoRegistroDto dto) {
+    public DescontoDto update(Long id, DescontoCreateDto dto) {
         return mapper.toDescontoDto(descontoUpdateUc.update(id, mapper.toDesconto(dto)));
     }
 
