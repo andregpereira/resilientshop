@@ -12,17 +12,16 @@ public class UpdateCupomImpl implements UpdateCupom {
     private final CupomGateway gateway;
 
     @Override
-    public Cupom update(Long id, Cupom cupom) {
-        return gateway.findById(id).map(c -> {
-            c.setCodigo(cupom.getCodigo());
-            c.setPercentual(cupom.getPercentual());
-            c.setQtdMinimaProdutos(cupom.getQtdMinimaProdutos());
-            c.setValorMinimoPedido(cupom.getValorMinimoPedido());
-            c.setDescontoMaximo(cupom.getDescontoMaximo());
-            c.setDataExpiracao(cupom.getDataExpiracao());
-            c.setAtivo(cupom.isAtivo());
-            return gateway.save(c);
-        });
+    public Cupom update(Long id, Cupom cupomAtualizado) {
+        Cupom cupom = gateway.findById(id);
+        cupom.setCodigo(cupom.getCodigo());
+        cupom.setPercentual(cupom.getPercentual());
+        cupom.setQtdMinimaProdutos(cupom.getQtdMinimaProdutos());
+        cupom.setValorMinimoPedido(cupom.getValorMinimoPedido());
+        cupom.setDescontoMaximo(cupom.getDescontoMaximo());
+        cupom.setDataExpiracao(cupom.getDataExpiracao());
+        cupom.setAtivo(cupom.isAtivo());
+        return gateway.save(cupom);
     }
 
 }

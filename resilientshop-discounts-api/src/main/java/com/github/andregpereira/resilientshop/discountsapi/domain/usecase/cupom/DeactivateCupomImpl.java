@@ -1,6 +1,7 @@
 package com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom;
 
 import com.github.andregpereira.resilientshop.discountsapi.domain.gateway.CupomGateway;
+import com.github.andregpereira.resilientshop.discountsapi.domain.model.Cupom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -14,11 +15,10 @@ public class DeactivateCupomImpl implements DeactivateCupom {
 
     @Override
     public String deactivate(Long id) {
-        return gateway.findActivatedById(id).map(c -> {
-            c.setAtivo(false);
-            gateway.save(c);
-            return MessageFormat.format("Cupom com id {0} desativado com sucesso!", id);
-        });
+        Cupom cupom = gateway.findAtivoById(id);
+        cupom.setAtivo(false);
+        gateway.save(cupom);
+        return MessageFormat.format("Cupom com id {0} desativado com sucesso!", id);
     }
 
 }
