@@ -1,6 +1,6 @@
 package com.github.andregpereira.resilientshop.discountsapi.infra.dataprovider;
 
-import com.github.andregpereira.resilientshop.discountsapi.cross.exception.CupomNotFoundException;
+import com.github.andregpereira.resilientshop.discountsapi.cross.exception.DescontoNotFoundException;
 import com.github.andregpereira.resilientshop.discountsapi.domain.gateway.DescontoGateway;
 import com.github.andregpereira.resilientshop.discountsapi.domain.model.Desconto;
 import com.github.andregpereira.resilientshop.discountsapi.infra.mapper.DescontoDataProviderMapper;
@@ -48,19 +48,19 @@ public class DescontoDataProvider implements DescontoGateway {
 
     @Override
     public Desconto findById(Long id) {
-        return repository.findById(id).map(mapper::toDesconto).orElseThrow(() -> new CupomNotFoundException(id));
+        return repository.findById(id).map(mapper::toDesconto).orElseThrow(() -> new DescontoNotFoundException(id));
     }
 
     @Override
     public Desconto findAtivoById(Long id) {
         return repository.findByIdAndAtivoTrue(id).map(mapper::toDesconto).orElseThrow(
-                () -> new CupomNotFoundException(id, true));
+                () -> new DescontoNotFoundException(id, true));
     }
 
     @Override
     public Desconto findInativoById(Long id) {
         return repository.findByIdAndAtivoFalse(id).map(mapper::toDesconto).orElseThrow(
-                () -> new CupomNotFoundException(id, false));
+                () -> new DescontoNotFoundException(id, false));
     }
 
 }

@@ -24,7 +24,7 @@ public class DescontoNotFoundException extends ErrorResponseException {
 
     private static ProblemDetail asProblemDetail(String msg) {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(status, msg);
-        pd.setTitle("Cupom não encontrado");
+        pd.setTitle("Desconto não encontrado");
         pd.setType(URI.create("http://resilientshop.com/errors/not-found"));
         return pd;
     }
