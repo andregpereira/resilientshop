@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -20,6 +21,7 @@ public class DescontoDataProvider implements DescontoGateway {
     private final DescontoDataProviderMapper mapper;
 
     @Override
+    @Transactional
     public Desconto save(Desconto desconto) {
         return mapper.toDesconto(repository.save(mapper.toDescontoEntity(desconto)));
     }
