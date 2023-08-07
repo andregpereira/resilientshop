@@ -15,18 +15,18 @@ import org.springframework.stereotype.Service;
 @Service
 public non-sealed class DescontoConsultaServiceImpl implements DescontoConsultaService {
 
-    private final DescontoFindAllUc descontoFindAllUc;
-    private final DescontoFindByIdUc descontoFindByIdUc;
+    private final DescontoFindAllUc findAllUc;
+    private final DescontoFindByIdUc findByIdUc;
     private final DescontoServiceMapper mapper;
 
     @Override
     public Page<DescontoDto> consultarTodos(Pageable pageable) {
-        return descontoFindAllUc.findAll(pageable).map(mapper::toDescontoDto);
+        return findAllUc.findAll(pageable).map(mapper::toDescontoDto);
     }
 
     @Override
     public DescontoDto consultarPorId(Long id) {
-        return mapper.toDescontoDto(descontoFindByIdUc.findById(id));
+        return mapper.toDescontoDto(findByIdUc.findById(id));
     }
 
 }

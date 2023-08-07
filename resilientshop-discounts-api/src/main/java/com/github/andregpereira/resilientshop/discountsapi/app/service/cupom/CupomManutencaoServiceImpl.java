@@ -17,30 +17,30 @@ import org.springframework.stereotype.Service;
 @Service
 public non-sealed class CupomManutencaoServiceImpl implements CupomManutencaoService {
 
-    private final CupomCreateUc cupomCreateUc;
-    private final CupomUpdateUc cupomUpdateUc;
-    private final CupomDeactivateUc cupomDeactivateUc;
-    private final CupomActivateUc cupomActivateUc;
+    private final CupomCreateUc createUc;
+    private final CupomUpdateUc updateUc;
+    private final CupomDeactivateUc deactivateUc;
+    private final CupomActivateUc activateUc;
     private final CupomServiceMapper mapper;
 
     @Override
     public CupomDto criar(CupomCreateDto dto) {
-        return mapper.toCupomDto(cupomCreateUc.criar(mapper.toCupom(dto)));
+        return mapper.toCupomDto(createUc.criar(mapper.toCupom(dto)));
     }
 
     @Override
     public CupomDto update(Long id, CupomUpdateDto dto) {
-        return mapper.toCupomDto(cupomUpdateUc.update(id, mapper.toCupom(dto)));
+        return mapper.toCupomDto(updateUc.update(id, mapper.toCupom(dto)));
     }
 
     @Override
     public String activate(Long id) {
-        return cupomActivateUc.activate(id);
+        return activateUc.activate(id);
     }
 
     @Override
     public String deactivate(Long id) {
-        return cupomDeactivateUc.deactivate(id);
+        return deactivateUc.deactivate(id);
     }
 
 }
