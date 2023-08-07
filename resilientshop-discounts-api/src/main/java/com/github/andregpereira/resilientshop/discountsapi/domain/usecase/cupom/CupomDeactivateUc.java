@@ -1,6 +1,6 @@
 package com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom;
 
-public interface DeactivateCupom {
+public interface CupomDeactivateUc {
 
     String deactivate(Long id);
 

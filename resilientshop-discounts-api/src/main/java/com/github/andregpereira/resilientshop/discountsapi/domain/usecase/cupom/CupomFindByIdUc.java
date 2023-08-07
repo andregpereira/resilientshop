@@ -2,8 +2,8 @@ package com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom
 
 import com.github.andregpereira.resilientshop.discountsapi.domain.model.Cupom;
 
-public interface CreateCupom {
+public interface CupomFindByIdUc {
 
-    Cupom criar(Cupom cupom);
+    Cupom findById(Long id);
 
 }
