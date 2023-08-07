@@ -11,12 +11,10 @@ import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
-@Transactional
 public non-sealed class CupomManutencaoServiceImpl implements CupomManutencaoService {
 
     private final CreateCupom createCupom;
