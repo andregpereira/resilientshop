@@ -28,7 +28,7 @@ public class DiscountsExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleErrorResponseException(ErrorResponseException ex, HttpHeaders headers,
             HttpStatusCode status, WebRequest request) {
         log.warn(LOG_TRATANDO_EXCECAO, ex.toString());
-        return super.handleErrorResponseException(ex, headers, status, request);
+        return super.handleExceptionInternal(ex, null, headers, status, request);
     }
 
     @Override
