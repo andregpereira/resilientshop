@@ -1,7 +1,7 @@
 package com.github.andregpereira.resilientshop.discountsapi.app.rest;
 
-import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomCreateDto;
+import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomUpdateDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.service.cupom.CupomConsultaService;
 import com.github.andregpereira.resilientshop.discountsapi.app.service.cupom.CupomManutencaoService;
@@ -66,6 +66,16 @@ public class CupomController {
     @GetMapping
     public ResponseEntity<Page<CupomDto>> findAll(@PageableDefault(sort = "id") Pageable pageable) {
         return ResponseEntity.ok(consultaService.consultarTodos(pageable));
+    }
+
+    @GetMapping("/ativo")
+    public ResponseEntity<Page<CupomDto>> findAllAtivo(@PageableDefault(sort = "id") Pageable pageable) {
+        return ResponseEntity.ok(consultaService.consultarAtivo(pageable));
+    }
+
+    @GetMapping("/inativo")
+    public ResponseEntity<Page<CupomDto>> findAllInativo(@PageableDefault(sort = "id") Pageable pageable) {
+        return ResponseEntity.ok(consultaService.consultarInativo(pageable));
     }
 
     @GetMapping("/{id}")
