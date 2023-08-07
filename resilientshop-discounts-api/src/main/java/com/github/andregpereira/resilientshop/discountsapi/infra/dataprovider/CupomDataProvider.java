@@ -37,8 +37,24 @@ public class CupomDataProvider implements CupomGateway {
     }
 
     @Override
+    public Page<Cupom> findAllAtivo(Pageable pageable) {
+        return repository.findAllByAtivoTrue(pageable).map(mapper::toCupom);
+    }
+
+    @Override
+    public Page<Cupom> findAllInativo(Pageable pageable) {
+        return repository.findAllByAtivoFalse(pageable).map(mapper::toCupom);
+    }
+
+    @Override
     public Cupom findById(Long id) {
         return repository.findById(id).map(mapper::toCupom).orElseThrow(() -> new CupomNotFoundException(id));
+    }
+
+    @Override
+    public Cupom findByCodigo(String codigo) {
+        return repository.findByCodigo(codigo).map(mapper::toCupom).orElseThrow(
+                () -> new CupomNotFoundException(codigo));
     }
 
     @Override
