@@ -1,7 +1,7 @@
 package com.github.andregpereira.resilientshop.discountsapi.app.rest;
 
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.DescontoDto;
-import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.DescontoRegistroDto;
+import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.DescontoCreateDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.service.desconto.DescontoConsultaService;
 import com.github.andregpereira.resilientshop.discountsapi.app.service.desconto.DescontoManutencaoService;
 import jakarta.validation.Valid;
@@ -29,7 +29,7 @@ public class DescontoController {
     private final DescontoConsultaService consultaService;
 
     @PostMapping
-    public ResponseEntity<DescontoDto> criar(@RequestBody @Valid DescontoRegistroDto dto) {
+    public ResponseEntity<DescontoDto> criar(@RequestBody @Valid DescontoCreateDto dto) {
         log.info("Criando desconto...");
         DescontoDto desconto = manutencaoService.criar(dto);
         log.info("Desconto criado com sucesso");
@@ -38,7 +38,7 @@ public class DescontoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DescontoDto> update(@PathVariable Long id, @RequestBody @Valid DescontoRegistroDto dto) {
+    public ResponseEntity<DescontoDto> update(@PathVariable Long id, @RequestBody @Valid DescontoCreateDto dto) {
         log.info("Atualizando desconto...");
         DescontoDto desconto = manutencaoService.update(id, dto);
         log.info("Desconto atualizado com sucesso");
