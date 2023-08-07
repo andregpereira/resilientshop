@@ -6,4 +6,6 @@ public interface CupomGateway extends BaseGateway<Cupom> {
 
     boolean existsByCodigo(String codigo);
 
+    Cupom findByCodigo(String codigo);
+
 }
