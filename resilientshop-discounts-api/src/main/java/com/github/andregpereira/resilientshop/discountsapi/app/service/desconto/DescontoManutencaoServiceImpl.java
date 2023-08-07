@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-@Transactional
 public non-sealed class DescontoManutencaoServiceImpl implements DescontoManutencaoService {
 
     private final DescontoCreateUc descontoCreateUc;
