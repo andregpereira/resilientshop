@@ -1,7 +1,7 @@
 package com.github.andregpereira.resilientshop.discountsapi.app.rest;
 
-import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.DescontoDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.DescontoCreateDto;
+import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.DescontoDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.service.desconto.DescontoConsultaService;
 import com.github.andregpereira.resilientshop.discountsapi.app.service.desconto.DescontoManutencaoService;
 import jakarta.validation.Valid;
@@ -65,6 +65,12 @@ public class DescontoController {
     @GetMapping
     public ResponseEntity<Page<DescontoDto>> findAll(@PageableDefault(sort = "id") Pageable pageable) {
         return ResponseEntity.ok(consultaService.consultarTodos(pageable));
+    }
+
+    @GetMapping("/tipo-desconto")
+    public ResponseEntity<Page<DescontoDto>> findAllByTipoDesconto(String tipoDesconto,
+            @PageableDefault(sort = "tipoDesconto") Pageable pageable) {
+        return ResponseEntity.ok(consultaService.consultarByTipoDesconto(tipoDesconto, pageable));
     }
 
     @GetMapping("/{id}")
