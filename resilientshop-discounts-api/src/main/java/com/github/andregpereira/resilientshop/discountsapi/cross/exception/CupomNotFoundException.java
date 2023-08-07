@@ -21,6 +21,11 @@ public class CupomNotFoundException extends ErrorResponseException {
                 ativo ? "ativo" : "inativo")), null);
     }
 
+    public CupomNotFoundException(String codigo) {
+        super(status, asProblemDetail(MessageFormat.format("Opa! Não foi encontrado um cupom com código {0}", codigo)),
+                null);
+    }
+
     private static ProblemDetail asProblemDetail(String msg) {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(status, msg);
         pd.setTitle("Cupom não encontrado");
