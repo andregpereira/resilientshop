@@ -32,6 +32,21 @@ public class DescontoDataProvider implements DescontoGateway {
     }
 
     @Override
+    public Page<Desconto> findAllByTipoDesconto(String tipoDesconto, Pageable pageable) {
+        return repository.findAllByTipoDesconto(tipoDesconto, pageable).map(mapper::toDesconto);
+    }
+
+    @Override
+    public Page<Desconto> findAllAtivo(Pageable pageable) {
+        return repository.findAllByAtivoTrue(pageable).map(mapper::toDesconto);
+    }
+
+    @Override
+    public Page<Desconto> findAllInativo(Pageable pageable) {
+        return repository.findAllByAtivoFalse(pageable).map(mapper::toDesconto);
+    }
+
+    @Override
     public Desconto findById(Long id) {
         return repository.findById(id).map(mapper::toDesconto).orElseThrow(() -> new CupomNotFoundException(id));
     }
