@@ -4,10 +4,10 @@ import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomDt
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomRegistroDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomUpdateDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.mapper.CupomServiceMapper;
-import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.ActivateCupom;
-import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.CreateCupom;
-import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.DeactivateCupom;
-import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.UpdateCupom;
+import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.CupomActivateUc;
+import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.CupomCreateUc;
+import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.CupomDeactivateUc;
+import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.CupomUpdateUc;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,30 +17,30 @@ import org.springframework.stereotype.Service;
 @Service
 public non-sealed class CupomManutencaoServiceImpl implements CupomManutencaoService {
 
-    private final CreateCupom createCupom;
-    private final UpdateCupom updateCupom;
-    private final DeactivateCupom deactivateCupom;
-    private final ActivateCupom activateCupom;
+    private final CupomCreateUc cupomCreateUc;
+    private final CupomUpdateUc cupomUpdateUc;
+    private final CupomDeactivateUc cupomDeactivateUc;
+    private final CupomActivateUc cupomActivateUc;
     private final CupomServiceMapper mapper;
 
     @Override
     public CupomDto criar(CupomRegistroDto dto) {
-        return mapper.toCupomDto(createCupom.criar(mapper.toCupom(dto)));
+        return mapper.toCupomDto(cupomCreateUc.criar(mapper.toCupom(dto)));
     }
 
     @Override
     public CupomDto update(Long id, CupomUpdateDto dto) {
-        return mapper.toCupomDto(updateCupom.update(id, mapper.toCupom(dto)));
+        return mapper.toCupomDto(cupomUpdateUc.update(id, mapper.toCupom(dto)));
     }
 
     @Override
     public String activate(Long id) {
-        return activateCupom.activate(id);
+        return cupomActivateUc.activate(id);
     }
 
     @Override
     public String deactivate(Long id) {
-        return deactivateCupom.deactivate(id);
+        return cupomDeactivateUc.deactivate(id);
     }
 
 }
