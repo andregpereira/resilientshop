@@ -1,6 +1,5 @@
 package com.github.andregpereira.resilientshop.discountsapi.domain.model;
 
-import com.github.andregpereira.resilientshop.discountsapi.domain.util.ModelHelper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,7 @@ import java.util.StringJoiner;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Desconto implements ModelHelper<Desconto> {
+public class Desconto {
 
     Long id;
     BigDecimal percentual;
