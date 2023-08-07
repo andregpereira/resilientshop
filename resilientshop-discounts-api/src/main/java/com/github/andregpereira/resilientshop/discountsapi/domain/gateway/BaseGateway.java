@@ -9,6 +9,10 @@ public interface BaseGateway<T> {
 
     Page<T> findAll(Pageable pageable);
 
+    Page<T> findAllAtivo(Pageable pageable);
+
+    Page<T> findAllInativo(Pageable pageable);
+
     T findById(Long id);
 
     T findAtivoById(Long id);
