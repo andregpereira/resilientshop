@@ -67,15 +67,15 @@ public class DescontoController {
         return ResponseEntity.ok(consultaService.consultarTodos(pageable));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<DescontoDto> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(consultaService.consultarPorId(id));
+    }
+
     @GetMapping("/tipo-desconto")
     public ResponseEntity<Page<DescontoDto>> findAllByTipoDesconto(String tipoDesconto,
             @PageableDefault(sort = "tipoDesconto") Pageable pageable) {
         return ResponseEntity.ok(consultaService.consultarByTipoDesconto(tipoDesconto, pageable));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<DescontoDto> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(consultaService.consultarPorId(id));
     }
 
 }
