@@ -7,13 +7,13 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class FindByIdDescontoImpl implements FindByIdDesconto {
+public class DescontoCreateUcImpl implements DescontoCreateUc {
 
     private final DescontoGateway gateway;
 
     @Override
-    public Desconto findById(Long id) {
-        return gateway.findById(id);
+    public Desconto criar(Desconto desconto) {
+        return gateway.save(desconto);
     }
 
 }

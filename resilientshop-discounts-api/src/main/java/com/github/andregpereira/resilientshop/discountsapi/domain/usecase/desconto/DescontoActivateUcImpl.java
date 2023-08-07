@@ -9,7 +9,7 @@ import java.text.MessageFormat;
 
 @RequiredArgsConstructor
 @Component
-public class ActivateDescontoImpl implements ActivateDesconto {
+public class DescontoActivateUcImpl implements DescontoActivateUc {
 
     private final DescontoGateway gateway;
 

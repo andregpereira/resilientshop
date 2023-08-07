@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class UpdateDescontoImpl implements UpdateDesconto {
+public class DescontoUpdateUcImpl implements DescontoUpdateUc {
 
     private final DescontoGateway gateway;
 
