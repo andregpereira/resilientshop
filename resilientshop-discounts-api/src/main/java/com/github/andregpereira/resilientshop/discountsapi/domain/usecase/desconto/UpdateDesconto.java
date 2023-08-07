@@ -4,6 +4,6 @@ import com.github.andregpereira.resilientshop.discountsapi.domain.model.Desconto
 
 public interface UpdateDesconto {
 
-    Desconto update(Long id, Desconto desconto);
+    Desconto update(Long id, Desconto descontoAtualizado);
 
 }

@@ -1,6 +1,7 @@
 package com.github.andregpereira.resilientshop.discountsapi.domain.usecase.desconto;
 
 import com.github.andregpereira.resilientshop.discountsapi.domain.gateway.DescontoGateway;
+import com.github.andregpereira.resilientshop.discountsapi.domain.model.Desconto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -14,11 +15,10 @@ public class DeactivateDescontoImpl implements DeactivateDesconto {
 
     @Override
     public String deactivate(Long id) {
-        return gateway.findActivatedById(id).map(d -> {
-            d.setAtivo(false);
-            gateway.save(d);
-            return MessageFormat.format("Desconto com id {0} desativado com sucesso!", id);
-        });
+        Desconto desconto = gateway.findAtivoById(id);
+        desconto.setAtivo(false);
+        gateway.save(desconto);
+        return MessageFormat.format("Desconto com id {0} desativado com sucesso!", id);
     }
 
 }
