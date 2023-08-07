@@ -2,8 +2,8 @@ package com.github.andregpereira.resilientshop.discountsapi.domain.usecase.desco
 
 import com.github.andregpereira.resilientshop.discountsapi.domain.model.Desconto;
 
-public interface UpdateDesconto {
+public interface DescontoCreateUc {
 
-    Desconto update(Long id, Desconto descontoAtualizado);
+    Desconto criar(Desconto desconto);
 
 }

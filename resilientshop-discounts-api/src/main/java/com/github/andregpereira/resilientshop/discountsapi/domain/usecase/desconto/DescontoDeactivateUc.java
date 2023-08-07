@@ -1,6 +1,6 @@
 package com.github.andregpereira.resilientshop.discountsapi.domain.usecase.desconto;
 
-public interface DeactivateDesconto {
+public interface DescontoDeactivateUc {
 
     String deactivate(Long id);
 
