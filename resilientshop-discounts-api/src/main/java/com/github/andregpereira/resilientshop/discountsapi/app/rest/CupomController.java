@@ -1,7 +1,7 @@
 package com.github.andregpereira.resilientshop.discountsapi.app.rest;
 
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomDto;
-import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomRegistroDto;
+import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomCreateDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomUpdateDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.service.cupom.CupomConsultaService;
 import com.github.andregpereira.resilientshop.discountsapi.app.service.cupom.CupomManutencaoService;
@@ -30,7 +30,7 @@ public class CupomController {
     private final CupomConsultaService consultaService;
 
     @PostMapping
-    public ResponseEntity<CupomDto> criar(@RequestBody @Valid CupomRegistroDto dto) {
+    public ResponseEntity<CupomDto> criar(@RequestBody @Valid CupomCreateDto dto) {
         log.info("Criando cupom...");
         CupomDto cupom = manutencaoService.criar(dto);
         log.info("Cupom criado com sucesso");
