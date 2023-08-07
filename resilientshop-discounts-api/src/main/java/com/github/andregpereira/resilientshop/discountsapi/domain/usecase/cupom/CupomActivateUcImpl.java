@@ -9,16 +9,16 @@ import java.text.MessageFormat;
 
 @RequiredArgsConstructor
 @Component
-public class DeactivateCupomImpl implements DeactivateCupom {
+public class CupomActivateUcImpl implements CupomActivateUc {
 
     private final CupomGateway gateway;
 
     @Override
-    public String deactivate(Long id) {
-        Cupom cupom = gateway.findAtivoById(id);
-        cupom.setAtivo(false);
+    public String activate(Long id) {
+        Cupom cupom = gateway.findInativoById(id);
+        cupom.setAtivo(true);
         gateway.save(cupom);
-        return MessageFormat.format("Cupom com id {0} desativado com sucesso!", id);
+        return MessageFormat.format("Cupom com id {0} ativado com sucesso!", id);
     }
 
 }

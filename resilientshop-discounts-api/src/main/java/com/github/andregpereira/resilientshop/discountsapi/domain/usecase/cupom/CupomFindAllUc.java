@@ -4,7 +4,7 @@ import com.github.andregpereira.resilientshop.discountsapi.domain.model.Cupom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface FindAllCupom {
+public interface CupomFindAllUc {
 
     Page<Cupom> findAll(Pageable pageable);
 
