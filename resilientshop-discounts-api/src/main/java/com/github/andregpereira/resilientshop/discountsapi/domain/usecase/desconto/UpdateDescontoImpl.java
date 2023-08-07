@@ -12,15 +12,14 @@ public class UpdateDescontoImpl implements UpdateDesconto {
     private final DescontoGateway gateway;
 
     @Override
-    public Desconto update(Long id, Desconto desconto) {
-        return gateway.findById(id).map(d -> {
-            d.setPercentual(desconto.getPercentual());
-            d.setTipoDesconto(desconto.getTipoDesconto());
-            d.setDataExpiracao(desconto.getDataExpiracao());
-            d.setAtivo(desconto.isAtivo());
-            d.setIdObjetoDoDesconto(desconto.getIdObjetoDoDesconto());
-            return gateway.save(d);
-        });
+    public Desconto update(Long id, Desconto descontoAtualizado) {
+        Desconto desconto = gateway.findById(id);
+        desconto.setPercentual(descontoAtualizado.getPercentual());
+        desconto.setTipoDesconto(descontoAtualizado.getTipoDesconto());
+        desconto.setDataExpiracao(descontoAtualizado.getDataExpiracao());
+        desconto.setAtivo(descontoAtualizado.isAtivo());
+        desconto.setIdObjetoDoDesconto(descontoAtualizado.getIdObjetoDoDesconto());
+        return gateway.save(desconto);
     }
 
 }
