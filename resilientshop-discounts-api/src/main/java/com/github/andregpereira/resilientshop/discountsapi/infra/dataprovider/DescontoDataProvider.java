@@ -6,11 +6,13 @@ import com.github.andregpereira.resilientshop.discountsapi.domain.model.Desconto
 import com.github.andregpereira.resilientshop.discountsapi.infra.mapper.DescontoDataProviderMapper;
 import com.github.andregpereira.resilientshop.discountsapi.infra.repository.DescontoRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
+@Slf4j
 @Component
 public class DescontoDataProvider implements DescontoGateway {
 
@@ -33,13 +35,13 @@ public class DescontoDataProvider implements DescontoGateway {
     }
 
     @Override
-    public Desconto findActivatedById(Long id) {
+    public Desconto findAtivoById(Long id) {
         return repository.findByIdAndAtivoTrue(id).map(mapper::toDesconto).orElseThrow(
                 () -> new CupomNotFoundException(id, true));
     }
 
     @Override
-    public Desconto findDeactivatedById(Long id) {
+    public Desconto findInativoById(Long id) {
         return repository.findByIdAndAtivoFalse(id).map(mapper::toDesconto).orElseThrow(
                 () -> new CupomNotFoundException(id, false));
     }
