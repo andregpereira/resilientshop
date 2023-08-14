@@ -1,19 +1,11 @@
 package com.github.andregpereira.resilientshop.discountsapi.domain.gateway;
 
 import com.github.andregpereira.resilientshop.discountsapi.domain.model.Cupom;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
-public interface CupomGateway {
+public interface CupomGateway extends BaseGateway<Cupom> {
 
-    Cupom save(Cupom cupom);
+    boolean existsByCodigo(String codigo);
 
-    Page<Cupom> findAll(Pageable pageable);
-
-    Cupom findById(Long id);
-
-    Cupom findActivatedById(Long id);
-
-    Cupom findDeactivatedById(Long id);
+    Cupom findByCodigo(String codigo);
 
 }

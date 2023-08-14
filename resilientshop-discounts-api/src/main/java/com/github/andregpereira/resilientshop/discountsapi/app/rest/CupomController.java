@@ -1,7 +1,7 @@
 package com.github.andregpereira.resilientshop.discountsapi.app.rest;
 
+import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomCreateDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomDto;
-import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomRegistroDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomUpdateDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.service.cupom.CupomConsultaService;
 import com.github.andregpereira.resilientshop.discountsapi.app.service.cupom.CupomManutencaoService;
@@ -30,7 +30,7 @@ public class CupomController {
     private final CupomConsultaService consultaService;
 
     @PostMapping
-    public ResponseEntity<CupomDto> criar(@RequestBody @Valid CupomRegistroDto dto) {
+    public ResponseEntity<CupomDto> criar(@RequestBody @Valid CupomCreateDto dto) {
         log.info("Criando cupom...");
         CupomDto cupom = manutencaoService.criar(dto);
         log.info("Cupom criado com sucesso");
@@ -68,9 +68,23 @@ public class CupomController {
         return ResponseEntity.ok(consultaService.consultarTodos(pageable));
     }
 
+    @GetMapping("/ativo")
+    public ResponseEntity<Page<CupomDto>> findAllAtivo(@PageableDefault(sort = "id") Pageable pageable) {
+        return ResponseEntity.ok(consultaService.consultarAtivo(pageable));
+    }
+
+    @GetMapping("/inativo")
+    public ResponseEntity<Page<CupomDto>> findAllInativo(@PageableDefault(sort = "id") Pageable pageable) {
+        return ResponseEntity.ok(consultaService.consultarInativo(pageable));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<CupomDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(consultaService.consultarPorId(id));
+    }
+    @GetMapping("/codigo")
+    public ResponseEntity<CupomDto> findByCodigo(@RequestParam String codigo) {
+        return ResponseEntity.ok(consultaService.consultarPorCodigo(codigo));
     }
 
 }

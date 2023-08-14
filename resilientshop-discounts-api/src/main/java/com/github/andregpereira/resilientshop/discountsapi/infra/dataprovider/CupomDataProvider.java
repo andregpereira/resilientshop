@@ -6,30 +6,44 @@ import com.github.andregpereira.resilientshop.discountsapi.domain.model.Cupom;
 import com.github.andregpereira.resilientshop.discountsapi.infra.mapper.CupomDataProviderMapper;
 import com.github.andregpereira.resilientshop.discountsapi.infra.repository.CupomRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
-
-import java.util.Optional;
-
-import static java.util.function.Predicate.not;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-@Component
+@Slf4j
+@Service
 public class CupomDataProvider implements CupomGateway {
 
     private final CupomRepository repository;
     private final CupomDataProviderMapper mapper;
 
     @Override
+    @Transactional
     public Cupom save(Cupom cupom) {
         return mapper.toCupom(repository.save(mapper.toCupomEntity(cupom)));
     }
 
     @Override
+    public boolean existsByCodigo(String codigo) {
+        return repository.existsByCodigo(codigo);
+    }
+
+    @Override
     public Page<Cupom> findAll(Pageable pageable) {
-        return Optional.of(repository.findAll(pageable)).filter(not(Page::isEmpty)).map(
-                p -> p.map(mapper::toCupom)).orElseThrow(CupomNotFoundException::new);
+        return repository.findAll(pageable).map(mapper::toCupom);
+    }
+
+    @Override
+    public Page<Cupom> findAllAtivo(Pageable pageable) {
+        return repository.findAllByAtivoTrue(pageable).map(mapper::toCupom);
+    }
+
+    @Override
+    public Page<Cupom> findAllInativo(Pageable pageable) {
+        return repository.findAllByAtivoFalse(pageable).map(mapper::toCupom);
     }
 
     @Override
@@ -38,13 +52,19 @@ public class CupomDataProvider implements CupomGateway {
     }
 
     @Override
-    public Cupom findActivatedById(Long id) {
+    public Cupom findByCodigo(String codigo) {
+        return repository.findByCodigo(codigo).map(mapper::toCupom).orElseThrow(
+                () -> new CupomNotFoundException(codigo));
+    }
+
+    @Override
+    public Cupom findAtivoById(Long id) {
         return repository.findByIdAndAtivoTrue(id).map(mapper::toCupom).orElseThrow(
                 () -> new CupomNotFoundException(id, true));
     }
 
     @Override
-    public Cupom findDeactivatedById(Long id) {
+    public Cupom findInativoById(Long id) {
         return repository.findByIdAndAtivoFalse(id).map(mapper::toCupom).orElseThrow(
                 () -> new CupomNotFoundException(id, false));
     }

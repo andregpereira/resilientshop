@@ -1,16 +1,13 @@
 package com.github.andregpereira.resilientshop.discountsapi.infra.repository;
 
 import com.github.andregpereira.resilientshop.discountsapi.infra.entity.DescontoEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
-public interface DescontoRepository extends JpaRepository<DescontoEntity, Long> {
+public interface DescontoRepository extends BaseRepository<DescontoEntity> {
 
-    Optional<DescontoEntity> findByIdAndAtivoTrue(Long id);
-
-    Optional<DescontoEntity> findByIdAndAtivoFalse(Long id);
+    Page<DescontoEntity> findAllByTipoDesconto(String tipoDesconto, Pageable pageable);
 
 }
