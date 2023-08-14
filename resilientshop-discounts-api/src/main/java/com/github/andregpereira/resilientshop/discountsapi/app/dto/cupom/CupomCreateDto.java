@@ -1,5 +1,6 @@
 package com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom;
 
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -11,6 +12,7 @@ public record CupomCreateDto(@NotBlank(message = "O código é obrigatório") St
         Integer qtdMinimaProdutos,
         BigDecimal valorMinimoPedido,
         BigDecimal descontoMaximo,
-        @NotNull(message = "A data de expiração é obrigatória") LocalDate dataExpiracao) {
+        @NotNull(message = "A data de expiração é obrigatória") @Future(
+                message = "A data de expiração deve ser uma data futura") LocalDate dataExpiracao) {
 
 }
