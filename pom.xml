@@ -19,9 +19,9 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <maven-compiler.version>3.11.0</maven-compiler.version>
         <postgresql.version>42.6.0</postgresql.version>
-        <spring-boot-version>3.1.1</spring-boot-version>
-        <spring-cloud.version>2022.0.3</spring-cloud.version>
-        <springdoc.version>2.1.0</springdoc.version>
+        <spring-boot.version>3.1.2</spring-boot.version>
+        <spring-cloud.version>2022.0.4</spring-cloud.version>
+        <springdoc.version>2.2.0</springdoc.version>
         <testcontainers.version>1.18.3</testcontainers.version>
     </properties>
     <modules>
@@ -39,7 +39,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot-version}</version>
+                <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -137,7 +137,7 @@
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>${spring-boot-version}</version>
+                    <version>${spring-boot.version}</version>
                     <configuration>
                         <excludes>
                             <exclude>
