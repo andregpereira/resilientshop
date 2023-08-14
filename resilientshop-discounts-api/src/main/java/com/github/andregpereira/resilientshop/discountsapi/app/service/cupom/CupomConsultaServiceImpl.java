@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public non-sealed class CupomConsultaServiceImpl implements CupomConsultaService {
+public class CupomConsultaServiceImpl implements CupomConsultaService {
 
     private final CupomFindAllUc findAllUc;
     private final CupomFindAllAtivoUc findAllAtivoUc;
