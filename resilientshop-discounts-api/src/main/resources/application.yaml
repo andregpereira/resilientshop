@@ -1,6 +1,9 @@
 spring:
   application:
     name: resilientshop-discounts-api
+  cache:
+    redis:
+      time-to-live: 60000
   # H2
   datasource:
     url: jdbc:h2:mem:resilientshop-user-test
