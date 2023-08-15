@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public non-sealed class DescontoConsultaServiceImpl implements DescontoConsultaService {
+public class DescontoConsultaServiceImpl implements DescontoConsultaService {
 
     private final DescontoFindAllUc findAllUc;
     private final DescontoFindAllByTipoDescontoUc findAllByTipoDescontoUc;
@@ -27,7 +27,7 @@ public non-sealed class DescontoConsultaServiceImpl implements DescontoConsultaS
     }
 
     @Override
-    public Page<DescontoDto> consultarTodosByTipoDesconto(String tipoDesconto, Pageable pageable) {
+    public Page<DescontoDto> consultarPorTipoDesconto(String tipoDesconto, Pageable pageable) {
         return findAllByTipoDescontoUc.findAllByTipoDesconto(tipoDesconto, pageable).map(mapper::toDescontoDto);
     }
 
