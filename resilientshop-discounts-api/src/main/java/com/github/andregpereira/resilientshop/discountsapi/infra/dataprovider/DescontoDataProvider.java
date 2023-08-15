@@ -7,6 +7,8 @@ import com.github.andregpereira.resilientshop.discountsapi.infra.mapper.Desconto
 import com.github.andregpereira.resilientshop.discountsapi.infra.repository.DescontoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 @Component
+@CacheConfig(cacheNames = "Descontos")
 public class DescontoDataProvider implements DescontoGateway {
 
     private final DescontoRepository repository;
@@ -47,6 +50,7 @@ public class DescontoDataProvider implements DescontoGateway {
     }
 
     @Override
+    @Cacheable(key = "'id::' + #id")
     public Desconto findById(Long id) {
         return repository.findById(id).map(mapper::toDesconto).orElseThrow(() -> new DescontoNotFoundException(id));
     }
