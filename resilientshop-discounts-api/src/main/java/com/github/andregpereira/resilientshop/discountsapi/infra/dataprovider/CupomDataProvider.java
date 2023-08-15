@@ -7,6 +7,8 @@ import com.github.andregpereira.resilientshop.discountsapi.infra.mapper.CupomDat
 import com.github.andregpereira.resilientshop.discountsapi.infra.repository.CupomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 @Service
+@CacheConfig(cacheNames = "Cupons")
 public class CupomDataProvider implements CupomGateway {
 
     private final CupomRepository repository;
@@ -47,11 +50,14 @@ public class CupomDataProvider implements CupomGateway {
     }
 
     @Override
+    @Cacheable(key = "'id::' + #id")
     public Cupom findById(Long id) {
+        log.info("Procurando cupom id {}...", id);
         return repository.findById(id).map(mapper::toCupom).orElseThrow(() -> new CupomNotFoundException(id));
     }
 
     @Override
+    @Cacheable(key = "'codigo::' + #codigo")
     public Cupom findByCodigo(String codigo) {
         return repository.findByCodigo(codigo).map(mapper::toCupom).orElseThrow(
                 () -> new CupomNotFoundException(codigo));
