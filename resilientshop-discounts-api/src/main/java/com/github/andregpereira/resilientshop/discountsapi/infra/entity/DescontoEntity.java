@@ -34,6 +34,9 @@ public class DescontoEntity {
     @Column(nullable = false)
     String tipoDesconto;
 
+    @Column(nullable = false)
+    Long idObjetoDoDesconto;
+
     @CreatedDate
     @Column(nullable = false)
     LocalDate dataCriacao;
@@ -44,9 +47,6 @@ public class DescontoEntity {
     @Column(nullable = false)
     boolean ativo;
 
-    @Column(nullable = false)
-    Long idObjetoDoDesconto;
-
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -55,21 +55,21 @@ public class DescontoEntity {
             return false;
         return ativo == desconto.ativo && Objects.equals(id, desconto.id) && Objects.equals(percentual,
                 desconto.percentual) && Objects.equals(tipoDesconto, desconto.tipoDesconto) && Objects.equals(
-                dataCriacao, desconto.dataCriacao) && Objects.equals(dataExpiracao,
-                desconto.dataExpiracao) && Objects.equals(idObjetoDoDesconto, desconto.idObjetoDoDesconto);
+                idObjetoDoDesconto, desconto.idObjetoDoDesconto) && Objects.equals(dataCriacao,
+                desconto.dataCriacao) && Objects.equals(dataExpiracao, desconto.dataExpiracao);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, percentual, tipoDesconto, dataCriacao, dataExpiracao, ativo, idObjetoDoDesconto);
+        return Objects.hash(id, percentual, tipoDesconto, idObjetoDoDesconto, dataCriacao, dataExpiracao, ativo);
     }
 
     @Override
     public String toString() {
         return new StringJoiner(", ", DescontoEntity.class.getSimpleName() + "[", "]").add("id=" + id).add(
-                "percentual=" + percentual).add("tipoDesconto=" + tipoDesconto).add("dataCriacao=" + dataCriacao).add(
-                "dataExpiracao=" + dataExpiracao).add("ativo=" + ativo).add(
-                "idObjetoDoDesconto=" + idObjetoDoDesconto).toString();
+                "percentual=" + percentual).add("tipoDesconto=" + tipoDesconto).add(
+                "idObjetoDoDesconto=" + idObjetoDoDesconto).add("dataCriacao=" + dataCriacao).add(
+                "dataExpiracao=" + dataExpiracao).add("ativo=" + ativo).toString();
     }
 
 }

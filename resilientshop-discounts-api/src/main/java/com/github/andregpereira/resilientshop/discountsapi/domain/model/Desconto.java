@@ -19,10 +19,10 @@ public class Desconto {
     Long id;
     BigDecimal percentual;
     String tipoDesconto;
+    Long idObjetoDoDesconto;
     LocalDate dataCriacao;
     LocalDate dataExpiracao;
     boolean ativo;
-    Long idObjetoDoDesconto;
 
     @Override
     public boolean equals(Object o) {
@@ -32,21 +32,21 @@ public class Desconto {
             return false;
         return ativo == desconto.ativo && Objects.equals(id, desconto.id) && Objects.equals(percentual,
                 desconto.percentual) && Objects.equals(tipoDesconto, desconto.tipoDesconto) && Objects.equals(
-                dataCriacao, desconto.dataCriacao) && Objects.equals(dataExpiracao,
-                desconto.dataExpiracao) && Objects.equals(idObjetoDoDesconto, desconto.idObjetoDoDesconto);
+                idObjetoDoDesconto, desconto.idObjetoDoDesconto) && Objects.equals(dataCriacao,
+                desconto.dataCriacao) && Objects.equals(dataExpiracao, desconto.dataExpiracao);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, percentual, tipoDesconto, dataCriacao, dataExpiracao, ativo, idObjetoDoDesconto);
+        return Objects.hash(id, percentual, tipoDesconto, idObjetoDoDesconto, dataCriacao, dataExpiracao, ativo);
     }
 
     @Override
     public String toString() {
         return new StringJoiner(", ", Desconto.class.getSimpleName() + "[", "]").add("id=" + id).add(
                 "percentual=" + percentual).add("tipoDesconto='" + tipoDesconto + "'").add(
-                "dataCriacao=" + dataCriacao).add("dataExpiracao=" + dataExpiracao).add("ativo=" + ativo).add(
-                "idObjetoDoDesconto=" + idObjetoDoDesconto).toString();
+                "idObjetoDoDesconto=" + idObjetoDoDesconto).add("dataCriacao=" + dataCriacao).add(
+                "dataExpiracao=" + dataExpiracao).add("ativo=" + ativo).toString();
     }
 
 }
