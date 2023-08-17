@@ -5,12 +5,12 @@ import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.Desc
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.DescontoDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+
+import static com.github.andregpereira.resilientshop.discountsapi.constant.CommonsConstants.PAGEABLE_ID;
 
 public class DescontoDtoConstants {
 
@@ -34,12 +34,9 @@ public class DescontoDtoConstants {
 
     public static final DescontoCreateDto DESCONTO_CREATE_DTO_INVALIDO = DescontoCreateDto.builder().build();
 
-    private static final PageRequest PAGEABLE = PageRequest.of(0, 10, Sort.Direction.ASC, "id");
+    public static final Page<DescontoDto> PAGE_DESCONTO_DTO = new PageImpl<>(List.of(DESCONTO_DTO), PAGEABLE_ID, 10);
 
-    public static final Page<DescontoDto> PAGE_DESCONTO_DTO = new PageImpl<>(
-            List.of(DESCONTO_DTO, DESCONTO_DTO_ATUALIZADO), PAGEABLE, 10);
-
-    public static final Page<DescontoDto> PAGE_DESCONTO_DTO_ATIVO = new PageImpl<>(
-            List.of(DESCONTO_DTO_ATIVO, DESCONTO_DTO_ATUALIZADO_ATIVO), PAGEABLE, 10);
+    public static final Page<DescontoDto> PAGE_DESCONTO_DTO_ATIVO = new PageImpl<>(List.of(DESCONTO_DTO_ATIVO),
+            PAGEABLE_ID, 10);
 
 }

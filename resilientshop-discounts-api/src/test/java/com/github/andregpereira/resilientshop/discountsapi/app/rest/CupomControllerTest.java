@@ -116,21 +116,21 @@ class CupomControllerTest {
     void findAll_Return200() throws Exception {
         given(consultaService.consultarTodos(any(Pageable.class))).willReturn(PAGE_CUPOM_DTO);
         mockMvc.perform(get(URI.create(PATH))).andExpect(status().isOk()).andExpectAll(
-                jsonPath("$.numberOfElements").value(2));
+                jsonPath("$.numberOfElements").value(1));
     }
 
     @Test
     void findAllAtivo_Return200() throws Exception {
         given(consultaService.consultarAtivo(any(Pageable.class))).willReturn(PAGE_CUPOM_DTO_ATIVO);
         mockMvc.perform(get(URI.create(PATH + "/ativo"))).andExpect(status().isOk()).andExpectAll(
-                jsonPath("$.numberOfElements").value(2));
+                jsonPath("$.numberOfElements").value(1));
     }
 
     @Test
     void findAllInativo_Return200() throws Exception {
         given(consultaService.consultarInativo(any(Pageable.class))).willReturn(PAGE_CUPOM_DTO);
         mockMvc.perform(get(URI.create(PATH + "/inativo"))).andExpect(status().isOk()).andExpectAll(
-                jsonPath("$.numberOfElements").value(2));
+                jsonPath("$.numberOfElements").value(1));
     }
 
     @Test
@@ -160,6 +160,17 @@ class CupomControllerTest {
         given(consultaService.consultarPorCodigo(anyString())).willThrow(new CupomNotFoundException("codigo"));
         mockMvc.perform(get(URI.create(PATH + "/codigo")).queryParam("codigo", "codigo")).andExpect(
                 status().isNotFound());
+    }
+
+    @Test
+    void nullJson_Returns400() throws Exception {
+        mockMvc.perform(post(URI.create(PATH)).content(objectMapper.writeValueAsString(null)).contentType(
+                MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void nullRequestParameter_Returns400() throws Exception {
+        mockMvc.perform(get(URI.create(PATH + "/codigo"))).andExpect(status().isBadRequest());
     }
 
 }
