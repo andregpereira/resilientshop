@@ -28,6 +28,8 @@ public class DescontoConstants {
     public static final Desconto DESCONTO_CREATE = new Desconto(null, BigDecimal.valueOf(0.3),
             TipoDesconto.PROD.toString(), 5L, null, LocalDate.now().plusDays(5), false);
 
+    public static final Desconto DESCONTO_CREATE_INVALIDO = new Desconto();
+
     public static final Desconto DESCONTO_CREATE_ATUALIZADO = new Desconto(null, BigDecimal.valueOf(0.1),
             TipoDesconto.PROD.toString(), 7L, null, LocalDate.now().plusDays(15), false);
 

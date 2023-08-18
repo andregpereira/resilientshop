@@ -29,6 +29,8 @@ public class DescontoEntityConstants {
     public static final DescontoEntity DESCONTO_ENTITY_CREATE = new DescontoEntity(null, BigDecimal.valueOf(0.3),
             TipoDesconto.PROD.toString(), 5L, null, LocalDate.now().plusDays(5), false);
 
+    public static final DescontoEntity DESCONTO_ENTITY_CREATE_INVALIDO = new DescontoEntity();
+
     public static final DescontoEntity DESCONTO_ENTITY_CREATE_ATUALIZADO = new DescontoEntity(null,
             BigDecimal.valueOf(0.1), TipoDesconto.PROD.toString(), 7L, null, LocalDate.now().plusDays(15), false);
 
