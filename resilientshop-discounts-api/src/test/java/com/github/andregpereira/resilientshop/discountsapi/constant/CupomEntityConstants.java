@@ -28,11 +28,7 @@ public class CupomEntityConstants {
     public static final CupomEntity CUPOM_ENTITY_CREATE = new CupomEntity(null, "codigo", BigDecimal.valueOf(0.2), 3,
             BigDecimal.valueOf(50), BigDecimal.valueOf(12), null, LocalDate.now().plusDays(5), false);
 
-    public static final CupomEntity CUPOM_ENTITY_CREATE_INVALIDO = new CupomEntity(null, "codigo",
-            BigDecimal.valueOf(0.2), 3, BigDecimal.valueOf(50), BigDecimal.valueOf(12), null,
-            LocalDate.now().plusDays(5), false);
-
-    public static final CupomEntity CUPOM_ENTITY_UPDATE = CupomEntity.builder().build();
+    public static final CupomEntity CUPOM_ENTITY_CREATE_INVALIDO = new CupomEntity();
 
     public static final Page<CupomEntity> PAGE_CUPOM_ENTITY = new PageImpl<>(List.of(CUPOM_ENTITY), PAGEABLE_ID, 10);
 
