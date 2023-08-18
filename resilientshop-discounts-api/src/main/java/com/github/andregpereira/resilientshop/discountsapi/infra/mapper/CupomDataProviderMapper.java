@@ -9,8 +9,8 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CupomDataProviderMapper {
 
-    CupomEntity toCupomEntity(Cupom cupom);
-
     Cupom toCupom(CupomEntity cupom);
+
+    CupomEntity toCupomEntity(Cupom cupom);
 
 }
