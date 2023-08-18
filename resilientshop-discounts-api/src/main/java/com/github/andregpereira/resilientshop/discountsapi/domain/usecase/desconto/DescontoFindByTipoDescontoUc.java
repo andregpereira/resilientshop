@@ -4,8 +4,8 @@ import com.github.andregpereira.resilientshop.discountsapi.domain.model.Desconto
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface DescontoFindAllByTipoDescontoUc {
+public interface DescontoFindByTipoDescontoUc {
 
-    Page<Desconto> findAllByTipoDesconto(String tipoDesconto, Pageable pageable);
+    Page<Desconto> findByTipoDesconto(String tipoDesconto, Pageable pageable);
 
 }

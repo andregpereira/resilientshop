@@ -35,7 +35,7 @@ public class DescontoDataProvider implements DescontoGateway {
     }
 
     @Override
-    public Page<Desconto> findAllByTipoDesconto(String tipoDesconto, Pageable pageable) {
+    public Page<Desconto> findByTipoDesconto(String tipoDesconto, Pageable pageable) {
         return repository.findAllByTipoDesconto(tipoDesconto, pageable).map(mapper::toDesconto);
     }
 
