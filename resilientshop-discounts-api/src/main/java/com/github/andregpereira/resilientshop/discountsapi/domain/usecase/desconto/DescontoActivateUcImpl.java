@@ -14,7 +14,7 @@ public class DescontoActivateUcImpl implements DescontoActivateUc {
     @Override
     public void activate(Long id) {
         Desconto desconto = gateway.findInativoById(id);
-        desconto.setAtivo(false);
+        desconto.setAtivo(true);
         gateway.save(desconto);
     }
 
