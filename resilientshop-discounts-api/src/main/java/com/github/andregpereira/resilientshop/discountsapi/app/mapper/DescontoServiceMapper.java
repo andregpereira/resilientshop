@@ -10,8 +10,8 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DescontoServiceMapper {
 
-    DescontoDto toDescontoDto(Desconto desconto);
-
     Desconto toDesconto(DescontoCreateDto dto);
+
+    DescontoDto toDescontoDto(Desconto desconto);
 
 }

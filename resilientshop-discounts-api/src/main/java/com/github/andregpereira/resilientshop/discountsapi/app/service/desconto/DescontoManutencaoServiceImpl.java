@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public non-sealed class DescontoManutencaoServiceImpl implements DescontoManutencaoService {
+public class DescontoManutencaoServiceImpl implements DescontoManutencaoService {
 
     private final DescontoCreateUc createUc;
     private final DescontoUpdateUc updateUc;
@@ -33,13 +33,13 @@ public non-sealed class DescontoManutencaoServiceImpl implements DescontoManuten
     }
 
     @Override
-    public String activate(Long id) {
-        return activateUc.activate(id);
+    public void activate(Long id) {
+        activateUc.activate(id);
     }
 
     @Override
-    public String deactivate(Long id) {
-        return deactivateUc.deactivate(id);
+    public void deactivate(Long id) {
+        deactivateUc.deactivate(id);
     }
 
 }

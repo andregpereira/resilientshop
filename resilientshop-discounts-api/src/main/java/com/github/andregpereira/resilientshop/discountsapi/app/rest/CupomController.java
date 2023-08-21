@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.text.MessageFormat;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -50,17 +51,17 @@ public class CupomController {
     @PatchMapping("/{id}")
     public ResponseEntity<String> activate(@PathVariable Long id) {
         log.info("Ativando cupom...");
-        String resposta = manutencaoService.activate(id);
+        manutencaoService.activate(id);
         log.info("Cupom ativado com sucesso");
-        return ResponseEntity.ok(resposta);
+        return ResponseEntity.ok(MessageFormat.format("Cupom com id {0} ativado com sucesso!", id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deactivate(@PathVariable Long id) {
         log.info("Desativando cupom...");
-        String resposta = manutencaoService.deactivate(id);
+        manutencaoService.deactivate(id);
         log.info("Cupom desativado com sucesso");
-        return ResponseEntity.ok(resposta);
+        return ResponseEntity.ok(MessageFormat.format("Cupom com id {0} desativado com sucesso!", id));
     }
 
     @GetMapping
@@ -82,6 +83,7 @@ public class CupomController {
     public ResponseEntity<CupomDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(consultaService.consultarPorId(id));
     }
+
     @GetMapping("/codigo")
     public ResponseEntity<CupomDto> findByCodigo(@RequestParam String codigo) {
         return ResponseEntity.ok(consultaService.consultarPorCodigo(codigo));

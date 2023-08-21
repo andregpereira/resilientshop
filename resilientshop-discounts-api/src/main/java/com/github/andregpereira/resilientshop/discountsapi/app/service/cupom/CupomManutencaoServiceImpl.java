@@ -1,7 +1,7 @@
 package com.github.andregpereira.resilientshop.discountsapi.app.service.cupom;
 
-import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomCreateDto;
+import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomUpdateDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.mapper.CupomServiceMapper;
 import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.CupomActivateUc;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public non-sealed class CupomManutencaoServiceImpl implements CupomManutencaoService {
+public class CupomManutencaoServiceImpl implements CupomManutencaoService {
 
     private final CupomCreateUc createUc;
     private final CupomUpdateUc updateUc;
@@ -34,13 +34,13 @@ public non-sealed class CupomManutencaoServiceImpl implements CupomManutencaoSer
     }
 
     @Override
-    public String activate(Long id) {
-        return activateUc.activate(id);
+    public void activate(Long id) {
+        activateUc.activate(id);
     }
 
     @Override
-    public String deactivate(Long id) {
-        return deactivateUc.deactivate(id);
+    public void deactivate(Long id) {
+        deactivateUc.deactivate(id);
     }
 
 }

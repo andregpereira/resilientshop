@@ -1,5 +1,6 @@
 package com.github.andregpereira.resilientshop.discountsapi.app.rest;
 
+import com.github.andregpereira.resilientshop.discountsapi.app.constant.TipoDesconto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.DescontoCreateDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.DescontoDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.service.desconto.DescontoConsultaService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.text.MessageFormat;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -49,17 +51,17 @@ public class DescontoController {
     @PatchMapping("/{id}")
     public ResponseEntity<String> activate(@PathVariable Long id) {
         log.info("Ativando desconto...");
-        String resposta = manutencaoService.activate(id);
+        manutencaoService.activate(id);
         log.info("Desconto ativado com sucesso");
-        return ResponseEntity.ok(resposta);
+        return ResponseEntity.ok(MessageFormat.format("Desconto com id {0} ativado com sucesso!", id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deactivate(@PathVariable Long id) {
         log.info("Desativando desconto...");
-        String resposta = manutencaoService.deactivate(id);
+        manutencaoService.deactivate(id);
         log.info("Desconto desativado com sucesso");
-        return ResponseEntity.ok(resposta);
+        return ResponseEntity.ok(MessageFormat.format("Desconto com id {0} desativado com sucesso!", id));
     }
 
     @GetMapping
@@ -73,9 +75,10 @@ public class DescontoController {
     }
 
     @GetMapping("/tipo-desconto")
-    public ResponseEntity<Page<DescontoDto>> findAllByTipoDesconto(String tipoDesconto,
+    public ResponseEntity<Page<DescontoDto>> findByTipoDesconto(
+            @RequestParam("tipo-desconto") TipoDesconto tipoDesconto,
             @PageableDefault(sort = "tipoDesconto") Pageable pageable) {
-        return ResponseEntity.ok(consultaService.consultarByTipoDesconto(tipoDesconto, pageable));
+        return ResponseEntity.ok(consultaService.consultarPorTipoDesconto(tipoDesconto.toString(), pageable));
     }
 
 }

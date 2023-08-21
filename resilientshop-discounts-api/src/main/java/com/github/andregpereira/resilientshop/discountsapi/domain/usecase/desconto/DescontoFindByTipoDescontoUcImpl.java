@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class DescontoFindAllByTipoDescontoUcImpl implements DescontoFindAllByTipoDescontoUc {
+public class DescontoFindByTipoDescontoUcImpl implements DescontoFindByTipoDescontoUc {
 
     private final DescontoGateway gateway;
 
     @Override
-    public Page<Desconto> findAllByTipoDesconto(String tipoDesconto, Pageable pageable) {
-        return gateway.findAllByTipoDesconto(tipoDesconto, pageable);
+    public Page<Desconto> findByTipoDesconto(String tipoDesconto, Pageable pageable) {
+        return gateway.findByTipoDesconto(tipoDesconto, pageable);
     }
 
 }
