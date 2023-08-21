@@ -6,6 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface DescontoGateway extends BaseGateway<Desconto> {
 
-    Page<Desconto> findAllByTipoDesconto(String tipoDesconto, Pageable pageable);
+    Page<Desconto> findByTipoDesconto(String tipoDesconto, Pageable pageable);
 
 }

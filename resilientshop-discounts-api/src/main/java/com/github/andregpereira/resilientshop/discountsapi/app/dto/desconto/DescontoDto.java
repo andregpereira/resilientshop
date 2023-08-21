@@ -9,9 +9,9 @@ import java.time.LocalDate;
 public record DescontoDto(Long id,
         BigDecimal percentual,
         TipoDesconto tipoDesconto,
+        Long idObjetoDoDesconto,
         @JsonFormat(pattern = "dd/MM/uuuu") LocalDate dataCriacao,
         @JsonFormat(pattern = "dd/MM/uuuu") LocalDate dataExpiracao,
-        boolean ativo,
-        Long idObjetoDoDesconto) {
+        boolean ativo) {
 
 }

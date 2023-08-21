@@ -4,7 +4,7 @@ import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomDt
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public sealed interface CupomConsultaService permits CupomConsultaServiceImpl {
+public interface CupomConsultaService {
 
     Page<CupomDto> consultarTodos(Pageable pageable);
 

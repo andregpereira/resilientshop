@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -14,7 +15,7 @@ import java.util.StringJoiner;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Cupom {
+public class Cupom implements Serializable {
 
     Long id;
     String codigo;
