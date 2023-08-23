@@ -1,6 +1,8 @@
 package com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom;
 
-public interface CupomActivateUc {
+import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.UseCase;
+
+public interface CupomActivateUc extends UseCase {
 
     void activate(Long id);
 

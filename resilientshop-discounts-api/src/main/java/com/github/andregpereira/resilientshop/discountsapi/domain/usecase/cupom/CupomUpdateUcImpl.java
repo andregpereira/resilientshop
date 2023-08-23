@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class CupomUpdateUcImpl implements CupomUpdateUc {
+class CupomUpdateUcImpl implements CupomUpdateUc {
 
     private final CupomGateway gateway;
 
