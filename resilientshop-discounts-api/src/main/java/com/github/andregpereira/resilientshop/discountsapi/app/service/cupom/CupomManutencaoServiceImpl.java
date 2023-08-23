@@ -4,6 +4,7 @@ import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomCr
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomUpdateDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.mapper.CupomServiceMapper;
+import com.github.andregpereira.resilientshop.discountsapi.cross.factory.UseCaseFactory;
 import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.CupomActivateUc;
 import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.CupomCreateUc;
 import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.CupomDeactivateUc;
@@ -17,30 +18,27 @@ import org.springframework.stereotype.Service;
 @Service
 public class CupomManutencaoServiceImpl implements CupomManutencaoService {
 
-    private final CupomCreateUc createUc;
-    private final CupomUpdateUc updateUc;
-    private final CupomDeactivateUc deactivateUc;
-    private final CupomActivateUc activateUc;
+    private final UseCaseFactory factory;
     private final CupomServiceMapper mapper;
 
     @Override
     public CupomDto criar(CupomCreateDto dto) {
-        return mapper.toCupomDto(createUc.criar(mapper.toCupom(dto)));
+        return mapper.toCupomDto(factory.getUseCase(CupomCreateUc.class).criar(mapper.toCupom(dto)));
     }
 
     @Override
     public CupomDto update(Long id, CupomUpdateDto dto) {
-        return mapper.toCupomDto(updateUc.update(id, mapper.toCupom(dto)));
+        return mapper.toCupomDto(factory.getUseCase(CupomUpdateUc.class).update(id, mapper.toCupom(dto)));
     }
 
     @Override
     public void activate(Long id) {
-        activateUc.activate(id);
+        factory.getUseCase(CupomActivateUc.class).activate(id);
     }
 
     @Override
     public void deactivate(Long id) {
-        deactivateUc.deactivate(id);
+        factory.getUseCase(CupomDeactivateUc.class).deactivate(id);
     }
 
 }
