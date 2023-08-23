@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class CupomFindAllUcImpl implements CupomFindAllUc {
+class CupomFindAllUcImpl implements CupomFindAllUc {
 
     private final CupomGateway gateway;
 
