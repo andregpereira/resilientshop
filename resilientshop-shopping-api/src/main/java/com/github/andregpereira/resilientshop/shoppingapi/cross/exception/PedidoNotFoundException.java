@@ -1,17 +1,14 @@
 package com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions;
 
-import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.enums.StatusPedido;
+import com.github.andregpereira.resilientshop.shoppingapi.app.constant.StatusPedido;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatusCode;
 
 import java.text.MessageFormat;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
 public class PedidoNotFoundException extends RuntimeException {
 
-    public PedidoNotFoundException() {
-        super("Poxa! Ainda não há pedidos cadastrados");
-    }
+    private static final HttpStatusCode status = HttpStatus.NOT_FOUND;
 
     public PedidoNotFoundException(String msg) {
         super(msg);

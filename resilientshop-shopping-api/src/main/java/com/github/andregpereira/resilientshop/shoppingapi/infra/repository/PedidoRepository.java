@@ -1,6 +1,6 @@
 package com.github.andregpereira.resilientshop.shoppingapi.infra.repositories;
 
-import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence.PedidoEntity;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.entity.PedidoEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

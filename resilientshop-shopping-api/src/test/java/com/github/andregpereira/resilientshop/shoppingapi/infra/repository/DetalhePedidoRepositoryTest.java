@@ -1,6 +1,6 @@
 package com.github.andregpereira.resilientshop.shoppingapi.infra.repositories;
 
-import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence.DetalhePedidoEntity;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.entity.DetalhePedidoEntity;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

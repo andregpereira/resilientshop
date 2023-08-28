@@ -1,11 +1,11 @@
 package com.github.andregpereira.resilientshop.shoppingapi.app.controllers;
 
+import com.github.andregpereira.resilientshop.shoppingapi.app.constant.StatusPedido;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoDetalharDto;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoDto;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoRegistrarDto;
 import com.github.andregpereira.resilientshop.shoppingapi.app.services.PedidoConsultaService;
 import com.github.andregpereira.resilientshop.shoppingapi.app.services.PedidoManutencaoService;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.enums.StatusPedido;
 import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.validation.Valid;
@@ -13,18 +13,22 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.stream.function.StreamOperations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.text.MessageFormat;
+import java.time.LocalDateTime;
 
 /**
  * Controller de pedidos da API de Pedidos
@@ -47,6 +51,15 @@ public class PedidoController {
      * Injeção da dependência {@link PedidoConsultaService} para serviços de consulta.
      */
     private final PedidoConsultaService consultaService;
+
+    private final StreamOperations streamOperations;
+
+    @GetMapping("/test/{s}")
+    public ResponseEntity<Object> test(@PathVariable String s) {
+        log.info("Enviando: {}", s);
+        return ResponseEntity.ok(streamOperations.send("processDiscount-out-0", MessageBuilder.withPayload(
+                new PedidoDto(null, LocalDateTime.now(), LocalDateTime.now(), 3, BigDecimal.valueOf(12.67))).build()));
+    }
 
     /**
      * Cadastra um pedido. Retorna um {@link PedidoDetalharDto}.
@@ -72,7 +85,7 @@ public class PedidoController {
      *
      * @return Uma {@link String} com uma mensagem de erro.
      */
-    public ResponseEntity<String> cadastrarFallbackMethod(FeignException.ServiceUnavailable e) {
+    public ResponseEntity<String> cadastrarFallbackMethod(FeignException e) {
         String api = e.getMessage().matches(".*\\buser\\b.*") ? "usuários" : "produtos";
         log.error(MessageFormat.format("Erro ao tentar acessar a API de {0}: {1}", api, e));
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Ops! Não foi possível cadastrar o pedido");
@@ -86,11 +99,11 @@ public class PedidoController {
      * @return Uma {@link String} com uma mensagem de confirmação de cancelamento.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> cancelar(@PathVariable Long id) {
+    public ResponseEntity<Void> cancelar(@PathVariable Long id) {
         log.info("Cancelando pedido...");
-        return ResponseEntity.ok(manutencaoService.cancelar(id));
+        manutencaoService.cancelar(id);
+        return ResponseEntity.ok().build();
     }
-
     /**
      * Lista todos os pedidos cadastrados. Retorna uma {@link Page} de {@link PedidoDto}.
      *
@@ -98,12 +111,12 @@ public class PedidoController {
      *
      * @return Uma {@link Page} de {@link PedidoDto} com todos os pedidos cadastrados.
      */
-    @GetMapping
-    public ResponseEntity<Page<PedidoDto>> listar(
-            @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pageable) {
-        log.info("Procurando pedidos...");
-        return ResponseEntity.ok(consultaService.listar(pageable));
-    }
+//    @GetMapping
+//    public ResponseEntity<Page<PedidoDto>> listar(
+//            @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pageable) {
+//        log.info("Procurando pedidos...");
+//        return ResponseEntity.ok(consultaService.listar(pageable));
+//    }
 
     /**
      * Lista todos os pedidos de um usuário. Retorna uma {@link Page} de {@link PedidoDto}.
@@ -115,10 +128,10 @@ public class PedidoController {
      */
     @GetMapping("/usuario/{id}")
     @CircuitBreaker(name = "listarPorUsuario", fallbackMethod = "listarPorUsuarioFallbackMethod")
-    public ResponseEntity<Page<PedidoDto>> listarPorUsuario(@PathVariable Long id,
+    public ResponseEntity<Page<PedidoDto>> findAllByIdUsuario(@PathVariable Long id,
             @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pageable) {
         log.info("Procurando pedidos do usuário com id {}...", id);
-        return ResponseEntity.ok(consultaService.listarPorUsuario(id, pageable));
+        return ResponseEntity.ok(consultaService.consultarPorIdUsuario(id, pageable));
     }
 
     /**
@@ -128,8 +141,7 @@ public class PedidoController {
      *
      * @return Uma {@link String} com uma mensagem de erro.
      */
-    public ResponseEntity<String> listarPorUsuarioFallbackMethod(Long id, Pageable pageable,
-            FeignException.ServiceUnavailable e) {
+    public ResponseEntity<String> listarPorUsuarioFallbackMethod(Long id, Pageable pageable, FeignException e) {
         log.error(
                 MessageFormat.format("Erro ao tentar acessar a API de usuários: id: {0} - {1} - {2}", id, pageable, e));
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(
@@ -145,7 +157,7 @@ public class PedidoController {
      */
     @GetMapping("/{id}")
     @CircuitBreaker(name = "consultarPorId", fallbackMethod = "consultarPorIdFallbackMethod")
-    public ResponseEntity<PedidoDetalharDto> consultarPorId(@PathVariable Long id) {
+    public ResponseEntity<PedidoDetalharDto> findById(@PathVariable Long id) {
         log.info("Pesquisando pedido com id {}...", id);
         return ResponseEntity.ok(consultaService.consultarPorId(id));
     }
@@ -157,7 +169,7 @@ public class PedidoController {
      *
      * @return Uma {@link String} com uma mensagem de erro.
      */
-    public ResponseEntity<String> consultarPorIdFallbackMethod(Long id, FeignException.ServiceUnavailable e) {
+    public ResponseEntity<String> consultarPorIdFallbackMethod(Long id, FeignException e) {
         log.error(MessageFormat.format("Erro ao tentar acessar a API de {0}: id: {1}: {2}",
                 e.getMessage().matches(".*\\buser\\b.*") ? "usuários" : "produtos", id, e));
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(
@@ -173,13 +185,13 @@ public class PedidoController {
      * @return Uma {@link Page} de {@link PedidoDto} com todos os pedidos encontrados pelo {@code status} informado.
      */
     @GetMapping("/status")
-    public ResponseEntity<Page<PedidoDto>> consultarPorStatus(
+    public ResponseEntity<Page<PedidoDto>> findAllByStatus(
             @RequestParam @Min(message = "O status mínimo é 0", value = 0) @Max(message = "O status máximo é 5",
                     value = 5) int status,
             @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pageable) {
         log.info("Pesquisando pedidos com status {} ({})...", StatusPedido.getStatusPorId(
                 status).toString().toLowerCase().replace("_", "").replace("separacao", "separação"), status);
-        return ResponseEntity.ok(consultaService.consultarPorStatus(status, pageable));
+        return ResponseEntity.ok(consultaService.consultarPorStatus(StatusPedido.getStatusPorId(status), pageable));
     }
 
 }

@@ -1,7 +1,7 @@
 package com.github.andregpereira.resilientshop.shoppingapi.infra.repositories;
 
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.config.PostgreSQLContainerConfig;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence.DetalhePedidoEntity;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.entity.DetalhePedidoEntity;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

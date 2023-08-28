@@ -5,9 +5,9 @@ import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.Pedid
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.EnderecoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.PedidoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.ProdutoMapper;
-import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.UsuarioMapper;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.ProdutosFeignClient;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.UsuariosFeignClient;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.mapper.UsuarioDataProviderMapper;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclient.ProdutosFeignClient;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclient.UsuariosFeignClient;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.DetalhePedidoRepository;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.PedidoRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -27,9 +27,7 @@ import static com.github.andregpereira.resilientshop.shoppingapi.constants.Detal
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.EnderecoConstants.ENDERECO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.EnderecoDtoConstants.ENDERECO_DTO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.LocalDateTimeConstants.PEDIDO_LOCAL_DATE_TIME;
-import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoConstants.PEDIDO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoDtoConstants.*;
-import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoEntityConstants.PEDIDO_ENTITY;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoEntityConstants.PEDIDO_ENTITY_INVALIDO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.ProdutoConstants.PRODUTO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.ProdutoDtoConstants.PRODUTO_DTO;
@@ -51,7 +49,7 @@ class PedidoManutencaoServiceTest {
     private PedidoMapper pedidoMapper;
 
     @Mock
-    private UsuarioMapper usuarioMapper;
+    private UsuarioDataProviderMapper usuarioMapper;
 
     @Mock
     private EnderecoMapper enderecoMapper;
@@ -83,7 +81,7 @@ class PedidoManutencaoServiceTest {
 
     @Test
     void criarPedidoComDadosValidosRetornaPedidoDetalharDto() {
-        given(usuariosFeignClient.consultarUsuarioPorId(1L)).willReturn(USUARIO_DTO);
+        given(usuariosFeignClient.findUsuarioById(1L)).willReturn(USUARIO_DTO);
         given(usuarioMapper.toUsuario(USUARIO_DTO)).willReturn(USUARIO);
         given(usuariosFeignClient.consultarEnderecoPorApelido(1L, "apelido")).willReturn(ENDERECO_DTO);
         willDoNothing().given(produtosFeignClient).subtrair(Collections.singletonList(
@@ -91,11 +89,11 @@ class PedidoManutencaoServiceTest {
                         DETALHE_PEDIDO_ENTITY.getQuantidade())));
         given(enderecoMapper.toEndereco(ENDERECO_DTO)).willReturn(ENDERECO);
         given(pedidoMapper.toPedidoEntity(PEDIDO_REGISTRAR_DTO)).willReturn(PEDIDO_ENTITY);
-        given(produtosFeignClient.consultarPorId(1L)).willReturn(PRODUTO_DTO);
+        given(produtosFeignClient.findProdutoById(1L)).willReturn(PRODUTO_DTO);
         given(produtoMapper.toProduto(PRODUTO_DTO)).willReturn(PRODUTO);
         given(pedidoRepository.save(PEDIDO_ENTITY)).willReturn(PEDIDO_ENTITY);
-        given(pedidoMapper.toPedido(PEDIDO_ENTITY)).willReturn(PEDIDO);
-        given(pedidoMapper.toPedidoDetalharDto(PEDIDO)).willReturn(PEDIDO_DETALHAR_DTO);
+        given(pedidoMapper.toPedido(PEDIDO_ENTITY)).willReturn(PEDIDO_ENTITY);
+        given(pedidoMapper.toPedidoDetalharDto(PEDIDO_ENTITY)).willReturn(PEDIDO_DETALHAR_DTO);
         try (MockedStatic<LocalDateTime> mockedStatic = mockStatic(LocalDateTime.class)) {
             mockedStatic.when(LocalDateTime::now).thenReturn(PEDIDO_LOCAL_DATE_TIME);
             assertThat(manutencaoService.criar(PEDIDO_REGISTRAR_DTO)).isEqualTo(PEDIDO_DETALHAR_DTO);

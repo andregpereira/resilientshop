@@ -4,10 +4,11 @@ import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoD
 import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoDto;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.PedidoNotFoundException;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.*;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.ProdutosFeignClient;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients.UsuariosFeignClient;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclient.ProdutosFeignClient;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclient.UsuariosFeignClient;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.mapper.UsuarioDataProviderMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.PedidoRepository;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence.PedidoEntity;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.entity.PedidoEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,10 +27,8 @@ import java.util.Optional;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.DetalhePedidoEntityConstants.LISTA_DETALHES_PEDIDO_ENTITY;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.EnderecoConstants.ENDERECO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.EnderecoDtoConstants.ENDERECO_DTO;
-import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoConstants.PEDIDO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoDtoConstants.PEDIDO_DETALHAR_DTO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoDtoConstants.PEDIDO_DTO;
-import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoEntityConstants.PEDIDO_ENTITY;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoEntityConstants.PEDIDO_ENTITY_ATUALIZADO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.ProdutoDtoConstants.PRODUTO_DTO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.UsuarioConstants.USUARIO;
@@ -49,7 +48,7 @@ class PedidoConsultaServiceTest {
     private PedidoMapper pedidoMapper;
 
     @Mock
-    private UsuarioMapper usuarioMapper;
+    private UsuarioDataProviderMapper usuarioMapper;
 
     @Mock
     private EnderecoMapper enderecoMapper;
@@ -82,9 +81,9 @@ class PedidoConsultaServiceTest {
         listaPedidos.add(PEDIDO_ENTITY_ATUALIZADO);
         Page<PedidoEntity> pagePedidos = new PageImpl<>(listaPedidos, pageable, 10);
         given(repository.findAll(pageable)).willReturn(pagePedidos);
-        given(pedidoMapper.toPedido(PEDIDO_ENTITY)).willReturn(PEDIDO);
-        given(pedidoMapper.toPedido(PEDIDO_ENTITY_ATUALIZADO)).willReturn(PEDIDO);
-        given(pedidoMapper.toPedidoDto(PEDIDO)).willReturn(PEDIDO_DTO);
+        given(pedidoMapper.toPedido(PEDIDO_ENTITY)).willReturn(PEDIDO_ENTITY);
+        given(pedidoMapper.toPedido(PEDIDO_ENTITY_ATUALIZADO)).willReturn(PEDIDO_ENTITY);
+        given(pedidoMapper.toPedidoDto(PEDIDO_ENTITY)).willReturn(PEDIDO_DTO);
         Page<PedidoDto> sut = consultaService.listar(pageable);
         assertThat(sut).isNotEmpty().hasSize(2);
         assertThat(sut.getContent().get(0)).isEqualTo(PEDIDO_DTO);
@@ -102,13 +101,13 @@ class PedidoConsultaServiceTest {
     @Test
     void consultarPedidoPorIdExistenteRetornaPedidoDetalharDto() {
         given(repository.findById(1L)).willReturn(Optional.of(PEDIDO_ENTITY));
-        given(pedidoMapper.toPedido(PEDIDO_ENTITY)).willReturn(PEDIDO);
-        given(usuariosFeignClient.consultarUsuarioPorId(1L)).willReturn(USUARIO_DTO);
+        given(pedidoMapper.toPedido(PEDIDO_ENTITY)).willReturn(PEDIDO_ENTITY);
+        given(usuariosFeignClient.findUsuarioById(1L)).willReturn(USUARIO_DTO);
         given(usuarioMapper.toUsuario(USUARIO_DTO)).willReturn(USUARIO);
-        given(usuariosFeignClient.consultarEnderecoPorId(any(), any())).willReturn(ENDERECO_DTO);
+        given(usuariosFeignClient.findEnderecoById(any(), any())).willReturn(ENDERECO_DTO);
         given(enderecoMapper.toEndereco(ENDERECO_DTO)).willReturn(ENDERECO);
-        given(produtosFeignClient.consultarPorId(1L)).willReturn(PRODUTO_DTO);
-        given(pedidoMapper.toPedidoDetalharDto(PEDIDO)).willReturn(PEDIDO_DETALHAR_DTO);
+        given(produtosFeignClient.findProdutoById(1L)).willReturn(PRODUTO_DTO);
+        given(pedidoMapper.toPedidoDetalharDto(PEDIDO_ENTITY)).willReturn(PEDIDO_DETALHAR_DTO);
         PedidoDetalharDto sut = consultaService.consultarPorId(1L);
         assertThat(sut).isNotNull().isEqualTo(PEDIDO_DETALHAR_DTO);
     }
@@ -128,9 +127,9 @@ class PedidoConsultaServiceTest {
         Page<PedidoEntity> pagePedidos = new PageImpl<>(listaPedidos, pageable, 10);
         given(repository.findAllByStatus(1, pageable)).willReturn(pagePedidos);
 //        Page<PedidoEntity> pagePedidos = new PageImpl<>(listaPedidos, pageable, 10);
-        given(pedidoMapper.toPedido(PEDIDO_ENTITY)).willReturn(PEDIDO);
-        given(pedidoMapper.toPedido(PEDIDO_ENTITY_ATUALIZADO)).willReturn(PEDIDO);
-        given(pedidoMapper.toPedidoDto(PEDIDO)).willReturn(PEDIDO_DTO);
+        given(pedidoMapper.toPedido(PEDIDO_ENTITY)).willReturn(PEDIDO_ENTITY);
+        given(pedidoMapper.toPedido(PEDIDO_ENTITY_ATUALIZADO)).willReturn(PEDIDO_ENTITY);
+        given(pedidoMapper.toPedidoDto(PEDIDO_ENTITY)).willReturn(PEDIDO_DTO);
         Page<PedidoDto> sut = consultaService.consultarPorStatus(1, pageable);
         assertThat(sut).isNotEmpty().hasSize(2);
         assertThat(sut.getContent().get(0)).isEqualTo(PEDIDO_DTO);
