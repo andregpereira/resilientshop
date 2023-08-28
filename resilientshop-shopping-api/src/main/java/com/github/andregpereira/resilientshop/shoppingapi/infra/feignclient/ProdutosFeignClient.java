@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.shoppingapi.infra.feignclients;
+package com.github.andregpereira.resilientshop.shoppingapi.infra.feignclient;
 
 import com.github.andregpereira.resilientshop.commons.entities.Produto;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dto.produto.ProdutoAtualizarEstoqueDto;

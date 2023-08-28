@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence;
+package com.github.andregpereira.resilientshop.shoppingapi.infra.entity;
 
 import com.github.andregpereira.resilientshop.commons.entities.Produto;
 import jakarta.persistence.*;
