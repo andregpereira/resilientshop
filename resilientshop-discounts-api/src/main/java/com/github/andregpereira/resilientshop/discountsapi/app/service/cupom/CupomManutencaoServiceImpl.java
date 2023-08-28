@@ -4,11 +4,11 @@ import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomCr
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomUpdateDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.mapper.CupomServiceMapper;
-import com.github.andregpereira.resilientshop.discountsapi.cross.factory.UseCaseFactory;
 import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.CupomActivateUc;
 import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.CupomCreateUc;
 import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.CupomDeactivateUc;
 import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.cupom.CupomUpdateUc;
+import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.factory.UseCaseFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
