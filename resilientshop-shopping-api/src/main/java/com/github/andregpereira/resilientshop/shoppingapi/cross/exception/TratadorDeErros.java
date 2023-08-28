@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions;
+package com.github.andregpereira.resilientshop.shoppingapi.cross.exception;
 
 import feign.FeignException;
 import jakarta.validation.ConstraintViolation;

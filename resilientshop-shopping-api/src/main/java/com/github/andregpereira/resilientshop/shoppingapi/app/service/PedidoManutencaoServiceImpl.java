@@ -1,9 +1,9 @@
-package com.github.andregpereira.resilientshop.shoppingapi.app.services;
+package com.github.andregpereira.resilientshop.shoppingapi.app.service;
 
 import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoDetalharDto;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoRegistrarDto;
 import com.github.andregpereira.resilientshop.shoppingapi.app.mapper.PedidoServiceMapper;
-import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.PedidoNotFoundException;
+import com.github.andregpereira.resilientshop.shoppingapi.cross.exception.PedidoNotFoundException;
 import com.github.andregpereira.resilientshop.shoppingapi.domain.usecase.PedidoCancelUc;
 import com.github.andregpereira.resilientshop.shoppingapi.domain.usecase.PedidoCreateUc;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.entity.PedidoEntity;

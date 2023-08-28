@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions;
+package com.github.andregpereira.resilientshop.shoppingapi.cross.exception;
 
 import com.github.andregpereira.resilientshop.shoppingapi.app.constant.StatusPedido;
 import org.springframework.http.HttpStatus;

@@ -1,11 +1,11 @@
-package com.github.andregpereira.resilientshop.shoppingapi.app.controllers;
+package com.github.andregpereira.resilientshop.shoppingapi.app.controller;
 
 import com.github.andregpereira.resilientshop.shoppingapi.app.constant.StatusPedido;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoDetalharDto;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoDto;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoRegistrarDto;
-import com.github.andregpereira.resilientshop.shoppingapi.app.services.PedidoConsultaService;
-import com.github.andregpereira.resilientshop.shoppingapi.app.services.PedidoManutencaoService;
+import com.github.andregpereira.resilientshop.shoppingapi.app.service.PedidoConsultaService;
+import com.github.andregpereira.resilientshop.shoppingapi.app.service.PedidoManutencaoService;
 import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.validation.Valid;
