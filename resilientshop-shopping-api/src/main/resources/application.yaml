@@ -1,6 +1,42 @@
+server:
+  port: ${SERVER_PORT:0}
+  error:
+    include-stacktrace: never
+
 spring:
   application:
     name: resilientshop-shopping-api
+  cloud:
+    function:
+      definition: receber
+    stream:
+      bindings:
+        receber-in-0:
+          destination: resilientshop-exchange
+          group: pedido.desconto.processado
+        processDiscount-out-0:
+          destination: resilientshop-exchange
+      rabbit:
+        bindings:
+          receber-in-0:
+            consumer:
+              exchangeType: direct
+              bindingRoutingKey: pedido.desconto.processado
+          processDiscount-out-0:
+            producer:
+              exchangeType: direct
+              routingKey: pedido.desconto.processar
+  rabbitmq:
+    #    stream:
+    #      port: 5552
+    #      host: localhost
+    #      username: guest
+    #      password: guest
+    port: ${SPRING_RABBITMQ_PORT:5672}
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    username: ${SPRING_RABBITMQ_USERNAME:guest}
+    password: ${SPRING_RABBITMQ_PASSWORD:guest}
+
   #PostgreSQL
   datasource:
     url: ${SPRING_DATASOURCE_URL}
@@ -10,18 +46,13 @@ spring:
     hibernate:
       ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
 
-
-server:
-  port: ${SERVER_PORT:0}
-  error:
-    include-stacktrace: never
-
 eureka:
   instance:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     fetchRegistry: true
+    register-with-eureka: true
     registry-fetch-interval-seconds: 5
     serviceUrl:
       defaultZone: http://${EUREKA_SERVICE_NAME:localhost}:8761/eureka
