@@ -15,7 +15,7 @@ import java.util.Set;
 public interface ProdutosFeignClient {
 
     @GetMapping("/produtos/{id}")
-    Produto consultarPorId(@PathVariable Long id);
+    Produto findProdutoById(@PathVariable Long id);
 
     @PutMapping("/produtos/estoque/subtrair")
     void subtrair(Set<ProdutoAtualizarEstoqueDto> dto);

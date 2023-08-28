@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.discountsapi.cross.factory;
+package com.github.andregpereira.resilientshop.discountsapi.domain.usecase.factory;
 
 import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.UseCase;
 

@@ -7,6 +7,6 @@ public interface PedidoManutencaoService {
 
     PedidoDetalharDto criar(PedidoRegistrarDto dto);
 
-    String cancelar(Long id);
+    void cancelar(Long id);
 
 }

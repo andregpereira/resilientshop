@@ -1,6 +1,7 @@
 package com.github.andregpereira.resilientshop.shoppingapi.infra.repositories;
 
-import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence.PedidoEntity;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.config.PostgreSQLContainerConfig;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.entity.PedidoEntity;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -22,7 +24,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
-class PedidoRepositoryTest {
+@ContextConfiguration(initializers = PostgreSQLContainerConfig.PostgreSQLContainerInitializer.class)
+class PedidoRepositoryPostgreSQLContainerTest extends PostgreSQLContainerConfig {
 
     @Autowired
     private PedidoRepository repository;
@@ -46,7 +49,7 @@ class PedidoRepositoryTest {
         assertThat(sut.getDataModificacao()).isEqualTo(PEDIDO_ENTITY.getDataModificacao());
         assertThat(sut.getStatus()).isEqualTo(PEDIDO_ENTITY.getStatus());
         assertThat(sut.getTotal()).isEqualTo(PEDIDO_ENTITY.getTotal());
-        assertThat(sut.getDetalhePedido()).isEqualTo(PEDIDO_ENTITY.getDetalhePedido());
+        assertThat(sut.getDetalhesPedido()).isEqualTo(PEDIDO_ENTITY.getDetalhesPedido());
     }
 
     @Test

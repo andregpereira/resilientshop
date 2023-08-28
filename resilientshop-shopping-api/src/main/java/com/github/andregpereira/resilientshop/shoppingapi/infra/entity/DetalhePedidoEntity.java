@@ -2,17 +2,15 @@ package com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.pe
 
 import com.github.andregpereira.resilientshop.commons.entities.Produto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.StringJoiner;
 
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -42,26 +40,24 @@ public class DetalhePedidoEntity {
     private Produto produto;
 
     @Override
-    public boolean equals(Object o) {
+    public final boolean equals(Object o) {
         if (this == o)
             return true;
         if (!(o instanceof DetalhePedidoEntity detalhePedido))
             return false;
-        return quantidade == detalhePedido.quantidade && Objects.equals(id, detalhePedido.id) && Objects.equals(
-                subtotal, detalhePedido.subtotal) && Objects.equals(idProduto,
-                detalhePedido.idProduto) && Objects.equals(produto, detalhePedido.produto);
+        Class<?> oEffectiveClass = o instanceof HibernateProxy hibernateProxy
+                ? hibernateProxy.getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+                ? hibernateProxy.getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass)
+            return false;
+        return getId() != null && Objects.equals(getId(), detalhePedido.getId());
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, quantidade, subtotal, idProduto, produto);
-    }
-
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", DetalhePedidoEntity.class.getSimpleName() + "[", "]").add("id=" + id).add(
-                "quantidade=" + quantidade).add("subtotal=" + subtotal).add("idProduto=" + idProduto).add(
-                "produto=" + produto).toString();
+    public final int hashCode() {
+        return this instanceof HibernateProxy hibernateProxy
+                ? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 
 }
