@@ -1,6 +1,6 @@
-package com.github.andregpereira.resilientshop.shoppingapi.infra.repositories;
+package com.github.andregpereira.resilientshop.shoppingapi.infra.repository;
 
-import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.config.PostgreSQLContainerConfig;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.repository.config.PostgreSQLContainerConfig;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.entity.DetalhePedidoEntity;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

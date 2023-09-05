@@ -1,15 +1,15 @@
-package com.github.andregpereira.resilientshop.shoppingapi.app.services;
+package com.github.andregpereira.resilientshop.shoppingapi.app.service;
 
 import com.github.andregpereira.resilientshop.shoppingapi.app.dto.produto.ProdutoAtualizarEstoqueDto;
-import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.PedidoNotFoundException;
+import com.github.andregpereira.resilientshop.shoppingapi.cross.exception.PedidoNotFoundException;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.EnderecoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.PedidoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.cross.mappers.ProdutoMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.mapper.UsuarioDataProviderMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclient.ProdutosFeignClient;
 import com.github.andregpereira.resilientshop.shoppingapi.infra.feignclient.UsuariosFeignClient;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.DetalhePedidoRepository;
-import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.PedidoRepository;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.repository.DetalhePedidoRepository;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.repository.PedidoRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
