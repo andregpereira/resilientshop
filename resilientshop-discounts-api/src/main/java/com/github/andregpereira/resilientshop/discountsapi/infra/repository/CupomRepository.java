@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CupomRepository extends BaseRepository<CupomEntity> {
+public non-sealed interface CupomRepository extends BaseRepository<CupomEntity> {
 
     boolean existsByCodigo(String codigo);
 
