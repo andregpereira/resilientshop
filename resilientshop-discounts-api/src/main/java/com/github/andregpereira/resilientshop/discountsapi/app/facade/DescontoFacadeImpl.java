@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.discountsapi.app.rest.facade;
+package com.github.andregpereira.resilientshop.discountsapi.app.facade;
 
 import com.github.andregpereira.resilientshop.discountsapi.app.constant.TipoDesconto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.DescontoCreateDto;

@@ -4,7 +4,7 @@ import com.github.andregpereira.resilientshop.discountsapi.app.constant.TipoDesc
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.DescontoCreateDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.DescontoDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.DescontoUpdateDto;
-import com.github.andregpereira.resilientshop.discountsapi.app.rest.facade.DescontoFacade;
+import com.github.andregpereira.resilientshop.discountsapi.app.facade.DescontoFacade;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
