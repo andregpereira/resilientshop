@@ -1,5 +1,44 @@
+networks:
+  mynetwork:
+
+name: resilientshop
+
 services:
-  resilientshop-eureka-server:
+  user-db:
+    image: postgres:alpine
+    user: root
+    environment:
+      - POSTGRES_DB=resilientshop-user
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "resilientshop-user" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+    networks:
+      mynetwork:
+    ports:
+      - "5434:5432"
+  auth-db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_DB=resilientshop-authentication
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "resilientshop-authentication" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+    networks:
+      mynetwork:
+    ports:
+      - "5436:5432"
+  eureka-server:
+    container_name: resilientshop-eureka-server
     build:
       context: ./resilientshop-eureka-server
       dockerfile: ./Dockerfile
@@ -7,78 +46,90 @@ services:
       mynetwork:
     ports:
       - "8751:8761"
-  resilientshop-api-gateway:
+  api-gateway:
+    container_name: resilientshop-api-gateway
     build:
       context: ./resilientshop-api-gateway
       dockerfile: ./Dockerfile
     depends_on:
-      resilientshop-eureka-server:
+      eureka-server:
         condition: service_started
     environment:
-      - EUREKA_SERVICE_NAME=resilientshop-eureka-server
+      - EUREKA_SERVICE_NAME=eureka-server
     networks:
       mynetwork:
     ports:
       - "8763:8763"
-  resilientshop-user-api:
+  user-api:
+    container_name: resilientshop-user-api
     build:
       context: ./resilientshop-user-api
       dockerfile: ./Dockerfile
     depends_on:
-      resilientshop-eureka-server:
-        condition: service_started
       user-db:
+        condition: service_healthy
+      eureka-server:
         condition: service_started
     environment:
-      - EUREKA_SERVICE_NAME=resilientshop-eureka-server
-#      - SERVER_PORT=8090
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://user-db:5432/resilientshop-user
-      - SPRING_DATASOURCE_USERNAME=postgres
+      - EUREKA_SERVICE_NAME=eureka-server
+      #      - SERVER_PORT=8090
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://user-db/resilientshop-user
+      - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
     networks:
       mynetwork:
-#    ports:
-#      - "8090:8090"
-  user-db:
-    image: postgres
-    environment:
-      - POSTGRES_DB=resilientshop-user
-      - POSTGRES_USERNAME=postgres
-      - POSTGRES_PASSWORD=root
-    networks:
-      mynetwork:
-    ports:
-      - "5434:5432"
-  resilientshop-authentication-api:
+  #    restart: on-failure
+  #    ports:
+  #      - "8090:8090"
+  authentication-api:
+    container_name: resilientshop-authentication-api
     build:
       context: ./resilientshop-authentication-api
       dockerfile: ./Dockerfile
     depends_on:
-      resilientshop-eureka-server:
-        condition: service_started
       auth-db:
+        condition: service_healthy
+      eureka-server:
         condition: service_started
     environment:
-      - EUREKA_SERVICE_NAME=resilientshop-eureka-server
-#      - SERVER_PORT=8092
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://auth-db:5432/resilientshop-authentication
-      - SPRING_DATASOURCE_USERNAME=postgres
+      - EUREKA_SERVICE_NAME=eureka-server
+      #      - SERVER_PORT=8092
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://auth-db/resilientshop-authentication
+      - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
     networks:
       mynetwork:
-#    ports:
-#      - "8092:8092"
-  auth-db:
-    image: postgres
-    environment:
-      - POSTGRES_DB=resilientshop-authentication
-      - POSTGRES_USERNAME=postgres
-      - POSTGRES_PASSWORD=root
+  #    restart: on-failure
+  #    ports:
+  #      - "8092:8092"
+  prometheus:
+    container_name: resilientshop-prometheus
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       mynetwork:
     ports:
-      - "5436:5432"
-networks:
-  mynetwork:
+      - '9090:9090'
+  grafana:
+    container_name: resilientshop-grafana
+    image: grafana/grafana
+    networks:
+      mynetwork:
+    ports:
+      - '3000:3000'
+#  jaeger:
+#    image: jaegertracing/all-in-one
+#    ports:
+#      - "6831:6831/udp"
+#      - "6832:6832/udp"
+#      - "5778:5778"
+#      - "16686:16686"
+#      - "4317:4317"
+#      - "4318:4318"
+#      - "14250:14250"
+#      - "14268:14268"
+#      - "14269:14269"
+#      - "9411:9411"
