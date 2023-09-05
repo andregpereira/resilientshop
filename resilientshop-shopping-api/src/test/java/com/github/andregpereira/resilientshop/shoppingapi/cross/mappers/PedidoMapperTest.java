@@ -1,6 +1,7 @@
 package com.github.andregpereira.resilientshop.shoppingapi.cross.mappers;
 
-import com.github.andregpereira.resilientshop.shoppingapi.infra.entities.Pedido;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.entity.PedidoEntity;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.mapper.UsuarioDataProviderMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,9 +15,7 @@ import static com.github.andregpereira.resilientshop.shoppingapi.constants.Detal
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.DetalhePedidoDtoConstants.LISTA_DETALHES_PEDIDO_REGISTRAR_DTO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.DetalhePedidoEntityConstants.LISTA_DETALHES_PEDIDO_ENTITY;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.DetalhePedidoEntityConstants.LISTA_DETALHES_PEDIDO_ENTITY_MAPEADO;
-import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoConstants.PEDIDO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoDtoConstants.*;
-import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoEntityConstants.PEDIDO_ENTITY;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.PedidoEntityConstants.PEDIDO_ENTITY_MAPEADO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.UsuarioConstants.USUARIO;
 import static com.github.andregpereira.resilientshop.shoppingapi.constants.UsuarioDtoConstants.USUARIO_DTO;
@@ -34,7 +33,7 @@ class PedidoMapperTest {
     private DetalhePedidoMapper detalhePedidoMapper;
 
     @Mock
-    private UsuarioMapper usuarioMapper;
+    private UsuarioDataProviderMapper usuarioMapper;
 
     @BeforeEach
     void beforeEach() {
@@ -56,7 +55,7 @@ class PedidoMapperTest {
     @Test
     void pedidoEntityRetornaPedido() {
         given(detalhePedidoMapper.toListaDetalhePedido(LISTA_DETALHES_PEDIDO_ENTITY)).willReturn(LISTA_DETALHES_PEDIDO);
-        assertThat(pedidoMapper.toPedido(PEDIDO_ENTITY)).isEqualTo(PEDIDO);
+        assertThat(pedidoMapper.toPedido(PEDIDO_ENTITY)).isEqualTo(PEDIDO_ENTITY);
     }
 
     @Test
@@ -66,19 +65,19 @@ class PedidoMapperTest {
 
     @Test
     void pedidoRetornaPedidoDto() {
-        assertThat(pedidoMapper.toPedidoDto(PEDIDO)).isEqualTo(PEDIDO_DTO);
+        assertThat(pedidoMapper.toPedidoDto(PEDIDO_ENTITY)).isEqualTo(PEDIDO_DTO);
     }
 
     @Test
     void pedidoNuloRetornaPedidoDtoNull() {
-        assertThat(pedidoMapper.toPedidoDto((Pedido) null)).isNull();
+        assertThat(pedidoMapper.toPedidoDto((PedidoEntity) null)).isNull();
     }
 
     @Test
     void pedidoRetornaPedidoDetalharDto() {
         given(usuarioMapper.toUsuarioDto(USUARIO)).willReturn(USUARIO_DTO);
         given(detalhePedidoMapper.toListaDetalhePedidoDto(LISTA_DETALHES_PEDIDO)).willReturn(LISTA_DETALHES_PEDIDO_DTO);
-        assertThat(pedidoMapper.toPedidoDetalharDto(PEDIDO)).isEqualTo(PEDIDO_DETALHAR_DTO);
+        assertThat(pedidoMapper.toPedidoDetalharDto(PEDIDO_ENTITY)).isEqualTo(PEDIDO_DETALHAR_DTO);
     }
 
     @Test

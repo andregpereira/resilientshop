@@ -1,11 +1,11 @@
-package com.github.andregpereira.resilientshop.shoppingapi.app.controllers;
+package com.github.andregpereira.resilientshop.shoppingapi.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoDto;
 import com.github.andregpereira.resilientshop.shoppingapi.app.dto.pedido.PedidoRegistrarDto;
-import com.github.andregpereira.resilientshop.shoppingapi.app.services.PedidoConsultaService;
-import com.github.andregpereira.resilientshop.shoppingapi.app.services.PedidoManutencaoService;
-import com.github.andregpereira.resilientshop.shoppingapi.cross.exceptions.PedidoNotFoundException;
+import com.github.andregpereira.resilientshop.shoppingapi.app.service.PedidoConsultaService;
+import com.github.andregpereira.resilientshop.shoppingapi.app.service.PedidoManutencaoService;
+import com.github.andregpereira.resilientshop.shoppingapi.cross.exception.PedidoNotFoundException;
 import feign.FeignException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

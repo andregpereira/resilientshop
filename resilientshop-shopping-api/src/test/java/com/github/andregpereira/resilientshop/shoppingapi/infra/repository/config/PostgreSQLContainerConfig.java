@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.config;
+package com.github.andregpereira.resilientshop.shoppingapi.infra.repository.config;
 
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;

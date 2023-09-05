@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.shoppingapi.infra.repositories;
+package com.github.andregpereira.resilientshop.shoppingapi.infra.repository;
 
 import com.github.andregpereira.resilientshop.shoppingapi.infra.entity.DetalhePedidoEntity;
 import org.junit.jupiter.api.AfterEach;
