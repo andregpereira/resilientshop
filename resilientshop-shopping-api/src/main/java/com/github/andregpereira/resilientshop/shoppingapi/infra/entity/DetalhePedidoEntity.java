@@ -13,7 +13,7 @@ import java.util.Objects;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "DetalhePedido")
 @Table(name = "tb_detalhes_pedidos")
 @SequenceGenerator(name = "detalhe_pedido", sequenceName = "sq_detalhes_pedidos", allocationSize = 1)
 public class DetalhePedidoEntity {
