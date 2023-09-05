@@ -1,5 +1,6 @@
 package com.github.andregpereira.resilientshop.discountsapi.app.mapper;
 
+import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.DescontoCreateDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,7 +25,7 @@ class DescontoServiceMapperTest {
 
     @Test
     void toDescontoNull_ReturnsNull() {
-        assertThat(mapper.toDesconto(null)).isNull();
+        assertThat(mapper.toDesconto((DescontoCreateDto) null)).isNull();
     }
 
     @Test
