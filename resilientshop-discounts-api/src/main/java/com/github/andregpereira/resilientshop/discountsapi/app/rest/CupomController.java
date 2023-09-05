@@ -3,7 +3,7 @@ package com.github.andregpereira.resilientshop.discountsapi.app.rest;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomCreateDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomUpdateDto;
-import com.github.andregpereira.resilientshop.discountsapi.app.rest.facade.CupomFacade;
+import com.github.andregpereira.resilientshop.discountsapi.app.facade.CupomFacade;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

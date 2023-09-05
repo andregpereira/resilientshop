@@ -1,10 +1,10 @@
-package com.github.andregpereira.resilientshop.discountsapi.app.rest.facade;
+package com.github.andregpereira.resilientshop.discountsapi.app.facade;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
-public sealed interface BaseFacade<R extends Record, C extends Record, U extends Record> permits CupomFacade, DescontoFacade {
+sealed interface BaseFacade<R extends Record, C extends Record, U extends Record> permits CupomFacade, DescontoFacade {
 
     ResponseEntity<R> criar(C c);
 

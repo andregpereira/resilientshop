@@ -1,4 +1,4 @@
-package com.github.andregpereira.resilientshop.discountsapi.app.rest.facade;
+package com.github.andregpereira.resilientshop.discountsapi.app.facade;
 
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomCreateDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomDto;
