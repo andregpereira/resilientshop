@@ -6,7 +6,6 @@ name: resilientshop
 services:
   user-db:
     image: postgres:alpine
-    user: root
     environment:
       - POSTGRES_DB=resilientshop-user
       - POSTGRES_USER=root
