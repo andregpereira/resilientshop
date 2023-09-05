@@ -1,7 +1,15 @@
+server:
+  port: ${SERVER_PORT:8763}
+  error:
+    include-stacktrace: never
+
 eureka:
   instance:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    metadata-map:
+      "prometheus.scrape": "true"
+      "prometheus.path": "/actuator/prometheus"
   client:
     register-with-eureka: true
     fetch-registry: true
@@ -9,18 +17,13 @@ eureka:
     serviceUrl:
       defaultZone: http://${EUREKA_SERVICE_NAME:localhost}:8761/eureka
 
-server:
-  port: ${SERVER_PORT:8763}
-  error:
-    include-stacktrace: never
-
 spring:
+  application:
+    name: resilientshop-api-gateway
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.security.reactive.ReativoSecurityAutoConfiguration
       - org.springframework.boot.actuate.autoconfigure.security.reactive.ReativoManagementWebSecurityAutoConfiguration
-  application:
-    name: resilientshop-api-gateway
   main:
     web-application-type: REACTIVE
   cloud:
@@ -92,3 +95,9 @@ resilience4j:
     instances:
       fallback:
         baseConfig: default
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
