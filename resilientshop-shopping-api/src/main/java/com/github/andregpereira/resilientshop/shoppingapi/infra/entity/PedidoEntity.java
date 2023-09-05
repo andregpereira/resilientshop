@@ -19,7 +19,7 @@ import java.util.Set;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "Pedido")
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "tb_pedidos")
 @SequenceGenerator(name = "pedido", sequenceName = "sq_pedidos", allocationSize = 1)
