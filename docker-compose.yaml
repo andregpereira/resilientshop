@@ -36,6 +36,22 @@ services:
       mynetwork:
     ports:
       - "5436:5432"
+  product-db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_DB=resilientshop-product
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "resilientshop-product" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+    networks:
+      mynetwork:
+    ports:
+      - "5438:5432"
   eureka-server:
     container_name: resilientshop-eureka-server
     build:
@@ -101,6 +117,27 @@ services:
     networks:
       mynetwork:
   #    restart: on-failure
+  #    ports:
+  #      - "8092:8092"
+  product-api:
+    container_name: resilientshop-products-api
+    build:
+      context: ./resilientshop-products-api
+      dockerfile: ./Dockerfile
+    depends_on:
+      product-db:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    environment:
+      - EUREKA_SERVICE_NAME=eureka-server
+      #      - SERVER_PORT=8092
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://product-db/resilientshop-product
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+    networks:
+      mynetwork:
   #    ports:
   #      - "8092:8092"
   prometheus:
