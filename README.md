@@ -4,6 +4,14 @@ Resilient Shop Backend GitHub Repository
 
 ---
 
+## Sumário
+
+1. [Instruções de uso](#instruções-de-uso)
+    1. [Rodar todos os módulos](#rodar-todos-os-módulos)
+    2. [Rodar um módulo individualmente](#rodar-um-módulo-individualmente)
+
+---
+
 ## Instruções de uso
 
 Para este projeto, você precisará dos seguintes itens instalados na sua máquina:
