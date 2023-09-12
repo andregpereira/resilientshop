@@ -53,6 +53,7 @@ services:
     ports:
       - "5438:5432"
   eureka-server:
+    platform: linux/amd64
     container_name: resilientshop-eureka-server
     build:
       context: ./resilientshop-eureka-server
@@ -62,6 +63,7 @@ services:
     ports:
       - "8751:8761"
   api-gateway:
+    platform: linux/amd64
     container_name: resilientshop-api-gateway
     build:
       context: ./resilientshop-api-gateway
@@ -76,6 +78,7 @@ services:
     ports:
       - "8763:8763"
   user-api:
+    platform: linux/amd64
     container_name: resilientshop-user-api
     build:
       context: ./resilientshop-user-api
@@ -98,6 +101,7 @@ services:
   #    ports:
   #      - "8090:8090"
   authentication-api:
+    platform: linux/amd64
     container_name: resilientshop-authentication-api
     build:
       context: ./resilientshop-authentication-api
@@ -120,6 +124,7 @@ services:
   #    ports:
   #      - "8092:8092"
   product-api:
+    platform: linux/amd64
     container_name: resilientshop-products-api
     build:
       context: ./resilientshop-products-api
@@ -140,22 +145,22 @@ services:
       mynetwork:
   #    ports:
   #      - "8092:8092"
-  prometheus:
-    container_name: resilientshop-prometheus
-    image: prom/prometheus
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    networks:
-      mynetwork:
-    ports:
-      - '9090:9090'
-  grafana:
-    container_name: resilientshop-grafana
-    image: grafana/grafana
-    networks:
-      mynetwork:
-    ports:
-      - '3000:3000'
+#  prometheus:
+#    container_name: resilientshop-prometheus
+#    image: prom/prometheus
+#    volumes:
+#      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+#    networks:
+#      mynetwork:
+#    ports:
+#      - '9090:9090'
+#  grafana:
+#    container_name: resilientshop-grafana
+#    image: grafana/grafana
+#    networks:
+#      mynetwork:
+#    ports:
+#      - '3000:3000'
 #  jaeger:
 #    image: jaegertracing/all-in-one
 #    ports:
