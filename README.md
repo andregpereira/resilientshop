@@ -16,7 +16,7 @@ Resilient Shop Backend GitHub Repository
 
 Para este projeto, você precisará dos seguintes itens instalados na sua máquina:
 
-- Java 17
+- JDK 17
 - Maven (Opcional - o projeto possui um wrapper)
 - [Rancher Desktop](https://rancherdesktop.io/) ou [Podman Desktop](https://podman-desktop.io/)
 
