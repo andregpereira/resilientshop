@@ -8,12 +8,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record PedidoDetalharDto(Long id,
+        int status,
+        String cupom,
+        BigDecimal total,
         @JsonFormat(shape = Shape.STRING, pattern = "dd/MM/uuuu HH:mm") LocalDateTime dataCriacao,
         @JsonFormat(shape = Shape.STRING, pattern = "dd/MM/uuuu HH:mm") LocalDateTime dataModificacao,
-        int status,
-        BigDecimal total,
         UsuarioDto usuario,
         EnderecoDto endereco,
-        List<DetalhePedidoDto> detalhePedido) {
+        List<DetalhePedidoDto> detalhesPedido) {
 
 }

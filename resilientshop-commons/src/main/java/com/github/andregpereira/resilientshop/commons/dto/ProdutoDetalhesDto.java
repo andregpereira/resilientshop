@@ -10,10 +10,12 @@ public record ProdutoDetalhesDto(Long id,
         Long sku,
         String nome,
         String descricao,
-        @JsonFormat(shape = Shape.STRING, pattern = "dd/MM/uuuu HH:mm") LocalDateTime dataCriacao,
         BigDecimal valorUnitario,
         int estoque,
+        @JsonFormat(shape = Shape.STRING, pattern = "dd/MM/uuuu HH:mm") LocalDateTime dataCriacao,
+        @JsonFormat(shape = Shape.STRING, pattern = "dd/MM/uuuu HH:mm") LocalDateTime dataModificacao,
         boolean ativo,
+        CategoriaDto categoria,
         SubcategoriaDto subcategoria) {
 
 }
