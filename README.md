@@ -26,14 +26,26 @@ Para este projeto, você precisará dos seguintes itens instalados na sua máqui
 
 Siga o passo a passo a seguir para buildar os módulos, criar suas respectivas imagens e rodar o projeto:
 
-**Obs.:** Use `nerdctl`/`docker` se estiver usando containerd/moby do Rancher Desktop ou `podman` se estiver usando
-Podman Desktop.
 
-1. Buildar projeto: `./mvnw clean package -DskipTests -f pom.xml`  
-   <br>
-2. Criar todas as imagens dos módulos: `nerdctl compose -f ./docker-compose.yaml build`  
-   <br>
-3. Subir os contêineres: `nerdctl compose -f ./docker-compose.yaml up -d`
+1. Buildar projeto:
+
+```shell
+./mvnw clean package -DskipTests -f pom.xml
+```
+
+2. Criar todas as imagens dos módulos:
+
+```shell
+nerdctl compose -f ./docker-compose.yaml build
+```
+
+3. Subir os contêineres:
+
+```shell
+nerdctl compose -f ./docker-compose.yaml up -d
+```
+
+> **_NOTA_:** Use `nerdctl`/`docker` se estiver usando containerd/dockerd do Rancher Desktop ou `podman` se estiver usando Podman Desktop.
 
 ###### Flags
 
@@ -46,15 +58,26 @@ Podman Desktop.
 
 Siga o passo a passo a seguir para criar e subir o módulo desejado:
 
-**Obs.:** Use `nerdctl`/`docker` se estiver usando containerd/moby do Rancher Desktop ou `podman` se estiver usando
-Podman Desktop.
 
-1. Buildar projeto: `./mvnw clean package -DskipTests -f pom.xml`  
-   <br>
-2. Criar imagem: `nerdctl build --platform linux/amd64 ./resilientshop-authentication-api/ -t resilientshop_authentication-api`  
-   <br>
+1. Buildar projeto:
+
+```shell
+./mvnw clean package -DskipTests -f pom.xml
+```
+
+2. Criar imagem:
+
+```shell
+nerdctl build --platform linux/amd64 ./resilientshop-authentication-api/ -t resilientshop_authentication-api
+```
+
 3. Criar contêiner:
-   `nerdctl run --platform linux/amd64 -e SPRING_DATASOURCE_URL=jdbc:postgresql://auth-db/resilientshop-authentication -e {...} -d resilientshop_authentication-api`
+
+```shell
+nerdctl run --platform linux/amd64 -e SPRING_DATASOURCE_URL=jdbc:postgresql://auth-db/resilientshop-authentication -e {...} -d resilientshop_authentication-api
+```
+
+> **_NOTA_:** Use `nerdctl`/`docker` se estiver usando containerd/dockerd do Rancher Desktop ou `podman` se estiver usando Podman Desktop.
 
 ###### Flags
 
