@@ -30,7 +30,7 @@ Siga o passo a passo a seguir para buildar os módulos, criar suas respectivas i
 1. Buildar projeto:
 
 ```shell
-./mvnw clean package -DskipTests -f pom.xml
+./mvnw clean package -DskipTests -Dmaven.test.skip=true -f pom.xml
 ```
 
 2. Criar todas as imagens dos módulos:
@@ -62,7 +62,7 @@ Siga o passo a passo a seguir para criar e subir o módulo desejado:
 1. Buildar projeto:
 
 ```shell
-./mvnw clean package -DskipTests -f pom.xml
+./mvnw clean package -DskipTests -Dmaven.test.skip=true -f pom.xml
 ```
 
 2. Criar imagem:
