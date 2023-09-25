@@ -4,54 +4,6 @@ networks:
 name: resilientshop
 
 services:
-  user-db:
-    image: postgres:alpine
-    environment:
-      - POSTGRES_DB=resilientshop-user
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready", "-d", "resilientshop-user" ]
-      interval: 30s
-      timeout: 60s
-      retries: 5
-      start_period: 80s
-    networks:
-      mynetwork:
-    ports:
-      - "5434:5432"
-  auth-db:
-    image: postgres:alpine
-    environment:
-      - POSTGRES_DB=resilientshop-authentication
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready", "-d", "resilientshop-authentication" ]
-      interval: 30s
-      timeout: 60s
-      retries: 5
-      start_period: 80s
-    networks:
-      mynetwork:
-    ports:
-      - "5436:5432"
-  product-db:
-    image: postgres:alpine
-    environment:
-      - POSTGRES_DB=resilientshop-product
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready", "-d", "resilientshop-product" ]
-      interval: 30s
-      timeout: 60s
-      retries: 5
-      start_period: 80s
-    networks:
-      mynetwork:
-    ports:
-      - "5438:5432"
   eureka-server:
     platform: linux/amd64
     container_name: resilientshop-eureka-server
@@ -60,8 +12,15 @@ services:
       dockerfile: ./Dockerfile
     networks:
       mynetwork:
+    healthcheck:
+      test: "curl --fail --silent localhost:8761/actuator/health | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
     ports:
       - "8751:8761"
+
   api-gateway:
     platform: linux/amd64
     container_name: resilientshop-api-gateway
@@ -76,7 +35,8 @@ services:
     networks:
       mynetwork:
     ports:
-      - "8763:8763"
+      - "8753:8763"
+
   user-api:
     platform: linux/amd64
     container_name: resilientshop-user-api
@@ -100,6 +60,24 @@ services:
   #    restart: on-failure
   #    ports:
   #      - "8090:8090"
+
+  user-db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_DB=resilientshop-user
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "resilientshop-user" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+    networks:
+      mynetwork:
+    ports:
+      - "5434:5432"
+
   authentication-api:
     platform: linux/amd64
     container_name: resilientshop-authentication-api
@@ -123,6 +101,24 @@ services:
   #    restart: on-failure
   #    ports:
   #      - "8092:8092"
+
+  auth-db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_DB=resilientshop-authentication
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "resilientshop-authentication" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+    networks:
+      mynetwork:
+    ports:
+      - "5436:5432"
+
   product-api:
     platform: linux/amd64
     container_name: resilientshop-products-api
@@ -145,6 +141,24 @@ services:
       mynetwork:
   #    ports:
   #      - "8092:8092"
+
+  product-db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_DB=resilientshop-product
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "resilientshop-product" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+    networks:
+      mynetwork:
+    ports:
+      - "5438:5432"
+
 #  prometheus:
 #    container_name: resilientshop-prometheus
 #    image: prom/prometheus
