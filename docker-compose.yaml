@@ -1,6 +1,3 @@
-networks:
-  mynetwork:
-
 name: resilientshop
 
 services:
@@ -10,8 +7,6 @@ services:
     build:
       context: ./resilientshop-eureka-server
       dockerfile: ./Dockerfile
-    networks:
-      mynetwork:
     healthcheck:
       test: "curl --fail --silent localhost:8761/actuator/health | grep UP || exit 1"
       interval: 20s
@@ -32,8 +27,6 @@ services:
         condition: service_started
     environment:
       - EUREKA_SERVICE_NAME=eureka-server
-    networks:
-      mynetwork:
     ports:
       - "8753:8763"
 
@@ -55,11 +48,8 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
-    networks:
-      mynetwork:
-  #    restart: on-failure
-  #    ports:
-  #      - "8090:8090"
+    ports:
+      - "8090:8090"
 
   user-db:
     image: postgres:alpine
@@ -73,8 +63,6 @@ services:
       timeout: 60s
       retries: 5
       start_period: 80s
-    networks:
-      mynetwork:
     ports:
       - "5434:5432"
 
@@ -96,11 +84,8 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
-    networks:
-      mynetwork:
-  #    restart: on-failure
-  #    ports:
-  #      - "8092:8092"
+    ports:
+      - "8094:8094"
 
   auth-db:
     image: postgres:alpine
@@ -114,8 +99,6 @@ services:
       timeout: 60s
       retries: 5
       start_period: 80s
-    networks:
-      mynetwork:
     ports:
       - "5436:5432"
 
@@ -137,10 +120,8 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
-    networks:
-      mynetwork:
-  #    ports:
-  #      - "8092:8092"
+    ports:
+      - "8092:8092"
 
   product-db:
     image: postgres:alpine
@@ -154,8 +135,6 @@ services:
       timeout: 60s
       retries: 5
       start_period: 80s
-    networks:
-      mynetwork:
     ports:
       - "5438:5432"
 
@@ -164,15 +143,11 @@ services:
 #    image: prom/prometheus
 #    volumes:
 #      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-#    networks:
-#      mynetwork:
 #    ports:
 #      - '9090:9090'
 #  grafana:
 #    container_name: resilientshop-grafana
 #    image: grafana/grafana
-#    networks:
-#      mynetwork:
 #    ports:
 #      - '3000:3000'
 #  jaeger:
