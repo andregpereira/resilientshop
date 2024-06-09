@@ -56,7 +56,7 @@ class DescontoManutencaoServiceImplTest {
         given(mapper.toDesconto(any(DescontoCreateDto.class))).willReturn(DESCONTO_CREATE_ATUALIZADO);
         given(updateUc.update(anyLong(), any(Desconto.class))).willReturn(DESCONTO_ATUALIZADO);
         given(mapper.toDescontoDto(any(Desconto.class))).willReturn(DESCONTO_DTO_ATUALIZADO);
-        DescontoDto sut = manutencaoService.update(1L, DESCONTO_CREATE_DTO_ATUALIZADO);
+        DescontoDto sut = manutencaoService.update(1L, DESCONTO_UPDATE_DTO);
         assertThat(sut).isEqualTo(DESCONTO_DTO_ATUALIZADO);
     }
 

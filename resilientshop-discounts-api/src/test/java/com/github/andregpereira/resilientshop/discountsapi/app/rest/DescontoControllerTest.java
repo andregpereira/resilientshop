@@ -3,6 +3,8 @@ package com.github.andregpereira.resilientshop.discountsapi.app.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.andregpereira.resilientshop.discountsapi.app.constant.TipoDesconto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.DescontoCreateDto;
+import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.DescontoUpdateDto;
+import com.github.andregpereira.resilientshop.discountsapi.app.facade.DescontoFacade;
 import com.github.andregpereira.resilientshop.discountsapi.app.service.desconto.DescontoConsultaService;
 import com.github.andregpereira.resilientshop.discountsapi.app.service.desconto.DescontoManutencaoService;
 import com.github.andregpereira.resilientshop.discountsapi.cross.exception.DescontoNotFoundException;
@@ -29,6 +31,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class DescontoControllerTest {
 
     private static final String PATH = "/descontos";
+
+    @MockBean
+    private DescontoFacade facade;
 
     @MockBean
     private DescontoManutencaoService manutencaoService;
@@ -61,9 +66,9 @@ class DescontoControllerTest {
 
     @Test
     void updateWithValidDto_Return200() throws Exception {
-        given(manutencaoService.update(anyLong(), any(DescontoCreateDto.class))).willReturn(DESCONTO_DTO_ATUALIZADO);
+        given(manutencaoService.update(anyLong(), any(DescontoUpdateDto.class))).willReturn(DESCONTO_DTO_ATUALIZADO);
         mockMvc.perform(put(URI.create(PATH + "/1")).content(
-                objectMapper.writeValueAsString(DESCONTO_CREATE_DTO_ATUALIZADO)).contentType(
+                objectMapper.writeValueAsString(DESCONTO_UPDATE_DTO)).contentType(
                 MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpectAll(jsonPath("$.dataExpiracao").value(
                         DESCONTO_DTO_ATUALIZADO.dataExpiracao().format(DateTimeFormatter.ofPattern("dd/MM/uuuu"))),
                 jsonPath("$.ativo").value(DESCONTO_DTO_ATUALIZADO.ativo()));
@@ -78,10 +83,10 @@ class DescontoControllerTest {
 
     @Test
     void updateByNonExistentId_Return404() throws Exception {
-        given(manutencaoService.update(anyLong(), any(DescontoCreateDto.class))).willThrow(
+        given(manutencaoService.update(anyLong(), any(DescontoUpdateDto.class))).willThrow(
                 new DescontoNotFoundException(10L));
         mockMvc.perform(put(URI.create(PATH + "/10")).content(
-                objectMapper.writeValueAsString(DESCONTO_CREATE_DTO_ATUALIZADO)).contentType(
+                objectMapper.writeValueAsString(DESCONTO_UPDATE_DTO)).contentType(
                 MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
     }
 

@@ -22,7 +22,8 @@ public enum Role implements GrantedAuthority {
             Set.of("/enderecos/**", "/pedidos/**"), HttpMethod.PUT, Set.of("/usuarios/**", "/enderecos/**"),
             HttpMethod.PATCH, Set.of("/usuarios/**", "/auth/**"), HttpMethod.DELETE,
             Set.of("/usuarios/{id}", "/enderecos/{id}", "/pedidos/**"))),
-    ANONYMOUS(Map.of(HttpMethod.GET, Set.of("/produtos/**"), HttpMethod.POST, Set.of("/usuarios/**", "/auth/usuario")));
+    ANONYMOUS(Map.of(HttpMethod.GET, Set.of("/produtos/**"), HttpMethod.POST,
+            Set.of("/usuarios/**", "/auth/usuario", "/auth/login")));
     private final Map<HttpMethod, Set<String>> permissions;
 
     public static Role getRole(String nome) {
