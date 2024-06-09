@@ -1,6 +1,6 @@
 package com.github.andregpereira.resilientshop.shoppingapi.constants;
 
-import com.github.andregpereira.resilientshop.shoppingapi.infra.repositories.persistence.DetalhePedidoEntity;
+import com.github.andregpereira.resilientshop.shoppingapi.infra.entity.DetalhePedidoEntity;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
