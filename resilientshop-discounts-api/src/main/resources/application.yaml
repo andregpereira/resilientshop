@@ -1,0 +1,66 @@
+server:
+  port: ${SERVER_PORT:0}
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: resilientshop-discounts-api
+  cache:
+    redis:
+      time-to-live: 60000
+  cloud:
+    function:
+      definition: processDiscount
+    stream:
+      bindings:
+        processDiscount-in-0:
+          destination: resilientshop-exchange
+          group: pedido.desconto.processamento
+        processDiscount-out-0:
+          destination: resilientshop-exchange
+      rabbit:
+        bindings:
+          processDiscount-in-0:
+            consumer:
+              exchangeType: direct
+              bindingRoutingKey: pedido.desconto.processar
+          processDiscount-out-0:
+            producer:
+              exchangeType: direct
+              routingKey: pedido.desconto.processado
+  rabbitmq:
+    #    stream:
+    #      port: 5552
+    #      host: localhost
+    #      username: guest
+    #      password: guest
+    port: ${SPRING_RABBITMQ_PORT:5672}
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    username: ${SPRING_RABBITMQ_USERNAME:guest}
+    password: ${SPRING_RABBITMQ_PASSWORD:guest}
+
+  # H2
+  datasource:
+    url: jdbc:h2:mem:resilientshop-user-test
+    username: sa
+    password: sa
+  jackson:
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: true
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: false
+    serviceUrl:
+      defaultZone: http://${EUREKA_SERVICE_NAME:localhost}:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

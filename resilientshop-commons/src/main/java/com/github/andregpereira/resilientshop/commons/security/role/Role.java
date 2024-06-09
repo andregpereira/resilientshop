@@ -11,14 +11,19 @@ import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 public enum Role implements GrantedAuthority {
-    ADMIN(Map.of(HttpMethod.GET, Set.of("/**"), HttpMethod.POST, Set.of("/**"), HttpMethod.PUT, Set.of("/**"),
+    SUPER_ADMIN(Map.of(HttpMethod.GET, Set.of("/**"), HttpMethod.POST, Set.of("/**"), HttpMethod.PUT, Set.of("/**"),
             HttpMethod.DELETE, Set.of("/**"), HttpMethod.PATCH, Set.of("/**"))),
+    ADMIN(Map.of(HttpMethod.GET, Set.of("/**"), HttpMethod.POST,
+            Set.of("/usuarios/**", "/enderecos/**", "/produtos/**", "/categorias/**", "/subcategorias/**",
+                    "/pedidos/**"), HttpMethod.PUT, Set.of("/**"), HttpMethod.DELETE, Set.of("/**"), HttpMethod.PATCH,
+            Set.of("/**"))),
     USER(Map.of(HttpMethod.GET, Set.of("/usuarios/{id}", "/produtos/**", "/enderecos/usuario/{idUsuario}",
                     "/enderecos/usuario/{idUsuario}/apelido", "/pedidos/**"), HttpMethod.POST,
             Set.of("/enderecos/**", "/pedidos/**"), HttpMethod.PUT, Set.of("/usuarios/**", "/enderecos/**"),
             HttpMethod.PATCH, Set.of("/usuarios/**", "/auth/**"), HttpMethod.DELETE,
             Set.of("/usuarios/{id}", "/enderecos/{id}", "/pedidos/**"))),
-    ANONYMOUS(Map.of(HttpMethod.GET, Set.of("/produtos/**"), HttpMethod.POST, Set.of("/usuarios/**", "/auth/**")));
+    ANONYMOUS(Map.of(HttpMethod.GET, Set.of("/produtos/**"), HttpMethod.POST,
+            Set.of("/usuarios/**", "/auth/usuario", "/auth/login")));
     private final Map<HttpMethod, Set<String>> permissions;
 
     public static Role getRole(String nome) {
@@ -31,6 +36,6 @@ public enum Role implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        return null;
+        return this.toString();
     }
 }

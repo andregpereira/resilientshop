@@ -3,9 +3,14 @@ spring:
     name: resilientshop-authentication-api
   #PostgreSQL
   datasource:
+    hikari:
+      initialization-fail-timeout: 30000
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
+  jackson:
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: true
   jpa:
     hibernate:
       ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
@@ -20,8 +25,18 @@ eureka:
   instance:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    metadata-map:
+      "prometheus.scrape": "true"
+      "prometheus.path": "/actuator/prometheus"
+#      "prometheus.port": "8080"
   client:
     registerWithEureka: true
     fetchRegistry: false
     serviceUrl:
       defaultZone: http://${EUREKA_SERVICE_NAME:localhost}:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
