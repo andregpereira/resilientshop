@@ -18,21 +18,28 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import javax.crypto.SecretKey;
+
 @Slf4j
 @Component
 public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
 
-    private static final String SECRET_KEY = "Som35ecretK3y109jP2n8PaMS05mDKAPOjd23ur98yoej";
+    private static final SecretKey SECRET_KEY =
+            Keys.hmacShaKeyFor(Decoders.BASE64.decode("Som35ecretK3y109jP2n8PaMS05mDKAPOjd23ur98yoej"));
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         log.info("Aplicando filtro");
-        return Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION)).filter(
-                authHeader -> authHeader.startsWith("Bearer ")).map(
-                authHeader -> authHeader.replace("Bearer ", "")).map(this::getRoleFromToken).defaultIfEmpty(
-                Role.ANONYMOUS).filter(role -> hasPermission(role, exchange.getRequest().getURI().getPath(),
-                exchange.getRequest().getMethod())).flatMap(role -> chain.filter(exchange)).switchIfEmpty(
-                Mono.defer(() -> onError(exchange, "Acesso negado", HttpStatus.UNAUTHORIZED)));
+        return Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
+                .filter(authHeader -> authHeader.startsWith("Bearer "))
+                .map(authHeader -> authHeader.replace("Bearer ", ""))
+                .map(this::getRoleFromToken)
+                .defaultIfEmpty(Role.ANONYMOUS)
+                .filter(role -> hasPermission(role,
+                        exchange.getRequest().getURI().getPath(),
+                        exchange.getRequest().getMethod()))
+                .flatMap(role -> chain.filter(exchange))
+                .switchIfEmpty(Mono.defer(() -> onError(exchange)));
     }
 
     @Override
@@ -41,22 +48,26 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
     }
 
     private boolean hasPermission(Role role, String path, HttpMethod method) {
-        return role.getPermissions(method).stream().anyMatch(
-                permittedPath -> new AntPathMatcher().match(permittedPath, path));
+        return role.getPermissions(method)
+                .stream()
+                .anyMatch(permittedPath -> new AntPathMatcher().match(permittedPath, path));
     }
 
-    private Mono<Void> onError(ServerWebExchange exchange, String error, HttpStatus httpStatus) {
-        log.error(error);
+    private Mono<Void> onError(ServerWebExchange exchange) {
+        log.error("Acesso negado");
         ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(httpStatus);
+        response.setStatusCode(HttpStatus.UNAUTHORIZED);
         return response.setComplete();
     }
 
     private Role getRoleFromToken(String token) {
         try {
-            return Role.valueOf(Jwts.parserBuilder().setSigningKey(
-                    Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY))).build().parseClaimsJws(token).getBody().get(
-                    "role", String.class));
+            return Role.valueOf(String.valueOf(Jwts.parser()
+                    .verifyWith(SECRET_KEY)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .get("role", String.class)));
         } catch (JwtException e) {
             log.warn(e.getMessage());
             return Role.ANONYMOUS;

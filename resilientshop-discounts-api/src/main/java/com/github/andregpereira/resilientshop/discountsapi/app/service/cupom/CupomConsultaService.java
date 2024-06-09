@@ -6,14 +6,14 @@ import org.springframework.data.domain.Pageable;
 
 public interface CupomConsultaService {
 
+    CupomDto consultarPorId(Long id);
+
+    CupomDto consultarPorCodigo(String codigo);
+
     Page<CupomDto> consultarTodos(Pageable pageable);
 
     Page<CupomDto> consultarAtivo(Pageable pageable);
 
     Page<CupomDto> consultarInativo(Pageable pageable);
-
-    CupomDto consultarPorId(Long id);
-
-    CupomDto consultarPorCodigo(String codigo);
 
 }

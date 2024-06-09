@@ -1,5 +1,6 @@
 package com.github.andregpereira.resilientshop.discountsapi.app.service.desconto;
 
+import com.github.andregpereira.resilientshop.discountsapi.app.constant.TipoDesconto;
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.desconto.DescontoDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.mapper.DescontoServiceMapper;
 import com.github.andregpereira.resilientshop.discountsapi.domain.usecase.desconto.DescontoFindAllUc;
@@ -16,10 +17,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class DescontoConsultaServiceImpl implements DescontoConsultaService {
 
+    private final DescontoFindByIdUc findByIdUc;
     private final DescontoFindAllUc findAllUc;
     private final DescontoFindByTipoDescontoUc findByTipoDescontoUc;
-    private final DescontoFindByIdUc findByIdUc;
     private final DescontoServiceMapper mapper;
+
+    @Override
+    public DescontoDto consultarPorId(Long id) {
+        return mapper.toDescontoDto(findByIdUc.findById(id));
+    }
 
     @Override
     public Page<DescontoDto> consultarTodos(Pageable pageable) {
@@ -27,13 +33,8 @@ public class DescontoConsultaServiceImpl implements DescontoConsultaService {
     }
 
     @Override
-    public Page<DescontoDto> consultarPorTipoDesconto(String tipoDesconto, Pageable pageable) {
-        return findByTipoDescontoUc.findByTipoDesconto(tipoDesconto, pageable).map(mapper::toDescontoDto);
-    }
-
-    @Override
-    public DescontoDto consultarPorId(Long id) {
-        return mapper.toDescontoDto(findByIdUc.findById(id));
+    public Page<DescontoDto> consultarPorTipoDesconto(TipoDesconto tipoDesconto, Pageable pageable) {
+        return findByTipoDescontoUc.findByTipoDesconto(tipoDesconto.toString(), pageable).map(mapper::toDescontoDto);
     }
 
 }

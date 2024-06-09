@@ -5,6 +5,7 @@ import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomCr
 import com.github.andregpereira.resilientshop.discountsapi.app.dto.cupom.CupomUpdateDto;
 import com.github.andregpereira.resilientshop.discountsapi.app.service.cupom.CupomConsultaService;
 import com.github.andregpereira.resilientshop.discountsapi.app.service.cupom.CupomManutencaoService;
+import com.github.andregpereira.resilientshop.discountsapi.cross.exception.CupomAlreadyExistsException;
 import com.github.andregpereira.resilientshop.discountsapi.cross.exception.CupomNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -59,6 +60,13 @@ class CupomControllerTest {
         mockMvc.perform(post(URI.create(PATH)).content(
                 objectMapper.writeValueAsString(CUPOM_CREATE_DTO_INVALIDO)).contentType(
                 MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
+    }
+    @Test
+    void createWithInvalidDto_Return409() throws Exception {
+        given(manutencaoService.criar(any(CupomCreateDto.class))).willThrow(new CupomAlreadyExistsException(anyString()));
+        mockMvc.perform(post(URI.create(PATH)).content(
+                objectMapper.writeValueAsString(CUPOM_CREATE_DTO)).contentType(
+                MediaType.APPLICATION_JSON)).andExpect(status().isConflict());
     }
 
     @Test

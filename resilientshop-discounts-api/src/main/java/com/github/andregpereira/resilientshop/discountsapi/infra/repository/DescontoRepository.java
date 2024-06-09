@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DescontoRepository extends BaseRepository<DescontoEntity> {
+public non-sealed interface DescontoRepository extends BaseRepository<DescontoEntity> {
 
     Page<DescontoEntity> findAllByTipoDesconto(String tipoDesconto, Pageable pageable);
 
