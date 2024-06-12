@@ -3,10 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.github.andregpereira</groupId>
-        <artifactId>resilientshop</artifactId>
+        <groupId>com.github.andregpereira.resilientshop</groupId>
+        <artifactId>resilientshop-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>resilientshop-authentication-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -14,21 +13,12 @@
     <description>Authentication API for Resilient Shop Ecommerce Project</description>
     <dependencies>
         <dependency>
-            <groupId>com.github.andregpereira</groupId>
+            <groupId>com.github.andregpereira.resilientshop</groupId>
             <artifactId>resilientshop-commons</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -85,12 +75,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
-            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
