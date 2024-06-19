@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 LABEL authors="André Garcia"
 RUN apk --no-cache add bash curl
 WORKDIR /app
