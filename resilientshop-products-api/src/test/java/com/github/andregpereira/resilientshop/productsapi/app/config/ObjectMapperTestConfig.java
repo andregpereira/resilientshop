@@ -1,6 +1,5 @@
 package com.github.andregpereira.resilientshop.productsapi.app.config;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -23,20 +22,26 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.fasterxml.jackson.databind.DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS;
+import static com.fasterxml.jackson.databind.DeserializationFeature.USE_LONG_FOR_INTS;
+
 @EnableSpringDataWebSupport(pageSerializationMode = PageSerializationMode.VIA_DTO)
 @TestConfiguration
 public class ObjectMapperTestConfig {
 
     private static final List<Module> MODULES =
-            List.of(new JavaTimeModule(), new PageJacksonModule(), new SortJacksonModule());
+        List.of(new JavaTimeModule(), new PageJacksonModule(), new SortJacksonModule());
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
         return builder -> {
-            builder.propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-                    .modules(MODULES)
-                    .featuresToEnable(DeserializationFeature.USE_LONG_FOR_INTS,
-                            DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
+            builder
+                .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+                .modules(MODULES)
+                .featuresToEnable(
+                    USE_LONG_FOR_INTS,
+                    USE_BIG_DECIMAL_FOR_FLOATS
+                );
         };
     }
 
